@@ -1,0 +1,50 @@
+<template name="SubfamList">
+    <div class="container pt mt">
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1">
+                <h2>Subfamilies available</h2>
+                <!--<a href="/admin/subfam/add" class="btn btn-primary btn-tiny">Add New Subfam</a>-->
+                <br>
+                <br>
+                <table class="table table-striped">
+                {{#if Template.subscriptionsReady}}
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Family</th>
+                        <th>Class</th>
+                        <th>Last Update</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    {{#each subfams}}
+                    <tr>
+                        <td>{{_id}}</td>
+                        <td>{{name}}</td>
+                        <td>{{family}}</td>
+                        <td>{{subfamclass}}</td>
+                        <td>{{formatDate updatedAt}}</td>
+                        <td>
+                            <!--<a href="/admin/subfam/{{_id}}/edit" class="btn btn-default btn-tiny">Edit</a>-->
+                            {{#linkTo route='SubfamEdit'}}<i class="fa fa-pencil-square-o"></i> {{/linkTo}}
+
+                        </td>
+                        <td><i class="fa fa-trash delete_subfam"></i></td>
+                    </tr>
+                    {{else}}
+                    <tr>
+                        <td>There are no Subfamilies</td>
+                    </tr>
+                    {{/each}}
+                {{else}}
+                    {{> Loading}}
+                {{/if}}
+                </table>
+                <!--{{> tabular table=TabularTables.Subfams class="table table-striped table-condensed"}}-->
+            </div>
+
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</template>

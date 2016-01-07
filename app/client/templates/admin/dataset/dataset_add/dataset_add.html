@@ -1,0 +1,36 @@
+<template name="DatasetAdd">
+    <div class="container pt mt">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Add a Dataset</h2>
+                <form class="add_dataset_form" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="GSM733636">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Label</label>
+                        <input type="text" class="form-control" id="label" name="label" placeholder="Digital Genomic Footprinting of IMR90 (fetallungfibroblast)">
+                    </div>
+                    <div class="form-group">
+                        <label>Date Added</label>
+                        <div class="input-group datetimepicker">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input class="set-due-date" id="projectDate" name="projectDate" form-control type="text" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Project Type</label>
+                        <input type="text" class="form-control" id="type" name="type" placeholder="ENCODE/ROADMAP?">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="/admin/datasets" class="btn btn-default">Go Back</a>
+                </form>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+</template>

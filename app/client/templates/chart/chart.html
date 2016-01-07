@@ -1,0 +1,17 @@
+<template name="Chart">
+    <div id="tooltip" class="hidden">
+        <p><span id="value"></span></p>
+    </div>
+    <select name="" id="order" class="form-control">
+        <option value="">-- Select One --</option>
+        <option value="hclust">by cluster</option>
+        <option value="probecontrast">by probe name and contrast name</option>
+        <option value="probe">by probe name</option>
+        <option value="contrast">by contrast name</option>
+        <option value="custom">by log2 ratio</option>
+    </select>
+
+    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+        <div id="heatmap"></div>
+    </div>
+</template>

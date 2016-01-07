@@ -1,0 +1,55 @@
+<template name="DatasetList">
+    <div class="dataset-list">
+        <div class="container pt mt">
+
+                <div class="row">
+                    <div class="col-lg-5 col-lg-offset-1">
+                        <h2>Datasets available</h2>
+                    </div>
+                    <div class="col-lg-4">
+                        <a href="/admin/dataset/add" class="btn btn-primary btn-tiny pull-right" style="margin-top: 20px;">Add new DataSet</a>
+                    </div>
+                </div>
+
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <br/>
+                    <br/>
+                    <table class="table table-striped">
+                        {{#if Template.subscriptionsReady}}
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Label</th>
+                            <th>Last Update</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                            {{#each datasets}}
+                            <tr>
+                                <td>{{_id}}</td>
+                                <td>{{name}}</td>
+                                <td>{{label}}</td>
+                                <td>{{formatDate updatedAt}}</td>
+                                <td> {{#linkTo route='DatasetEdit'}}<i class="fa fa-pencil-square-o datafile_add"></i> {{/linkTo}}
+                                </td>
+                                <td><i class="fa fa-trash delete_dataset"></i></td>
+                            </tr>
+                            {{else}}
+                            <tr>
+                                <td>There are no datasets</td>
+                            </tr>
+                            {{/each}}
+                        {{else}}
+                            {{> Loading}}
+                        {{/if}}
+                    </table>
+
+                </div>
+
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+</template>

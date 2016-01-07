@@ -1,0 +1,51 @@
+<template name="SubfamAdd">
+    <div class="container pt mt">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Add a Subfam</h2>
+                <form class="add_subfam_form" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="L2A">
+                    </div>
+                    <div class="form-group">
+                        <label>Id</label>
+                        <input type="text" class="form-control" id="id" name="id" placeholder="Legacy Id, e.g. 166">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Genome Length</label>
+                        <input type="text" class="form-control" id="genomelength" name="genomelength" placeholder="47834623">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Family</label>
+                        <input type="text" class="form-control" id="family" name="family" placeholder="L2">
+                    </div>
+                    <div class="form-group">
+                        <label>Class</label>
+                        <input class="form-control" id="subfamclass" name="subfamclass" placeholder="SINE">
+                    </div>
+                    <div class="form-group">
+                        <label>Consensus Length</label>
+                        <input class="form-control" id="consensuslength" name="consensuslength" placeholder="283">
+                    </div>
+                    <div class="form-group">
+                        <label>Copy Count</label>
+                        <input class="form-control" id="copycount" name="copycount" placeholder="171064">
+                    </div>
+                    <div class="form-group">
+                        <label>Sequence</label>
+                        <textarea class="form-control" id="sequence" name="sequence" placeholder="gtctactgccataccaccctgaacacgcccgatctcatctgatcttggaagctaagcagggtcaggcctggttggtacctgatgggagagagcctgggaacaccgggttctgtagggttg"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="/admin/subfams" class="btn btn-default">Go Back</a>
+                </form>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</template>

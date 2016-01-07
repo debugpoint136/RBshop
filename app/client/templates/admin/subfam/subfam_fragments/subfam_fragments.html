@@ -1,0 +1,41 @@
+<template name="SubfamFragments">
+    <div class="container pt mt">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Subfamily Genome Fragments</h2>
+                <br>
+                <br>
+                <table class="table table-striped">
+                    <tr>
+                        <th>Subfam Id</th>
+                        <th>Chromosome</th>
+                        <th>Start</th>
+                        <th>Stop</th>
+                        <th>swScore</th>
+                        <th>Strand</th>
+                        <!--<th></th>-->
+                    </tr>
+                    {{#each subfamfrags}}
+                    <tr>
+                        <td>{{subfamid}}</td>
+                        <td>{{chrom}}</td>
+                        <td>{{start}}</td>
+                        <td>{{stop}}</td>
+                        <td>{{swScore}}</td>
+                        <td>{{strand}}</td>
+                    </tr>
+                    {{else}}
+                    <tr>
+                        <td>There are no Subfamily Fragments</td>
+                    </tr>
+                    {{/each}}
+                    <tr class="row">------</tr>
+                    <tr class="row">Only first 200 records displayed </tr>
+                </table>
+            </div>
+
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</template>

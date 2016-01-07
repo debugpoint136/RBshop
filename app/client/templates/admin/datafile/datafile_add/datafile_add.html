@@ -1,0 +1,80 @@
+<template name="DatafileAdd">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add a Data File</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="add_datafile_form">
+                        <div class="form-group required">
+                            <label>Name</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="First experiment replicate">
+                        </div>
+
+                        <div class="form-group required">
+                            <label>Label</label>
+                            <input type="text" class="form-control" id="label" name="datafilelabel" placeholder="wgEncodeHaibTfbsGm12878Ebfsc137065RawDataRep2">
+                        </div>
+
+                        <div class="form-group btn-group required" data-toggle="buttons">
+                            <label class="btn btn-default">
+                                <input type="radio" id="exp" name="type" value="Experiment" /> Experiment
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio" id="cntl" name="type" value="Control" /> Control
+                            </label>
+                        </div>
+                        <br/>
+                        <div class="form-group required">
+                            <label>URL root</label>
+                            <input class="form-control" id="url" name="url" placeholder="Web location where the above files can be found">
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <label>Metadata</label>
+                            <textarea rows="24" class="form-control" id="metadata" name="metadata" placeholder="project=wgEncode; 
+grant=Myers; 
+lab=HudsonAlpha; 
+composite=wgEncodeHaibTfbs; 
+dataType=ChipSeq; 
+view=RawData; 
+cell=GM12878; 
+treatment=None; 
+antibody=EBF1_(SC-137065); 
+protocol=PCR1x; 
+replicate=2; 
+origAssembly=hg18; 
+dataVersion=ENCODE Jan 2010 Freeze; 
+dccAccession=wgEncodeEH001480; 
+dateSubmitted=2009-11-20; 
+dateUnrestricted=2010-08-19; 
+subId=768; 
+geoSampleAccession=GSM803386; 
+setType=exp; controlId=SL517; 
+labExpId=SL988; 
+labVersion=8; 
+type=fastq; 
+md5sum=0d40a7dda221db39df5f700461adcce9; 
+size=780M"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Date Added</label>
+                            <div class="input-group datetimepicker">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i> </span>
+                                <input class="set-due-date" id="projectDate" name="projectDate" form-control type="text" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Comments</label>
+                            <textarea type="text" class="form-control" id="label" name="label" placeholder="This is for Project XXXXX.. "></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

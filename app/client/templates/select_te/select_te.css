@@ -1,0 +1,16 @@
+
+.jstree-default {
+    display: block;
+    float: left;
+    margin-left: 150px;
+    margin-top: 50px;
+}
+
+.jstree-default .jstree-no-dots .jstree-closed > ins {
+    background-position: 0 4px;
+}
+
+.jstree a {
+    width: 250px;
+    text-align: left;
+}

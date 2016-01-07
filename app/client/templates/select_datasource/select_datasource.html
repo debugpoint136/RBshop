@@ -1,0 +1,43 @@
+
+<template name="select_datasource">
+
+<div class="container pagecentered">
+    <div class="jumbotron mt pt">
+        <div class="row mt">
+            <div class="col-lg-6 col-lg-offset-3 centered">
+                <h3>Select the data sources to load</h3>
+                <!--
+                TODO: Below code should not be hardcoded - should come from a database
+                -->
+                <div class="checkbox btn btn-primary btn-block btn-warning btn-lg" data-toggle="collapse" data-target="#encode" aria-expanded="false" aria-controls="encode">
+                    <label>
+                        <input type="checkbox" value="encode" checked> ENCODE
+                    </label>
+                </div>
+                <div class="collapse" id="encode">
+                    <div class="well">
+                        The Encyclopedia of DNA Elements (ENCODE) Consortium is an international collaboration of research groups funded by the National Human Genome Research Institute (NHGRI). The goal of ENCODE is to build a comprehensive parts list of functional elements in the human genome, including elements that act at the protein and RNA levels, and regulatory elements that control cells and circumstances in which a gene is active (quoted from UCSC ENCODE website).
+                    </div>
+                </div>
+
+                <div class="checkbox btn btn-primary btn-block btn-danger btn-lg" data-toggle="collapse" data-target="#roadmap" aria-expanded="false" aria-controls="roadmap">
+                    <label>
+                        <input type="checkbox" value="roadmap"> ROADMAP
+                    </label>
+                </div>
+                <div class="collapse" id="roadmap">
+                    <div class="well">
+                        The NIH Roadmap Epigenomics Mapping Consortium was launched with the goal of producing a public resource of human epigenomic data to catalyze basic biology and disease-oriented research. The Consortium leverages experimental pipelines built around next-generation sequencing technologies to map DNA methylation, histone modifications, chromatin accessibility and small RNA transcripts in stem cells and primary ex vivo tissues selected to represent the normal counterparts of tissues and organ systems frequently involved in human disease (quoted from Roadmap website).
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <hr>
+                <br/>
+                <br/>
+                <a href="/te" type="button" class="btn btn-info">Select TE subfamilies</a>
+            </div>
+        </div>
+    </div>
+</div>
+</template>

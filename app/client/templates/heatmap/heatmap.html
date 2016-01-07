@@ -1,0 +1,33 @@
+<template name="Heatmap">
+    <div id="tooltip" class="hidden">
+        <p><span id="experiment"></span></p>
+        <p><span id="repeat-subfamily"></span></p>
+        <p><span id="max"></span></p>
+        <p><span id="min"></span></p>
+        <p><span><a href="#">Click to View Details</a></span></p>
+    </div>
+    <div class="container">
+        <div class="row pt mt">
+            <div class="col-lg-4 col-lg-offset-4">
+
+            Order:
+
+            <select id="order" class="form-control">
+                <option value="default">---Select---</option>
+                <option value="hclust">by cluster</option>
+                <option value="probecontrast">by both Dataset name and Repeat Subfamily name</option>
+                <option value="probe">by Dataset name</option>
+                <option value="contrast">by Subfamily name</option>
+                <option value="custom">by log2 ratio</option>
+            </select>
+
+            </div>
+        </div>
+
+
+    <div class="row">
+        <div id="main" style='overflow:auto; width:{{getWidth}}px; height:{{getHeight}}px;'></div>
+    </div>
+    </div>
+    <!--container-->
+</template>

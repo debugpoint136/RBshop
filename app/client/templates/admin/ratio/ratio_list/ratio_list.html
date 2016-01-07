@@ -1,0 +1,36 @@
+<template name="RatioList">
+    <div class="container pt mt">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Ratio information</h2>
+                <br>
+                <br>
+                <table class="table table-striped">
+                    <tr>
+                        <th>Dataset Id</th>
+                        <th>Subfam Id</th>
+                        <th>All</th>
+                        <th>Uniq</th>
+                    </tr>
+                    {{#each ratiodata}}
+                    <tr>
+                        <td>{{datasetId}}</td>
+                        <td>{{subfamId}}</td>
+                        <td>{{ratioAll}}</td>
+                        <td>{{ratioUniq}}</td>
+
+                        <td><i class="fa fa-trash js-delete_ratioinfo"></i></td>
+                    </tr>
+                    {{else}}
+                    <tr>
+                        <td>There are no Ratio information available for this Dataset</td>
+                    </tr>
+                    {{/each}}
+                </table>
+            </div>
+
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</template>

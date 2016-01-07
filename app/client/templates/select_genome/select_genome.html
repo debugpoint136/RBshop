@@ -1,0 +1,27 @@
+
+<template name="select_genome">
+<div class="container pagecentered">
+    <div class="jumbotron mt pt">
+        <div class="row mt">
+            <div class="col-lg-6 col-lg-offset-3 centered">
+                <h3>Select a genome</h3>
+
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary btn-lg active">
+                        <input type="radio" name="options" id="option1" autocomplete="off" checked> hg19 (Human)
+                    </label>
+                    <label class="btn btn-primary btn-lg">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> mm9 (Mouse)
+                    </label>
+                </div>
+                <br/>
+                <br/>
+                <hr>
+                <br/>
+                <a href="/datasource" type="button" class="btn btn-info">Select Data Sources to load</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /container -->
+</template>

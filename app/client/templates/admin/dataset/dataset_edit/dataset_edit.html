@@ -1,0 +1,87 @@
+<template name="DatasetEdit">
+    <div class="container pt mt">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Edit Dataset</h2> <small>{{_id}}</small>
+                <form class="edit_dataset_form" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Project Name" value="{{name}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Label</label>
+                        <input type="text" class="form-control" id="label" name="label" placeholder="Digital Genomic Footprinting of IMR90 (fetallungfibroblast)" value="{{label}}">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Updated Date</label>
+                        <div class="input-group datetimepicker">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input class="set-due-date" id="projectDate" name="projectDate" form-control type="text" value={{formatDate updatedAt}}/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Project Type</label>
+                        <input type="text" class="form-control" id="type" name="type" placeholder="Project Type" value={{type}}>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">Data Files : </div>
+
+                        <div class="panel-body">
+                            <button class="btn btn-info btn-tiny datafile_add">Add Datafile</button>
+                        </div>
+
+
+                        <!-- Table -->
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Datafile Label</th>
+                                    <th>Type</th>
+                                    <th>Last Update</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each datafiles}}
+                                <tr>
+                                    <td>{{label}}</td>
+                                    <td>{{type}}</td>
+                                    <td>{{formatDate updatedAt}}</td>
+                                    <th>
+                                        <i class="fa fa-trash delete_datafile"></i>
+                                    </th>
+                                    <th>{{#linkTo route='DatafileEdit'}}<i class="fa fa-pencil-square-o"></i> {{/linkTo}}</th>
+                                </tr>
+                                {{else}}
+                                <div class="mt centered">
+                                    <p>No Data Files added to this Dataset yet</p>
+                                </div>
+                                {{/each}}
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ratio Unique</label>
+                        <input type="text" class="form-control" id="type" name="ratio_uniq"  value={{ratio_uniq}}>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ratio All</label>
+                        <input type="text" class="form-control" id="type" name="ratio_all"  value={{ratio_all}}>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="/admin/datasets" class="btn btn-default">Go Back</a>
+                </form>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</template>

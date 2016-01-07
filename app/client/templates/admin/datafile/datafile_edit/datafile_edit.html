@@ -1,0 +1,63 @@
+<template name="DatafileEdit">
+    <div class="container pt mt">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Edit Datafile</h2> <small>{{name}}</small>
+                <form class="edit_datafile_form" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Project Name" value="{{name}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Label</label>
+                        <input type="text" class="form-control" id="label" name="label" placeholder="wgEncodeHaibTfbsHepg2Atf3V0416101RawDataRep1" value="{{label}}">
+                    </div>
+                    <div class="form-group">
+                        <label>Metadata</label>
+                        <textarea rows="14" class="form-control" id="metadata" name="metadata" placeholder="project=wgEncode;" value="{{metadata}}"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>URL</label>
+                        <input type="text" class="form-control" id="url" name="label" placeholder="URL where the data is located on the web" value="{{url}}">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Updated Date</label>
+                        <div class="input-group datetimepicker">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input class="set-due-date" id="updatedAt" name="updatedAt" form-control type="text" value={{formatDate updatedAt}}/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Updated By</label>
+                        <input type="text" class="form-control" id="updatedBy" name="updatedBy" placeholder="Updated By" value={{updatedBy}}>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Project/Download Date</label>
+                        <div class="input-group datetimepicker">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input class="set-due-date" id="projectDate" name="projectDate" form-control type="text" value={{formatDate projectDate}}/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Datafile Type</label>
+                        <input type="text" class="form-control" id="type" name="type" placeholder="Project Type" value={{type}}>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Comments</label>
+                        <input type="text" class="form-control" id="comments" name="comments" placeholder="Any extra information" value={{comments}}>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary handle-datafile-edit-submit">Submit</button>
+                    <a href="/admin/datasets" class="btn btn-default">Go Back</a>
+                </form>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</template>
