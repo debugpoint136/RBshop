@@ -40,6 +40,11 @@ Router.map(function() {
 //            return templateData;
 //        }
     });
+
+    this.route('gg', {
+        path: '/gg',
+        template: 'GenomeGraph'
+    });
 });
 
 Router.route('/', {

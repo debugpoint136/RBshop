@@ -1,8 +1,8 @@
 /*****************************************************************************/
 /* SubfamList: Helpers */
 /*****************************************************************************/
-Template.SubfamList.helpers({
-    'getWidth' : function() {
+Template.Heatmap.helpers({
+    /*'getWidth' : function() {
         var col_number = 60, cellSize = 12, left = 300, right = 10;
 
         return (cellSize * col_number) + left + right + 100;
@@ -12,14 +12,16 @@ Template.SubfamList.helpers({
         var row_number = 50, cellSize = 12, top = 150, bottom = 50;
 
         return (cellSize * col_number) + top + bottom + 100;
-    },
+    }
+    ,*/
 
 });
+
 
 /*****************************************************************************/
 /* SubfamList: Lifecycle Hooks */
 /*****************************************************************************/
-Template.SubfamList.onCreated(function () {
+Template.Heatmap.onCreated(function () {
 });
 
 
@@ -37,6 +39,7 @@ Template.Heatmap.onRendered(function () {
     var data = []; // Adding this after disabling the previously laid out structure
 
     var dataRatio = [];
+    var datasetNames = [];
 
     width = cellSize * col_number, // - margin.left - margin.right,
         height = cellSize * row_number , // - margin.top - margin.bottom,
@@ -64,6 +67,7 @@ Template.Heatmap.onRendered(function () {
     var datasets = Datasets.find({});
     rowLabel = [];
     datasets.forEach(function(doc) {
+        datasetNames.push(doc.name);
         rowLabel.push(doc.label);
         dataRatio.push(doc.ratio_uniq);
         }
@@ -88,7 +92,6 @@ Template.Heatmap.onRendered(function () {
             data.push(cellObj);
         }
     }
-
 
             var colorScale = d3.scale.quantile()
                 .domain([-10, 0, 10])
@@ -197,6 +200,10 @@ Template.Heatmap.onRendered(function () {
             var rowtext = d3.select(".r" + (d.row - 1));
 
             // called function here that will create a genome graph view
+            var coordinate = [];
+
+            coordinate.push(datasetNames[d.row -1], colLabel[d.col - 1]);
+            callGenomeGraph(coordinate);
 
             if (rowtext.classed("text-selected") == false) {
                 rowtext.classed("text-selected", true);
@@ -508,6 +515,11 @@ Template.Heatmap.onRendered(function () {
             }
         });
 */
+
+    callGenomeGraph = function(coordinate) {
+        Session.set('coordinate', coordinate);
+        Router.go('/gg');
+    }
 
 });
 

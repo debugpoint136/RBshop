@@ -36,22 +36,18 @@ Meteor.publish('testdatasets', function () {
 
     toPrint = Datasets.find({}, { limit : 50 });
 
-    toPrint.forEach(function(obj, index) {
-        _(obj).each(function(elem, key){
-          /*console.log(elem);
-          console.log(key);*/
-          //obj[key] = _(elem).values();
-          obj[key] = elem;
-        });
-        //console.log(_.toArray(obj).join("\t")); 
-    });
-
     return toPrint;
 });
 
 Meteor.publish('testsubfam', function () {
-    return Subfam.find({}, { limit: 60 });
+    return Subfam.find({}, { limit : 60 , sort : { family: 1}});
+
 });
+
+Meteor.publish('fetchDatasetId', function(coordinate) {
+    return Datasets.find({ label: coordinate[0]});
+})
+
 
 //Meteor.publish('ratioforDatasets', function (datasetList) {
 //    return Ratio.find({

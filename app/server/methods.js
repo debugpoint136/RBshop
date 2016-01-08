@@ -96,3 +96,4 @@ function getFamilyNodes(classNode) {
 
   return nodeTree_class_family;
 }
+
