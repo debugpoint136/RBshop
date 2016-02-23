@@ -45,6 +45,22 @@ Router.map(function() {
         path: '/gg',
         template: 'GenomeGraph'
     });
+    /* ================================ */
+    /*           BEV                    */
+    /* ================================ */
+    this.route('bev01', {
+        path: '/bev01',
+        template: 'bev01'
+    });
+    this.route('bev02', {
+        path: '/bev02',
+        template: 'bev02'
+    });
+    this.route('bev03', {
+        path: '/bev03',
+        template: 'bev03'
+    });
+
 });
 
 Router.route('/', {
@@ -190,3 +206,6 @@ Router.route('/genome_graph', {
     action: 'list',
     where: 'client'
 });
+
+
+

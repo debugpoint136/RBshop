@@ -169,8 +169,160 @@ Template.Heatmap.onRendered(function () {
                     colSortOrder = !colSortOrder;
                     sortbylabel("c", i, colSortOrder);
                     d3.select("#order").property("selectedIndex", 4).node().focus();
-                })
-                ;
+                });
+
+            /*========== CFS Metadata labels ===========*/
+            
+            // SUBFAMILY METADATA CELLS
+
+            d3.json("/CFScolors.json", function(CFScolors) {
+    
+                var colMetaData = svg.append("g")
+                    .selectAll(".colMetadatag")
+                    .data(colLabel)
+                    .enter()
+                    .append("rect")
+                    .attr("x", 0)
+                    .attr("y", function (d, i) {
+                        return hccol.indexOf(i + 1) * cellSize;
+                    })
+                    .style("text-anchor", "left")
+                    .attr("transform", "translate(0, -80) rotate (-90)")
+                    .attr("width", cellSize)
+                    .attr("height", cellSize)
+                    .style("fill", function (d) {
+                        return CFScolors[d][4];
+                    })
+                    .on("click", function (d, i) {
+                        colSortOrder = !colSortOrder;
+                        sortbylabel("c", i, colSortOrder);
+                        d3.select("#order").property("selectedIndex", 4).node().focus();
+                    }) // move this to On click - Subfamily
+                  ;
+
+                // SUBFAMILY METADATA LABEL 
+
+                var subFamilyMetadataLabel = svg.append("g")
+                    .append("text")
+                    .text('Subfamily')
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("transform", "translate(-6, -80)")
+                    .attr("class", "subMetadataLabelg")
+
+                    // TODO: this selects the order drop-down to "by contrast name"
+                    .on("click", function () {
+                        console.log("subfamily clicked..!");
+                        order("contrast");
+                    });
+
+                // FAMILY METADATA CELLS
+
+                var familyMetaData = svg.append("g")
+                    .selectAll(".familyMetadatag")
+                    .data(colLabel)
+                    .enter()
+                    .append("rect")
+                    .attr("x", 0)
+                    .attr("y", function (d, i) {
+                        return hccol.indexOf(i + 1) * cellSize;
+                    })
+                    .style("text-anchor", "left")
+                    .attr("transform", "translate(0, -92) rotate (-90)")
+                    .attr("width", cellSize)
+                    .attr("height", cellSize)
+                    .style("fill", function (d) {
+                        return CFScolors[d][3];
+                    })
+                    .on("click", function (d, i) {
+                        colSortOrder = !colSortOrder;
+                        sortbylabel("c", i, colSortOrder);
+                        d3.select("#order").property("selectedIndex", 4).node().focus();
+                    }) // move this to On click - Subfamily
+                  ;
+
+                // FAMILY METADATA LABEL 
+
+                var familyMetadataLabel = svg.append("g")
+                    .append("text")
+                    .text('Family')
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("transform", "translate(-6, -93)")
+                    .attr("class", "subMetadataLabelg")
+
+                    // TODO: this selects the order drop-down to "by contrast name"
+                    .on("click", function () {
+                        console.log("Family clicked..!");
+                        order("contrast");
+                    });
+
+                // CLASS METADATA CELLS
+
+                var classMetaData = svg.append("g")
+                    .selectAll(".classMetadatag")
+                    .data(colLabel)
+                    .enter()
+                    .append("rect")
+                    .attr("x", 0)
+                    .attr("y", function (d, i) {
+                        return hccol.indexOf(i + 1) * cellSize;
+                    })
+                    .style("text-anchor", "left")
+                    .attr("transform", "translate(0, -104) rotate (-90)")
+                    .attr("width", cellSize)
+                    .attr("height", cellSize)
+                    .style("fill", function (d) {
+                        return CFScolors[d][2];
+                    })
+                    .on("click", function (d, i) {
+                        colSortOrder = !colSortOrder;
+                        sortbylabel("c", i, colSortOrder);
+                        d3.select("#order").property("selectedIndex", 4).node().focus();
+                    }) // move this to On click - Subfamily
+                  ;
+
+                // CLASS METADATA LABEL 
+
+                var classMetadataLabel = svg.append("g")
+                    .append("text")
+                    .text('Class')
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("transform", "translate(-6, -106)")
+                    .attr("class", "subMetadataLabelg")
+
+                    // TODO: this selects the order drop-down to "by contrast name"
+                    .on("click", function () {
+                        console.log("Class clicked..!");
+                        order("contrast");
+                    });
+            }); // end of d3.json call
+            /*==========================================*/
+
+            var geo = flatten_metadata_by_geo('encode');  
+            console.dir(geo);          
+
+            /*========== TCA Metadata start ===========*/
+            var sampleMetaData = svg.append("g")
+                    .selectAll(".sampleMetadatag")
+                    .data(rowLabel)
+                    .enter()
+                    .append("rect")
+                    .attr("x", 0)
+                    .attr("y", function (d, i) {
+                        return hcrow.indexOf(i) * cellSize;
+                    })
+                    .attr("transform", "translate(-300, " + cellSize + ")")
+                    .attr("width", cellSize)
+                    .attr("height", cellSize)
+                    .style("fill", function (d) {
+                        return 'green';
+                    });
+
+
+
+            /*========== TCA Metadata end ===========*/
 
     /*========== heatmap ===========*/
 
@@ -521,5 +673,41 @@ Template.Heatmap.onRendered(function () {
         Router.go('/gg');
     }
 
-});
+    function flatten_metadata_by_geo(type) {
 
+      var geoAll = {};
+      var geoMultiple = {};
+      var geoFlat = {};
+      var geoURL = 'http://vizhub.wustl.edu/public/hg19/encode.md',
+          roadmapURL = 'http://vizhub.wustl.edu/public/hg19/roadmap9_methylC.md';
+
+            d3.json((type === 'encode' ? geoURL : roadmapURL), 
+                function(err, res) {
+                  res.forEach(function(d) {
+                    if (d.geo) {
+                      var geoName = d.geo[0];
+                      // Re-format the objects 
+                        var obj = {};
+
+                        obj['name'] = d.name;
+                        obj['detail_url'] = d.detail_url;
+                        obj['metadata'] = d.metadata;
+                        obj['type'] = d.type;
+                        obj['public'] = d.public;
+                        obj['url'] = d.url;
+
+                        // var metadata = d.name.split(' ');
+
+                        if (geoFlat[geoName]) {
+                          geoFlat[geoName].push(obj);
+                        } else {
+                          geoFlat[geoName] = [obj];
+                        }
+                    }   
+                  });
+                
+                });
+            return geoFlat;
+      }
+
+});

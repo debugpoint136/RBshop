@@ -1,0 +1,41 @@
+<template name="bev02">
+    <div class="container jumbotron">
+        {{> pageHeader title="Genome View" desc="View Repeat Copies of this Subfamily on Genome" category="App views" }}
+        <div class="row ct">
+            <div class="hpanel">
+                <div class="col-sm-4 col-sm-offset-1">
+                {{#panel }}
+                    <a href="/bev03">
+                        <img src="/images/02-a.png" alt="Loading ..." style="max-width: 300px;">
+                    </a>
+                {{/panel}}
+                </div>
+                <div class="col-sm-3 col-sm-offset-1">
+                    <div class="hpanel plan-box">
+                        <div class="panel-heading hbuilt text-center">
+                            <h4 class="font-bold">HeLa-S3 STAT1 IFNg30 Yale</h4> over <h4>MER41B</h4>
+                        </div>
+                        <div class="panel-body text-center">
+
+                            <h5>
+                                View Browser Panel for displaying multiple TE copies next to each other
+                            </h5>
+                            <a href="http://epigenomegateway.wustl.edu/browser/?genome=hg19&datahub_jsonfile=http://epigenomegateway.wustl.edu/browser/t/1185429358.json" class="btn btn-info btn-sm">View in WashU Browser</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2 col-sm-offset-1">
+                    {{#panel }}
+                        <h5>2809 TEs are above threshold</h5>
+                    {{/panel}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {{#panel }}
+                <img src="/images/02.png" alt="" style="max-width: 1050px;">
+            {{/panel}}
+        </div>
+    </div>
+</template>
+

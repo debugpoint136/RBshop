@@ -34,13 +34,13 @@ Meteor.publish('datafile', function (id) {
 
 Meteor.publish('testdatasets', function () {
 
-    toPrint = Datasets.find({}, { limit : 50 });
-
-    return toPrint;
+    return Datasets.find({}, { limit : 50 });
+    //return Datasets.find({'label': { $regex: /STAT/} });
 });
 
 Meteor.publish('testsubfam', function () {
     return Subfam.find({}, { limit : 60 , sort : { family: 1}});
+    //return Subfam.find({'name': { $regex: /MER41/} });
 
 });
 

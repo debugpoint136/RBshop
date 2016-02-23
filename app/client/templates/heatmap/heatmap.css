@@ -38,7 +38,7 @@ rect.cell-hover {
 text.mono {
     font-size: 9pt;
     font-family: 'Montserrat', Consolas, courier;
-    fill: #aaa;
+    fill: #252729;
 }
 
 text.text-selected {
@@ -47,6 +47,7 @@ text.text-selected {
 
 text.text-highlight {
     fill: #c00;
+    font-weight: bold;
 }
 text.text-hover {
     fill: #00C;
@@ -82,3 +83,10 @@ text.text-hover {
      border-radius: 10px;
 }
 
+.subMetadataLabelg {
+    text-anchor: end;
+    font-size: 11px;
+    font-weight: bold;
+    fill: #003366;
+    padding-bottom: 5px;
+}
