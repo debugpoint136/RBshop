@@ -90,3 +90,11 @@ text.text-hover {
     fill: #003366;
     padding-bottom: 5px;
 }
+
+.tcaMetadataLabelg {
+    text-anchor: start;
+    font-size: 11px;
+    font-weight: bold;
+    fill: #003366;
+    padding-bottom: 5px;
+}

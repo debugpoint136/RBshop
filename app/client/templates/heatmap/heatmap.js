@@ -303,7 +303,8 @@ Template.Heatmap.onRendered(function () {
 
             // var geo = flatten_metadata_by_geo('encode');  // this won't work since this is asynchronous call
 
-            var sampleColors = {};                                              // this is an adhoc object to hold colors for samples
+            var sampleColors = {};
+            var assayColors = {};                                               // this is an adhoc objects to hold colors for samples and assays
 
             var geoURL = 'http://vizhub.wustl.edu/public/hg19/encode.md',
                 roadmapURL = 'http://vizhub.wustl.edu/public/hg19/roadmap9_methylC.md';
@@ -315,7 +316,8 @@ Template.Heatmap.onRendered(function () {
             d3.json(geoURL,                                                     // TODO: hardcoded for encode only
                 function(err, res) {
                     cleanUpGEO(res);
-            
+
+//################## SAMPLE METADATA MAP 
                     var sampleMetaData = svg.append("g")
                             .selectAll(".sampleMetadatag")
                             .data(datasetNames)
@@ -325,7 +327,7 @@ Template.Heatmap.onRendered(function () {
                             .attr("y", function (d, i) {
                                 return hcrow.indexOf(i) * cellSize;
                             })
-                            .attr("transform", "translate(-300, " + cellSize + ")")
+                            .attr("transform", "translate(-288, " + cellSize + ")")
                             .attr("width", cellSize)
                             .attr("height", cellSize)
                             .style("fill", function (d) {
@@ -339,7 +341,62 @@ Template.Heatmap.onRendered(function () {
                                     return newColor;
                                 }
                             }); // style end
+
+//################## ASSAY METADATA MAP 
+                    var assayMetaData = svg.append("g")
+                            .selectAll(".assayMetadatag")
+                            .data(datasetNames)
+                            .enter()
+                            .append("rect")
+                            .attr("x", 0)
+                            .attr("y", function (d, i) {
+                                return hcrow.indexOf(i) * cellSize;
+                            })
+                            .attr("transform", "translate(-300, " + cellSize + ")")
+                            .attr("width", cellSize)
+                            .attr("height", cellSize)
+                            .style("fill", function (d) {
+                                var assay = geoFlat[d][0].metadata.Assay;
+
+                                if (assayColors[assay]) {
+                                    return assayColors[assay];
+                                } else {
+                                    var newColor = getNewColor(); // randomly picking some color | TODO: refactor this to have fixed colors?
+                                    assayColors[assay] = newColor;
+                                    return newColor;
+                                }
+                            }); // style end
             }); // d3.json call end
+
+//################## SAMPLE METADATA LABEL 
+            var sampleMetadataLabel = svg.append("g")
+                                .append("text")
+                                .text('Sample')
+                                .attr("x", 0)
+                                .attr("y", 0)
+                                .attr("transform", "translate(-276, -6) rotate (-90)")
+                                .attr("class", "tcaMetadataLabelg")
+
+                                // TODO: this selects the order drop-down to "by contrast name"
+                                .on("click", function () {
+                                    console.log("Sample clicked..!");
+                                    order("contrast");
+                                });
+
+//################## ASSAY METADATA LABEL 
+            var assayMetadataLabel = svg.append("g")
+                                .append("text")
+                                .text('Assay')
+                                .attr("x", 0)
+                                .attr("y", 0)
+                                .attr("transform", "translate(-288, -6) rotate (-90)")
+                                .attr("class", "tcaMetadataLabelg")
+
+                                // TODO: this selects the order drop-down to "by contrast name"
+                                .on("click", function () {
+                                    console.log("Assay clicked..!");
+                                    order("contrast");
+                                });
 
             /*========== TCA Metadata end ===========*/
 
