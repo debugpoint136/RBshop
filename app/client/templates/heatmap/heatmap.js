@@ -65,6 +65,7 @@ Template.Heatmap.onRendered(function () {
 
     // Pull data from mongo db
     var datasets = Datasets.find({});
+
     rowLabel = [];
     datasets.forEach(function(doc) {
         datasetNames.push(doc.name);
@@ -300,27 +301,45 @@ Template.Heatmap.onRendered(function () {
             }); // end of d3.json call
             /*==========================================*/
 
-            var geo = flatten_metadata_by_geo('encode');  
-            console.dir(geo);          
+            // var geo = flatten_metadata_by_geo('encode');  // this won't work since this is asynchronous call
+
+            var sampleColors = {};                                              // this is an adhoc object to hold colors for samples
+
+            var geoURL = 'http://vizhub.wustl.edu/public/hg19/encode.md',
+                roadmapURL = 'http://vizhub.wustl.edu/public/hg19/roadmap9_methylC.md';
+          
+            var geoFlat = {};
 
             /*========== TCA Metadata start ===========*/
-            var sampleMetaData = svg.append("g")
-                    .selectAll(".sampleMetadatag")
-                    .data(rowLabel)
-                    .enter()
-                    .append("rect")
-                    .attr("x", 0)
-                    .attr("y", function (d, i) {
-                        return hcrow.indexOf(i) * cellSize;
-                    })
-                    .attr("transform", "translate(-300, " + cellSize + ")")
-                    .attr("width", cellSize)
-                    .attr("height", cellSize)
-                    .style("fill", function (d) {
-                        return 'green';
-                    });
 
+            d3.json(geoURL,                                                     // TODO: hardcoded for encode only
+                function(err, res) {
+                    cleanUpGEO(res);
+            
+                    var sampleMetaData = svg.append("g")
+                            .selectAll(".sampleMetadatag")
+                            .data(datasetNames)
+                            .enter()
+                            .append("rect")
+                            .attr("x", 0)
+                            .attr("y", function (d, i) {
+                                return hcrow.indexOf(i) * cellSize;
+                            })
+                            .attr("transform", "translate(-300, " + cellSize + ")")
+                            .attr("width", cellSize)
+                            .attr("height", cellSize)
+                            .style("fill", function (d) {
+                                var sample = geoFlat[d][0].metadata.Sample;
 
+                                if (sampleColors[sample]) {
+                                    return sampleColors[sample];
+                                } else {
+                                    var newColor = getNewColor(); // randomly picking some color | TODO: refactor this to have fixed colors?
+                                    sampleColors[sample] = newColor;
+                                    return newColor;
+                                }
+                            }); // style end
+            }); // d3.json call end
 
             /*========== TCA Metadata end ===========*/
 
@@ -673,17 +692,9 @@ Template.Heatmap.onRendered(function () {
         Router.go('/gg');
     }
 
-    function flatten_metadata_by_geo(type) {
 
-      var geoAll = {};
-      var geoMultiple = {};
-      var geoFlat = {};
-      var geoURL = 'http://vizhub.wustl.edu/public/hg19/encode.md',
-          roadmapURL = 'http://vizhub.wustl.edu/public/hg19/roadmap9_methylC.md';
-
-            d3.json((type === 'encode' ? geoURL : roadmapURL), 
-                function(err, res) {
-                  res.forEach(function(d) {
+    function cleanUpGEO(res) {
+        res.forEach(function(d) {
                     if (d.geo) {
                       var geoName = d.geo[0];
                       // Re-format the objects 
@@ -704,10 +715,11 @@ Template.Heatmap.onRendered(function () {
                           geoFlat[geoName] = [obj];
                         }
                     }   
-                  });
-                
-                });
-            return geoFlat;
-      }
+            });
+    }
+
+    function getNewColor() {
+        return '#'+Math.floor(Math.random()*16777215).toString(16);
+    }
 
 });
