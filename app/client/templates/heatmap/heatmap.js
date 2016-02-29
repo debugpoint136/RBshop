@@ -176,6 +176,11 @@ Template.Heatmap.onRendered(function () {
             
             // SUBFAMILY METADATA CELLS
 
+            /* Declare variables */
+            var dispClasses = [],
+                dispFamilies = [],
+                dispSubFamilies = [];
+
             d3.json("/CFScolors.json", function(CFScolors) {
     
                 var colMetaData = svg.append("g")
@@ -265,6 +270,7 @@ Template.Heatmap.onRendered(function () {
                     .data(colLabel)
                     .enter()
                     .append("rect")
+                    .attr("class", "sfc")
                     .attr("x", 0)
                     .attr("y", function (d, i) {
                         return hccol.indexOf(i + 1) * cellSize;
@@ -274,15 +280,10 @@ Template.Heatmap.onRendered(function () {
                     .attr("width", cellSize)
                     .attr("height", cellSize)
                     .style("fill", function (d) {
+                        dispClasses.push(CFScolors[d][1]);
                         return CFScolors[d][2];
-                    })
-                    .on("click", function (d, i) {
-                        colSortOrder = !colSortOrder;
-                        sortbylabel("c", i, colSortOrder);
-                        d3.select("#order").property("selectedIndex", 4).node().focus();
-                    }) // move this to On click - Subfamily
-                  ;
-
+                    });
+                    
                 // CLASS METADATA LABEL 
 
                 var classMetadataLabel = svg.append("g")
@@ -295,8 +296,8 @@ Template.Heatmap.onRendered(function () {
 
                     // TODO: this selects the order drop-down to "by contrast name"
                     .on("click", function () {
-                        console.log("Class clicked..!");
-                        order("contrast");
+                        colSortOrder = !colSortOrder;
+                        sortbylabel("sfClass", dispClasses, colSortOrder);
                     });
             }); // end of d3.json call
             /*==========================================*/
@@ -505,7 +506,7 @@ Template.Heatmap.onRendered(function () {
                 })
                 .attr("y", height + (cellSize * 4));
 
-    /*========== Change ordering of cells ===========*/
+/*========== Change ordering of cells ===========*/
 
             function sortbylabel(rORc, i, sortOrder) {
                 var t = svg.transition().duration(3000);
@@ -516,6 +517,7 @@ Template.Heatmap.onRendered(function () {
                         log2r.push(ce.value);
                     })
                 ;
+
                 if (rORc == "r") { // sort log2ratio of a gene
                     sorted = d3.range(col_number).sort(function (a, b) {
                         if (sortOrder) {
@@ -524,6 +526,7 @@ Template.Heatmap.onRendered(function () {
                             return log2r[a] - log2r[b];
                         }
                     });
+
                     t.selectAll(".cell")
                         .attr("x", function (d) {
                             return sorted.indexOf(d.col - 1) * cellSize;
@@ -534,6 +537,27 @@ Template.Heatmap.onRendered(function () {
                             return sorted.indexOf(i) * cellSize;
                         })
                     ;
+                } else if (rORc == "sfClass"){
+                    var classNames = i; // hitchhiked array with class names
+                    sorted = d3.range(col_number).sort(function (a, b) {
+                        if (sortOrder) {
+                            return d3.ascending(classNames[a], classNames[b]);
+                        } else {
+                            return d3.descending(a, b);
+                        }
+                    });
+
+                    t.selectAll(".sfc")
+                        .attr("y", function (d, i) {
+                            return sorted.indexOf(i) * cellSize;
+                        })
+                    ;
+                    t.selectAll(".cell")
+                        .attr("x", function (d) {
+                            return sorted.indexOf(d.col - 1) * cellSize;
+                        })
+                    ;
+
                 } else { // sort log2ratio of a contrast
                     sorted = d3.range(row_number).sort(function (a, b) {
                         if (sortOrder) {
