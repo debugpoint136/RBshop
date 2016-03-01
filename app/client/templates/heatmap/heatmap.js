@@ -616,6 +616,11 @@ Template.Heatmap.onRendered(function () {
                             return sorted.indexOf(i) * cellSize - cellSize;
                         })
                     ;
+                    t.selectAll(".yAssay")
+                        .attr("y", function (d, i) {
+                            return sorted.indexOf(i) * cellSize - cellSize;
+                        })
+                    ;
                     t.selectAll(".cell")
                         .attr("y", function (d) {
                             return sorted.indexOf(d.row - 1) * cellSize;
@@ -637,6 +642,11 @@ Template.Heatmap.onRendered(function () {
                         }
                     });
                     t.selectAll(".yAssay")
+                        .attr("y", function (d, i) {
+                            return sorted.indexOf(i) * cellSize - cellSize;
+                        })
+                    ;
+                    t.selectAll(".ysam")
                         .attr("y", function (d, i) {
                             return sorted.indexOf(i) * cellSize - cellSize;
                         })
