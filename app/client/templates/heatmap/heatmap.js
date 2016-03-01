@@ -528,6 +528,23 @@ Template.Heatmap.onRendered(function () {
                             return log2r[a] - log2r[b];
                         }
                     });
+                    // On sorting based on Row Label - CFS metadata heatmap also update
+                    t.selectAll(".sfc")
+                        .attr("y", function (d, i) {
+                            return sorted.indexOf(i) * cellSize;
+                        })
+                    ;
+
+                    t.selectAll(".sff")
+                        .attr("y", function (d, i) {
+                            return sorted.indexOf(i) * cellSize;
+                        })
+                    ;
+                    t.selectAll(".sfsf")
+                        .attr("y", function (d, i) {
+                            return sorted.indexOf(i) * cellSize;
+                        })
+                    ;
 
                     t.selectAll(".cell")
                         .attr("x", function (d) {
