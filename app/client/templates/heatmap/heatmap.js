@@ -313,6 +313,8 @@ Template.Heatmap.onRendered(function () {
                 roadmapURL = 'http://vizhub.wustl.edu/public/hg19/roadmap9_methylC.md';
           
             var geoFlat = {};
+            var dispSamples = [];
+            var dispAssays = [];
 
             /*========== TCA Metadata start ===========*/
 
@@ -326,6 +328,7 @@ Template.Heatmap.onRendered(function () {
                             .data(datasetNames)
                             .enter()
                             .append("rect")
+                            .attr("class", "ysam")
                             .attr("x", 0)
                             .attr("y", function (d, i) {
                                 return hcrow.indexOf(i) * cellSize;
@@ -335,6 +338,7 @@ Template.Heatmap.onRendered(function () {
                             .attr("height", cellSize)
                             .style("fill", function (d) {
                                 var sample = geoFlat[d][0].metadata.Sample;
+                                dispSamples.push(sample);
 
                                 if (sampleColors[sample]) {
                                     return sampleColors[sample];
@@ -351,6 +355,7 @@ Template.Heatmap.onRendered(function () {
                             .data(datasetNames)
                             .enter()
                             .append("rect")
+                            .attr('class', 'yAssay')
                             .attr("x", 0)
                             .attr("y", function (d, i) {
                                 return hcrow.indexOf(i) * cellSize;
@@ -360,6 +365,7 @@ Template.Heatmap.onRendered(function () {
                             .attr("height", cellSize)
                             .style("fill", function (d) {
                                 var assay = geoFlat[d][0].metadata.Assay;
+                                dispAssays.push(assay);
 
                                 if (assayColors[assay]) {
                                     return assayColors[assay];
@@ -373,6 +379,7 @@ Template.Heatmap.onRendered(function () {
 
 //################## SAMPLE METADATA LABEL 
             var sampleMetadataLabel = svg.append("g")
+                                .data(datasetNames)
                                 .append("text")
                                 .text('Sample')
                                 .attr("x", 0)
@@ -382,8 +389,8 @@ Template.Heatmap.onRendered(function () {
 
                                 // TODO: this selects the order drop-down to "by contrast name"
                                 .on("click", function () {
-                                    console.log("Sample clicked..!");
-                                    order("contrast");
+                                    colSortOrder = !colSortOrder;
+                                    sortbylabel("ySample", dispSamples, colSortOrder);
                                 });
 
 //################## ASSAY METADATA LABEL 
@@ -397,8 +404,8 @@ Template.Heatmap.onRendered(function () {
 
                                 // TODO: this selects the order drop-down to "by contrast name"
                                 .on("click", function () {
-                                    console.log("Assay clicked..!");
-                                    order("contrast");
+                                    colSortOrder = !colSortOrder;
+                                    sortbylabel("yAssay", dispAssays, colSortOrder);
                                 });
 
             /*========== TCA Metadata end ===========*/
@@ -514,13 +521,14 @@ Template.Heatmap.onRendered(function () {
                 var t = svg.transition().duration(3000);
                 var log2r = [];
                 var sorted; // sorted is zero-based index
-                d3.selectAll(".c" + rORc + i)
+                
+
+                if (rORc == "r") { // sort log2ratio of a gene
+                    d3.selectAll(".c" + rORc + i)
                     .filter(function (ce) {
                         log2r.push(ce.value);
                     })
-                ;
-
-                if (rORc == "r") { // sort log2ratio of a gene
+                    ;
                     sorted = d3.range(col_number).sort(function (a, b) {
                         if (sortOrder) {
                             return log2r[b] - log2r[a];
@@ -528,7 +536,7 @@ Template.Heatmap.onRendered(function () {
                             return log2r[a] - log2r[b];
                         }
                     });
-                    // On sorting based on Row Label - CFS metadata heatmap also update
+                    // ** On sorting based on Row Label - CFS metadata heatmap also update
                     t.selectAll(".sfc")
                         .attr("y", function (d, i) {
                             return sorted.indexOf(i) * cellSize;
@@ -545,6 +553,8 @@ Template.Heatmap.onRendered(function () {
                             return sorted.indexOf(i) * cellSize;
                         })
                     ;
+
+                    // ** Done 
 
                     t.selectAll(".cell")
                         .attr("x", function (d) {
@@ -592,7 +602,61 @@ Template.Heatmap.onRendered(function () {
                         })
                     ;
 
+                } else if (rORc == "ySample") {
+                    var sampleIDs = i;
+                    sorted = d3.range(row_number).sort(function (a, b) {
+                        if (sortOrder) {
+                            return sampleIDs[b] - sampleIDs[a];
+                        } else {
+                            return sampleIDs[a] - sampleIDs[b];
+                        }
+                    });
+                    t.selectAll(".ysam")
+                        .attr("y", function (d, i) {
+                            return sorted.indexOf(i) * cellSize - cellSize;
+                        })
+                    ;
+                    t.selectAll(".cell")
+                        .attr("y", function (d) {
+                            return sorted.indexOf(d.row - 1) * cellSize;
+                        })
+                    ;
+                    t.selectAll(".rowLabel")
+                        .attr("y", function (d, i) {
+                            return sorted.indexOf(i) * cellSize;
+                        })
+                    ;
+
+                } else if (rORc == "yAssay") {
+                    var assayIDs = i;
+                    sorted = d3.range(row_number).sort(function (a, b) {
+                        if (sortOrder) {
+                            return assayIDs[b] - assayIDs[a];
+                        } else {
+                            return assayIDs[a] - assayIDs[b];
+                        }
+                    });
+                    t.selectAll(".yAssay")
+                        .attr("y", function (d, i) {
+                            return sorted.indexOf(i) * cellSize - cellSize;
+                        })
+                    ;
+                    t.selectAll(".cell")
+                        .attr("y", function (d) {
+                            return sorted.indexOf(d.row - 1) * cellSize;
+                        })
+                    ;
+                    t.selectAll(".rowLabel")
+                        .attr("y", function (d, i) {
+                            return sorted.indexOf(i) * cellSize;
+                        })
+                    ;
                 } else { // sort log2ratio of a contrast
+                    d3.selectAll(".c" + rORc + i)
+                    .filter(function (ce) {
+                        log2r.push(ce.value);
+                    })
+                    ;
                     sorted = d3.range(row_number).sort(function (a, b) {
                         if (sortOrder) {
                             return log2r[b] - log2r[a];
@@ -838,3 +902,5 @@ Template.Heatmap.onRendered(function () {
     }
 
 });
+
+
