@@ -188,6 +188,7 @@ Template.Heatmap.onRendered(function () {
                     .data(colLabel)
                     .enter()
                     .append("rect")
+                    .attr("class", "sfsf")
                     .attr("x", 0)
                     .attr("y", function (d, i) {
                         return hccol.indexOf(i + 1) * cellSize;
@@ -229,6 +230,7 @@ Template.Heatmap.onRendered(function () {
                     .data(colLabel)
                     .enter()
                     .append("rect")
+                    .attr("class", "sff")
                     .attr("x", 0)
                     .attr("y", function (d, i) {
                         return hccol.indexOf(i + 1) * cellSize;
@@ -555,6 +557,21 @@ Template.Heatmap.onRendered(function () {
                     t.selectAll(".cell")
                         .attr("x", function (d) {
                             return sorted.indexOf(d.col - 1) * cellSize;
+                        })
+                    ;
+                    t.selectAll(".sff")
+                        .attr("y", function (d, i) {
+                            return sorted.indexOf(i) * cellSize;
+                        })
+                    ;
+                    t.selectAll(".sfsf")
+                        .attr("y", function (d, i) {
+                            return sorted.indexOf(i) * cellSize;
+                        })
+                    ;
+                    t.selectAll(".colLabel")
+                        .attr("y", function (d, i) {
+                            return sorted.indexOf(i) * cellSize;
                         })
                     ;
 
