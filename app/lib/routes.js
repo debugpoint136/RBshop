@@ -43,7 +43,8 @@ Router.map(function() {
 
     this.route('gg', {
         path: '/gg',
-        template: 'GenomeGraph'
+        // template: 'GenomeGraph'
+        template: 'consensusView'
     });
 
     this.route('cv', {

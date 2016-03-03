@@ -1,7 +1,11 @@
 Template.consensusView.onRendered(function () {
 
-    var coordinate = ['GSM935360', 'MER41B'];
- 	Meteor.call("retrieveMedia",coordinate, function(error, res) {
+  
+  // var coordinate = ['GSM935360', 'MER41B'];
+  var coordinate = Session.get('coordinate');
+
+  console.log(coordinate);
+ 	Meteor.call("retrieveMedia", coordinate, function(error, res) {
       if (!error) {
             var data = cleanUp(res);
     		    constructGraphs(data);
