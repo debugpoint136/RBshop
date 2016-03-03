@@ -1,0 +1,20 @@
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+/*.area {
+  fill: steelblue;
+}*/
+
+.heading {
+	margin: 50px;
+	font-weight: bold;
+	fill: blue;
+}
