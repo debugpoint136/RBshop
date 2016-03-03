@@ -45,6 +45,11 @@ Router.map(function() {
         path: '/gg',
         template: 'GenomeGraph'
     });
+
+    this.route('cv', {
+        path: '/cv',
+        template: 'consensusView'
+    });
     /* ================================ */
     /*           BEV                    */
     /* ================================ */
@@ -206,6 +211,7 @@ Router.route('/genome_graph', {
     action: 'list',
     where: 'client'
 });
+
 
 
 
