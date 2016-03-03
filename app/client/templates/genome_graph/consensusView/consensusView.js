@@ -79,13 +79,13 @@ function constructGraphs(data) {
 		
     var svg = d3.select("#artboard").append("svg")
         .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("height", height / 1.5 + margin.top + margin.bottom)
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   if (dataToDraw[0]) {
-    drawArea(svg, dataToDraw[0].bwa, '#843c39', datasetName, maxValforScale);
-    drawArea(svg, dataToDraw[0].itrs, '#e7969c', datasetName, maxValforScale);
+    drawArea(svg, dataToDraw[0].bwa, 'rgba(4, 68, 129, 0.75)', datasetName, maxValforScale);
+    drawArea(svg, dataToDraw[0].itrs, 'rgba(188, 224, 251, 0.75)', datasetName, maxValforScale);
   }
 }
     function drawArea(svg, data, fillColor, datasetName, maxValforScale) {
@@ -98,7 +98,7 @@ function constructGraphs(data) {
           .range([0, width]);
 
       var y = d3.scale.linear()
-          .range([height, 0]);
+          .range([height / 2, 0]);
 
       var xAxis = d3.svg.axis()
           .scale(x)
@@ -110,11 +110,11 @@ function constructGraphs(data) {
 
       var area = d3.svg.area()
           .x(function(d) { return x(d.position); })
-          .y0(height)
+          .y0(height/2)
           .y1(function(d) { return y(d.signal); });
 
       x.domain(d3.extent(data, function(d) { return d.position; }));
-      y.domain([0, maxValforScale]);
+      y.domain([ 0, maxValforScale ]);
     
       svg.append("text")
           .attr('class', 'heading')
@@ -128,7 +128,7 @@ function constructGraphs(data) {
 
       svg.append("g")
           .attr("class", "x axis")
-          .attr("transform", "translate(0," + height + ")")
+          .attr("transform", "translate(0," + height / 2 + ")")
           .call(xAxis);
 
       svg.append("g")

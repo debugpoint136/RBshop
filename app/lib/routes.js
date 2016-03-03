@@ -49,7 +49,7 @@ Router.map(function() {
 
     this.route('cv', {
         path: '/cv',
-        template: 'consensusView'
+        template: 'GenomeGraph'
     });
     /* ================================ */
     /*           BEV                    */
