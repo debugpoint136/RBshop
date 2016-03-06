@@ -18,11 +18,12 @@ var chrLengths = {
 Template.genomeView.onRendered(function () {
 
 // Fetch data - DONE :)
-	/* PROD */ //getsubfamcopies( subfamid, 'getsubfamcopieswithtk' ); 
-	/* TEST */ make_genomebev_base();
+	/* PROD */ getsubfamcopies( subfamid, 'getsubfamcopieswithtk' ); 
+	/* PROD */ // make_genomebev_base();
+	/* TEST */ // parseData_exp_bev();
 
 	
-	//		 make_genomebev_base(vobj,data.key);
+	//		 make_genomebev_base(vobj,data.key);  -- BASE CREATED
 	//       parseData_exp_bev(data,vobj,vobj.bev);
 	//       make_bevcolorscale(vobj,vobj.bev,data.key);
 	//       draw_genomebev_experiment(vobj,vobj.bev);
@@ -35,8 +36,9 @@ function callAPI(apiName, url) {
 
 	Meteor.call(apiName, url, function(error, res) {
 	  if (!error) {
-	        var data = res;
-	        make_genomebev_base(data); 
+	        var data = eval('(' + res + ')');
+	        /* PROD */ // make_genomebev_base(); 
+	        parseData_exp_bev(data);
 			
 	  } else {
 	    console.log(error);
@@ -70,10 +72,7 @@ function getsubfamcopies(sid, urlParam)
 }
 
 
-function make_genomebev_base(data) {
-	console.log('Inside make_genomebev_base');
-	// Just draw 24 rectangles
-	// 0.000004413228723710983 * browser.genome.scaffold.len['chr1']
+function make_genomebev_base() {
 
 	// declare SVG properties
 	var margin = {top: 50, right: 20, bottom: 20, left: 50};
@@ -95,14 +94,13 @@ function make_genomebev_base(data) {
 	        .attr("x", 0)
 	        .attr('fill', 'LightSlateGray')
 	        .attr("y", function (d, i) {
-	        	console.log(i + ": "+ d);
 	            return i * 20;
 	        })
 	        .attr("class", function (d, i) {
 	            return " chr chr-border chr" + i;
 	        })
 	        .attr("width", function(d) {
-	        	return 0.000004413228723710983 * d - 50; 
+	        	return 0.000004413228723710983 * d - 50; // TODO: Reduction factor based on screen size
 	        })
 	        .attr("height", 17)
 	        ;
@@ -129,6 +127,43 @@ function make_genomebev_base(data) {
 
 	// mousedown - genomebev_zoomin_md
 
+}
+
+function parseData_exp_bev(data) {
+
+	var chr2data={};
+	for(var i=0; i<chrLst.length; i++)
+        chr2data[chrLst[i]]=[];
+
+    var has_input = 1; // Check if input exists
+    var Data=[];
+
+    for(i=0; i<data.genomecopies.length; i++) {
+        var lst=data.genomecopies[i].split(' ');
+        var s=lst[5].split(',');
+        var ts=[];
+        // need to skip the last comma
+        for(var j=0; j<s.length-1; j++) ts.push(parseFloat(s[j]));
+        var is=[];
+       /* if(has_input) {
+            s=lst[6].split(',');
+            for(j=0; j<s.length-1; j++) is.push(parseFloat(s[j]));
+        }*/
+        Data.push([lst[0],parseInt(lst[1]),parseInt(lst[2]), lst[3], parseInt(lst[4]), ts, is]);
+        /* 0 chrom
+         1 start
+         2 stop
+         3 strand
+         4 bed item id
+         5 [] treat score
+         6 [] input score, could be empty
+         */
+
+         /* figure out *baseline* value for both treatment and input in computing ratio,
+     	(not the baseline for color scale)
+    	 any value lower than baseline will be replaced by baseline
+    	 */
+   }
 }
 
 
