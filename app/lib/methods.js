@@ -19,6 +19,37 @@ if (Meteor.isServer) {
             } else {
                 throw new Meteor.Error('HTTP get status ' + result.statusCode);
             }
+        },
+        'getsubfamcopiesonly': function (urlString) {
+            this.unblock();
+            try {
+                // coordinate = ['GSM935360', 'MER41B'];
+                var result = Meteor.http.call('GET', "http://epigenomegateway.wustl.edu/cgi-bin/subtleKnife?" + urlString);
+            } catch (error) {
+                throw new Meteor.Error(error.getMessage());
+            }
+
+            if (result.statusCode === 200) {
+                return result.content;
+            } else {
+                throw new Meteor.Error('HTTP get status ' + result.statusCode);
+            }
+        },
+
+        'getsubfamcopieswithtk': function (urlString) {
+            this.unblock();
+            try {
+                // coordinate = ['GSM935360', 'MER41B'];
+                var result = Meteor.http.call('GET', "http://epigenomegateway.wustl.edu/cgi-bin/subtleKnife?" + urlString);
+            } catch (error) {
+                throw new Meteor.Error(error.getMessage());
+            }
+
+            if (result.statusCode === 200) {
+                return result.content;
+            } else {
+                throw new Meteor.Error('HTTP get status ' + result.statusCode);
+            }
         }
     });
 }

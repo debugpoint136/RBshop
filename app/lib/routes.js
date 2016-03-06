@@ -66,6 +66,11 @@ Router.map(function() {
         path: '/bev03',
         template: 'bev03'
     });
+    //----------//
+    this.route('gv', {
+        path: '/gv',
+        template: 'genomeView'
+    });
 
 });
 

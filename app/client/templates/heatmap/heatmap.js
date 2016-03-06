@@ -878,7 +878,7 @@ Template.Heatmap.onRendered(function () {
 
     callGenomeGraph = function(coordinate) {
         Session.set('coordinate', coordinate);
-        Router.go('/gg');
+        Router.go('/gv');
     }
 
 
