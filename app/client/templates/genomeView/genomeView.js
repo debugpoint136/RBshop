@@ -2,7 +2,7 @@
 
 var coordinate = Session.get('coordinate');
 var chrLst = ["chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", "chr9", "chr10", "chr11", "chr12", "chr13", "chr14", "chr15", "chr16", "chr17", "chr18", "chr19", "chr20", "chr21", "chr22", "chrX", "chrY"];
-/*TEST*/ coordinate = ["GSM935576", "AluJb"];
+/*TEST*/ coordinate = ["GSM945188", "L1HS"];
 
 var subfamid = coordinate[1];
 var geoid 	 = coordinate[0];
@@ -13,6 +13,7 @@ var chrLengths = {
 		"chr1": 249250621, "chr2": 243199373, "chr3": 198022430, "chr4": 191154276, "chr5": 180915260, "chr6": 171115067, "chr7": 159138663, "chr8": 146364022, "chr9": 141213431, "chr10": 135534747, "chr11": 135006516, "chr12": 133851895, "chr13": 115169878, "chr14": 107349540, "chr15": 102531392, "chr16": 90354753, "chr17": 81195210, "chr18": 78077248, "chr19": 59128983, "chr20": 63025520, "chr21": 48129895, "chr22": 51304566, "chrX": 155270560, "chrY": 59373566
 		};
 
+var bev = {}; // TODO: check if this is the best place to declare this
 /*----end----*/
 
 Template.genomeView.onRendered(function () {
@@ -37,7 +38,7 @@ function callAPI(apiName, url) {
 	Meteor.call(apiName, url, function(error, res) {
 	  if (!error) {
 	        var data = eval('(' + res + ')');
-	        /* PROD */ // make_genomebev_base(); 
+	        /* PROD */  make_genomebev_base(); 
 	        parseData_exp_bev(data);
 			
 	  } else {
@@ -75,10 +76,13 @@ function getsubfamcopies(sid, urlParam)
 function make_genomebev_base() {
 
 	// declare SVG properties
-	var margin = {top: 50, right: 20, bottom: 20, left: 50};
+	var margin = {top: 50, right: 20, bottom: 10, left: 50};
 	var width = 1200;
-	var height = 500;
+	var height = 750;
 
+	var chrLen_scale = d3.scale.linear().range([0, width - margin.right - margin.left - 75]);
+		chrLen_scale.domain([0, d3.max(d3.values(chrLengths))]);
+    
 	var svg = d3.select('#genomeviewArtboard').append("svg")
 		.attr("width", width + margin.left + margin.right)  // Expanded the drawing canvas
         .attr("height", height + margin.top + margin.bottom)
@@ -92,15 +96,17 @@ function make_genomebev_base() {
 	        .enter()
 	        .append("rect")
 	        .attr("x", 0)
-	        .attr('fill', 'LightSlateGray')
+	        .attr('fill', '#B0E0E6')
 	        .attr("y", function (d, i) {
-	            return i * 20;
+	            return i * 30;
 	        })
+	        .attr('rx', 5)
+	        .attr('ry', 5)
 	        .attr("class", function (d, i) {
 	            return " chr chr-border chr" + i;
 	        })
 	        .attr("width", function(d) {
-	        	return 0.000004413228723710983 * d - 50; // TODO: Reduction factor based on screen size
+	        	return chrLen_scale(d);
 	        })
 	        .attr("height", 17)
 	        ;
@@ -115,9 +121,9 @@ function make_genomebev_base() {
     		})
     		.attr('class', 'mono')
     		.attr("x", -40)
-    		.attr("dy","0.35em")
+    		.attr("dy","0.15em")
     		.attr("y", function (d, i) {
-            	return i * 20 + 8;
+            	return i * 30 + 12;
         	})
         	;
 
@@ -127,6 +133,9 @@ function make_genomebev_base() {
 
 	// mousedown - genomebev_zoomin_md
 
+	bev.genomebev_base = svg;
+	bev.chrLen_scale = chrLen_scale;
+
 }
 
 function parseData_exp_bev(data) {
@@ -135,7 +144,7 @@ function parseData_exp_bev(data) {
 	for(var i=0; i<chrLst.length; i++)
         chr2data[chrLst[i]]=[];
 
-    var has_input = 1; // Check if input exists
+    var has_input = 0; // TODO: Check if input exists
     var Data=[];
 
     for(i=0; i<data.genomecopies.length; i++) {
@@ -145,10 +154,10 @@ function parseData_exp_bev(data) {
         // need to skip the last comma
         for(var j=0; j<s.length-1; j++) ts.push(parseFloat(s[j]));
         var is=[];
-       /* if(has_input) {
+        if(has_input) {
             s=lst[6].split(',');
             for(j=0; j<s.length-1; j++) is.push(parseFloat(s[j]));
-        }*/
+        }
         Data.push([lst[0],parseInt(lst[1]),parseInt(lst[2]), lst[3], parseInt(lst[4]), ts, is]);
         /* 0 chrom
          1 start
@@ -158,15 +167,171 @@ function parseData_exp_bev(data) {
          5 [] treat score
          6 [] input score, could be empty
          */
-
+	}
          /* figure out *baseline* value for both treatment and input in computing ratio,
      	(not the baseline for color scale)
     	 any value lower than baseline will be replaced by baseline
     	 */
-   }
+
+    	var treatValueLst=[];
+	    var inputValueLst=[];
+	    var mean_t=0; // mean of treatment
+	    var mean_i=0; // mean of input
+	    var count=0; // divisor
+
+	    for( i = 0; i < Data.length; i++ ) {
+	        var x = Data[i];
+	        count++;
+	        { // treat
+	            var s = 0;
+	            for( var j=0; j < x[5].length; j++ ) s+=x[5][j];  // iterate over treat - add and average
+	            var v = s/j;
+	            treatValueLst.push(v);
+	            mean_t += v;  // adding all v gives average of treatment values - clever :)
+	        }
+	        if(has_input) {
+	            // input
+	            var s = 0;
+	            for( var j = 0; j < x[6].length; j++ ) s += x[6][j];
+	            var v = s/j;
+	            inputValueLst.push(v);
+	            mean_i += v;
+	        }
+	    }
+
+        mean_t /= count;
+	    mean_i /= count;
+		    /* important change here
+		     if actual value is lower than mean_t/_i, replace with 1
+		     so that their log ratio can be 0
+		     */
+	   for( i = 0; i < treatValueLst.length; i++ ) {
+	        var v = treatValueLst[i];
+	        treatValueLst[i] = v < mean_t ? 1 : v;
+    	  } /*--for loop--*/
+
+    	  if(has_input) {
+	        for( i = 0; i < inputValueLst.length; i++ ) {
+	            var v = inputValueLst[i];
+	            inputValueLst[i] = v < mean_i ? 1 : v;
+	        }
+	    }
+
+	   // compute ratio for each individual repeat 
+	   	var minv = 0, maxv = 0;
+	    for( i = 0; i < Data.length; i++ ) {
+	        var x = Data[i];
+	        var v = treatValueLst[i];
+	        if( has_input ) {
+	            v = Math.log( v/inputValueLst[i] ) / Math.log(2);
+	        }
+	        if( v > maxv ) maxv = v;
+	        else if( v < minv ) minv = v;
+	        chr2data[x[0]].push([x[1],x[2],x[3],x[4],v]);
+	        /*
+	         0 start
+	         1 stop
+	         2 strand
+	         3 bed item id
+	         4 log ratio
+	         */
+	    }
+
+	    // example entry in Data array: ["chrY", 8178186, 8179010, "+", 1517, Array[2], Array[1]]
+	    /* !! this array must be sorted by chromosomal order
+	     or tooltipping won't work
+	     */
+	    for(var c in chr2data)
+	        chr2data[c].sort(coordSort);
+	    
+	    bev.data=chr2data;
+	    bev.minv=minv;
+	    bev.maxv=maxv;
+
+	    draw_genomebev_experiment();
+}
+
+function make_bevcolorscale(bev) {
+
+	// csbj - track-specific colorscale runtime object, attached to a bev object
+	var csbj={baseline:0}; // colorscale object, track-specific
+
+	/***** draw the color scale panel ***/
+    /* 1. calculate distribution, width of color scale defines resolution
+     in calculating ratio, many te got value of 0 for below baseline
+     the 0 ratio count must be escaped so it won't screw histogram
+     */
+    var chr2data=bev.data;
+    var minv=bev.minv;
+    var maxv=bev.maxv;
+    var arr=[]; // histogram
+
+    // this is all about the slider so skipping it for now
 }
 
 
+function draw_genomebev_experiment()
+{
+    /* draw bev graph on which the TEs from a subfam is plotted
+     colored by experiment assay data
+    */
+    var chr2xpos = {};
+    var basev = -0.01656745516965108; //HARDCODED!! TODO: this should come with bev.csbj.baseline;
+    var num = 0;
+    var clst = chrLst;
+
+    // for(var i = 0; i < clst.length; i++) {
+        //var svg = bev.chr2canvas[clst[i]]; // get the svg here
+        var svg = bev.genomebev_base;
+        // var svg = d3.select('.chr' + i);
+
+        // var dd = bev.data[clst[i]];  		// in bev object
+
+        chrLst.forEach(function(chrNum, chrIndex) {
+	        var chrTicks = svg.append('g')
+	    		.selectAll('chrTicks')
+	    		.data(d3.values(bev.data[chrNum]))
+	    		.enter()
+	    		.append("rect")
+		        .attr("x", function(d, i) {
+		        	return  bev.chrLen_scale( d[0] ) ;
+		        })
+		        .attr('fill', 'Crimson')
+		        .attr("y", function() {
+		        	return chrIndex * 30;
+		        })
+		        .attr("class", function (d, i) {
+		            return 'top chr' + i + 'Ticks';
+		        })
+		        .attr("width", 1)
+		        .attr("height", 17)
+		        ;
+        });
+
+
+        /* TODO : remove all elements on the chromosome */
+        
+    //     var xpos = [];
+    //     for( var j = 0; j < dd.length; j++ ) {
+    //         // [ start, stop, strand, swscore ]
+    //         var vobj_type = 2; // FIXME
+    //         var v = dd[j][( vobj_type == 1 ? 3 : 4 )];
+    //         var apps_gg_sf = 0.000004413228723710983; // FIXME : reduction factor
+    //         var x = apps_gg_sf * dd[j][0]; 
+    //         if( v < basev ) {
+    //             // ctx.fillStyle='rgba(0,0,255,'+((basev-v)/(basev-bev.minv))+')';
+    //             /* create a rectangle at this spot, 1 unit wide */
+    //         } else {
+    //             num ++;
+    //             // ctx.fillStyle='rgba(255,255,0,'+((v-basev)/(bev.maxv-basev))+')';
+    //         }
+    //         // ctx.fillRect(x,0,1,c.height);		// make a rect 1 width wide
+    //         xpos.push(x);
+    //     }
+    //     chr2xpos[clst[i]]=xpos;
+    // // }  // end of top for loop
+    // bev.chr2xpos=chr2xpos;
+} /* --end--:draw_genomebev_experiment--*/
 
 /*
 colorscale_slidermoved
@@ -178,3 +343,5 @@ beam_rankitem - on click on Download button // s.addEventListener('click',beam_r
 add2gg_invoketkselect  // Add another experiment
 */
 
+/* more util functions */
+function coordSort(a,b) {return a[0]-b[0];}
