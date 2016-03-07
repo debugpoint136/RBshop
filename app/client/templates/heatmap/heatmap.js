@@ -1,28 +1,9 @@
+Template.Heatmap.onCreated(function () {
+    Session.set('isBrowserReady', false);
+});
 /*****************************************************************************/
 /* SubfamList: Helpers */
 /*****************************************************************************/
-Template.Heatmap.helpers({
-    /*'getWidth' : function() {
-        var col_number = 60, cellSize = 12, left = 300, right = 10;
-
-        return (cellSize * col_number) + left + right + 100;
-    },
-
-    'getHeight' : function() {
-        var row_number = 50, cellSize = 12, top = 150, bottom = 50;
-
-        return (cellSize * col_number) + top + bottom + 100;
-    }
-    ,*/
-
-});
-
-
-/*****************************************************************************/
-/* SubfamList: Lifecycle Hooks */
-/*****************************************************************************/
-Template.Heatmap.onCreated(function () {
-});
 
 
 Template.Heatmap.onRendered(function () {
@@ -515,6 +496,10 @@ Template.Heatmap.onRendered(function () {
                 })
                 .attr("y", height + (cellSize * 4));
 
+/*==================LOAD COMPLETE FLAG===========*/
+
+Session.set('isBrowserReady', true) // Place this when load complete
+
 /*========== Change ordering of cells ===========*/
 
             function sortbylabel(rORc, i, sortOrder) {
@@ -875,7 +860,7 @@ Template.Heatmap.onRendered(function () {
             }
         });
 */
-
+    
     callGenomeGraph = function(coordinate) {
         Session.set('coordinate', coordinate);
         Router.go('/gv');
@@ -913,4 +898,22 @@ Template.Heatmap.onRendered(function () {
 
 });
 
+Template.Heatmap.helpers({
+    /*'getWidth' : function() {
+        var col_number = 60, cellSize = 12, left = 300, right = 10;
+
+        return (cellSize * col_number) + left + right + 100;
+    },
+
+    'getHeight' : function() {
+        var row_number = 50, cellSize = 12, top = 150, bottom = 50;
+
+        return (cellSize * col_number) + top + bottom + 100;
+    }
+    ,*/
+    browserReady: function () { 
+        return Session.get('isBrowserReady')
+    }
+
+});
 

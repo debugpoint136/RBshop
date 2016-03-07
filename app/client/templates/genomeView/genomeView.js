@@ -1,25 +1,36 @@
 /*----start Global Variable ----*/
 
-var coordinate = Session.get('coordinate');
 var chrLst = ["chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", "chr9", "chr10", "chr11", "chr12", "chr13", "chr14", "chr15", "chr16", "chr17", "chr18", "chr19", "chr20", "chr21", "chr22", "chrX", "chrY"];
-/*TEST*/ coordinate = ["GSM945188", "L1HS"];
-
-var subfamid = coordinate[1];
-var geoid 	 = coordinate[0];
-var viewKey  = Meteor.uuid().split('-').join('');
 var lst2=[], lst=chrLst;
 lst2 = ["chr1", 249250621, "chr2", 243199373, "chr3", 198022430, "chr4", 191154276, "chr5", 180915260, "chr6", 171115067, "chr7", 159138663, "chr8", 146364022, "chr9", 141213431, "chr10", 135534747, "chr11", 135006516, "chr12", 133851895, "chr13", 115169878, "chr14", 107349540, "chr15", 102531392, "chr16", 90354753, "chr17", 81195210, "chr18", 78077248, "chr19", 59128983, "chr20", 63025520, "chr21", 48129895, "chr22", 51304566, "chrX", 155270560, "chrY", 59373566];
 var chrLengths = { 
 		"chr1": 249250621, "chr2": 243199373, "chr3": 198022430, "chr4": 191154276, "chr5": 180915260, "chr6": 171115067, "chr7": 159138663, "chr8": 146364022, "chr9": 141213431, "chr10": 135534747, "chr11": 135006516, "chr12": 133851895, "chr13": 115169878, "chr14": 107349540, "chr15": 102531392, "chr16": 90354753, "chr17": 81195210, "chr18": 78077248, "chr19": 59128983, "chr20": 63025520, "chr21": 48129895, "chr22": 51304566, "chrX": 155270560, "chrY": 59373566
 		};
+// declare SVG properties
+var margin = {top: 50, right: 20, bottom: 10, left: 50};
+var width = 1200;
+var height = 750;
+var chrLen_scale = d3.scale.linear().range([0, width - margin.right - margin.left - 75]);
+	chrLen_scale.domain([0, d3.max(d3.values(chrLengths))]);
+var colors = ['#FF0000', '#FF1717', '#FF2E2E', '#FF4545', '#FF5C5C', '#FF7373', '#FF8B8B', '#FFA2A2', '#FFB9B9', '#FFD0D0', '#FFFFFF', '#D0D0FF', '#B9B9FF', '#A2A2FF', '#8B8BFF', '#7373FF', '#5C5CFF', '#4545FF', '#2E2EFF', '#1717FF', '#0000FF'];  // '#FFE7E7', '#FFFFFF', '#E7E7FF'
 
-var bev = {}; // TODO: check if this is the best place to declare this
 /*----end----*/
+Template.genomeView.onCreated(function () {
+	Session.set('ispageReady', false);
+});
 
 Template.genomeView.onRendered(function () {
+	
+	var coordinate = Session.get('coordinate');
+	
+		// /*TEST*/ coordinate = ["GSM945188", "L1HS"];
+	var subfamid = coordinate[1];
+	var geoid 	 = coordinate[0];
+	var viewKey  = Meteor.uuid().split('-').join('');
 
 // Fetch data - DONE :)
-	/* PROD */ getsubfamcopies( subfamid, 'getsubfamcopieswithtk' ); 
+	var bev = {}, data = {};
+	/* PROD */ getsubfamcopies( subfamid, geoid, viewKey, 'getsubfamcopieswithtk' , bev, data); 
 	/* PROD */ // make_genomebev_base();
 	/* TEST */ // parseData_exp_bev();
 
@@ -33,22 +44,7 @@ Template.genomeView.onRendered(function () {
 
 /*############# functions ###############*/
 
-function callAPI(apiName, url) {
-
-	Meteor.call(apiName, url, function(error, res) {
-	  if (!error) {
-	        var data = eval('(' + res + ')');
-	        /* PROD */  make_genomebev_base(); 
-	        parseData_exp_bev(data);
-			
-	  } else {
-	    console.log(error);
-	  }
-	});
-}
-
-
-function getsubfamcopies(sid, urlParam)
+function getsubfamcopies(sid, geoid, viewKey, urlParam, bev, data)
 {
      
     var CFSobj = {};
@@ -62,26 +58,31 @@ function getsubfamcopies(sid, urlParam)
 
 		if ( urlParam === 'getsubfamcopiesonly') {
 			var urlRequestString = 'repeatbrowser=on&getsubfamcopiesonly=on' + subfamTrackParamString;
-			callAPI( urlParam, urlRequestString );
+			callAPI( urlParam, urlRequestString , bev, data);
 		} else if ( urlParam === 'getsubfamcopieswithtk' ) {
 			var urlRequestString = 'repeatbrowser=on&getsubfamcopieswithtk=on' + subfamTrackParamString + '&geo=' + geoid + '&viewkey=' + viewKey;
-			callAPI( urlParam, urlRequestString );
+			callAPI( urlParam, urlRequestString , bev, data);
 		} else {
 			return 'Invalid URL param';
 		}
 	}); /*---end d3.csv call---*/
 }
 
+function callAPI(apiName, url, bev, data) {
 
-function make_genomebev_base() {
+	Meteor.call(apiName, url, function(error, res) {
+	  if (!error) {
+	        var data = eval('(' + res + ')');
+	        /* PROD */  make_genomebev_base(data, bev); 
+	        // parseData_exp_bev(data);
+			
+	  } else {
+	    console.log(error);
+	  }
+	});
+}
 
-	// declare SVG properties
-	var margin = {top: 50, right: 20, bottom: 10, left: 50};
-	var width = 1200;
-	var height = 750;
-
-	var chrLen_scale = d3.scale.linear().range([0, width - margin.right - margin.left - 75]);
-		chrLen_scale.domain([0, d3.max(d3.values(chrLengths))]);
+function make_genomebev_base(data, bev) {
     
 	var svg = d3.select('#genomeviewArtboard').append("svg")
 		.attr("width", width + margin.left + margin.right)  // Expanded the drawing canvas
@@ -90,42 +91,42 @@ function make_genomebev_base() {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")// moved the brush
         ;
 
-    	var chrBars = svg.append("g")
-    		.selectAll(".chrbar")
-	    	.data(d3.values(chrLengths))
-	        .enter()
-	        .append("rect")
-	        .attr("x", 0)
-	        .attr('fill', '#B0E0E6')
-	        .attr("y", function (d, i) {
-	            return i * 30;
-	        })
-	        .attr('rx', 5)
-	        .attr('ry', 5)
-	        .attr("class", function (d, i) {
-	            return " chr chr-border chr" + i;
-	        })
-	        .attr("width", function(d) {
-	        	return chrLen_scale(d);
-	        })
-	        .attr("height", 17)
-	        ;
+	var chrBars = svg.append("g")
+		.selectAll(".chrbar")
+    	.data(d3.values(chrLengths))
+        .enter()
+        .append("rect")
+        .attr("x", 0)
+        .attr('fill', '#F5F5F5')
+        .attr("y", function (d, i) {
+            return i * 30;
+        })
+        .attr('rx', 5)
+        .attr('ry', 5)
+        .attr("class", function (d, i) {
+            return " chr chr-border chr" + i;
+        })
+        .attr("width", function(d) {
+        	return chrLen_scale(d);
+        })
+        .attr("height", 17)
+        ;
 
-	    var chrNames = svg.append('g')
-    		.selectAll('chrname')
-    		.data(d3.keys(chrLengths))
-    		.enter()
-    		.append('text')
-    		.text(function(d) {
-    			return d;
-    		})
-    		.attr('class', 'mono')
-    		.attr("x", -40)
-    		.attr("dy","0.15em")
-    		.attr("y", function (d, i) {
-            	return i * 30 + 12;
-        	})
-        	;
+    var chrNames = svg.append('g')
+		.selectAll('chrname')
+		.data(d3.keys(chrLengths))
+		.enter()
+		.append('text')
+		.text(function(d) {
+			return d;
+		})
+		.attr('class', 'mono')
+		.attr("x", -40)
+		.attr("dy","0.15em")
+		.attr("y", function (d, i) {
+        	return i * 30 + 12;
+    	})
+    	;
 
 	// mousemove - genomebev_tooltip_mousemove
 
@@ -136,9 +137,10 @@ function make_genomebev_base() {
 	bev.genomebev_base = svg;
 	bev.chrLen_scale = chrLen_scale;
 
+	parseData_exp_bev(data, bev);
 }
 
-function parseData_exp_bev(data) {
+function parseData_exp_bev(data, bev) {
 
 	var chr2data={};
 	for(var i=0; i<chrLst.length; i++)
@@ -248,13 +250,13 @@ function parseData_exp_bev(data) {
 	    bev.minv = minv;
 	    bev.maxv = maxv;
 
-	    var colorScale = d3.scale.linear()
-                .domain([minv, maxv])
-                .range(['blue', 'red']);
+	    var colorScale = d3.scale.quantile()
+                .domain([minv, 0, maxv])
+                .range(colors);
 
         bev.colorScale = colorScale;
 
-	    draw_genomebev_experiment();
+	    draw_genomebev_experiment(bev);
 }
 
 function make_bevcolorscale(bev) {
@@ -276,7 +278,7 @@ function make_bevcolorscale(bev) {
 }
 
 
-function draw_genomebev_experiment()
+function draw_genomebev_experiment(bev)
 {
     /* draw bev graph on which the TEs from a subfam is plotted
      colored by experiment assay data
@@ -311,6 +313,8 @@ function draw_genomebev_experiment()
 	        ;
     });
 
+// page ready?
+    Session.set('ispageReady', true);
 
         /* TODO : remove all elements on the chromosome when threshold changes */
         
@@ -334,6 +338,9 @@ function draw_genomebev_experiment()
     //     chr2xpos[clst[i]]=xpos;
     // // }  // end of top for loop
     // bev.chr2xpos=chr2xpos;
+
+    // TODO : make sure the coloring is working fine
+    // what's the deal with chr2xpos
 } /* --end--:draw_genomebev_experiment--*/
 
 /*
@@ -348,3 +355,9 @@ add2gg_invoketkselect  // Add another experiment
 
 /* more util functions */
 function coordSort(a,b) {return a[0]-b[0];}
+
+Template.genomeView.helpers({
+    pageReady: function () { 
+    	return Session.get('ispageReady')
+    }
+});

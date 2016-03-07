@@ -16,6 +16,15 @@
 
     <div class="row">
         <div id="main" style='overflow:auto; width:{{getWidth}}px; height:{{getHeight}}px;'></div>
+        {{#if browserReady }}
+                    
+                {{else}}
+        <div class="row pt mt">
+                <div class="col-xs-4">
+                    <h5><a href="#">Loading ...</a></h5>        {{> Loading}}
+                </div>
+            </div>
+        {{/if}}
     </div>
     </div>
     <!--container-->

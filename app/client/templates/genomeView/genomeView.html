@@ -4,6 +4,15 @@
             <div class="col-xs-12">
 				<h1>Genome View</h1>
 				<div id="genomeviewArtboard"></div>
+				{{#if pageReady }}
+					
+				{{else}}
+                    <div class="row pt mt">
+            			<div class="col-xs-4">
+            				<h5><a href="#">Generating view ...</a></h5>		{{> Loading}}
+                   		</div>
+                   	</div>
+                {{/if}}
             </div>
         </div>
 	</div>
