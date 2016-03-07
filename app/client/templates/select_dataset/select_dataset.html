@@ -1,27 +1,20 @@
-
 <template name="select_dataset">
-    <div class="container pt">
-
-            <div class="row mt">
-                <div class="col-lg-6 col-lg-offset-3 centered">
-                    <h4>Select datasets to include in this analysis</h4>
-
-                </div>
-                <div class="col-lg-8">
-                    <img src="select_dataset.png" alt="">
-                </div>
-
-
-
-                <div class="col-lg-6 col-lg-offset-3 centered">
-                    <br/>
-                    <br/>
-
-                    <hr>
-                    <a href="/heatmap" type="button" class="btn btn-info">Load Browser</a>
-                </div>
+    <div class="container">
+        <div class="row pt mt">
+            <div class="col-xs-12">
+                <h1>Select Datasets</h1>
+                <div id="datasetsArtboard"></div>
+                {{#if datapageReady }}
+                <a href="/heatmap" type="button" class="btn btn-info">Load Browser</a>
+                    
+                {{else}}
+                    <div class="row pt">
+                        <div class="col-xs-4">
+                            <h5><a href="#">Loading data grid ...</a></h5>        {{> Loading}}
+                        </div>
+                    </div>
+                {{/if}}
             </div>
         </div>
-
-
+    </div>
 </template>
