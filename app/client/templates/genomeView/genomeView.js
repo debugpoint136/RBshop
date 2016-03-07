@@ -244,9 +244,15 @@ function parseData_exp_bev(data) {
 	    for(var c in chr2data)
 	        chr2data[c].sort(coordSort);
 	    
-	    bev.data=chr2data;
-	    bev.minv=minv;
-	    bev.maxv=maxv;
+	    bev.data = chr2data;
+	    bev.minv = minv;
+	    bev.maxv = maxv;
+
+	    var colorScale = d3.scale.linear()
+                .domain([minv, maxv])
+                .range(['blue', 'red']);
+
+        bev.colorScale = colorScale;
 
 	    draw_genomebev_experiment();
 }
@@ -280,36 +286,33 @@ function draw_genomebev_experiment()
     var num = 0;
     var clst = chrLst;
 
-    // for(var i = 0; i < clst.length; i++) {
-        //var svg = bev.chr2canvas[clst[i]]; // get the svg here
-        var svg = bev.genomebev_base;
-        // var svg = d3.select('.chr' + i);
+    var svg = bev.genomebev_base;
 
-        // var dd = bev.data[clst[i]];  		// in bev object
-
-        chrLst.forEach(function(chrNum, chrIndex) {
-	        var chrTicks = svg.append('g')
-	    		.selectAll('chrTicks')
-	    		.data(d3.values(bev.data[chrNum]))
-	    		.enter()
-	    		.append("rect")
-		        .attr("x", function(d, i) {
-		        	return  bev.chrLen_scale( d[0] ) ;
-		        })
-		        .attr('fill', 'Crimson')
-		        .attr("y", function() {
-		        	return chrIndex * 30;
-		        })
-		        .attr("class", function (d, i) {
-		            return 'top chr' + i + 'Ticks';
-		        })
-		        .attr("width", 1)
-		        .attr("height", 17)
-		        ;
-        });
+    chrLst.forEach(function(chrNum, chrIndex) {
+        var chrTicks = svg.append('g')
+    		.selectAll('chrTicks')
+    		.data(d3.values(bev.data[chrNum]))
+    		.enter()
+    		.append("rect")
+	        .attr("x", function(d, i) {
+	        	return  bev.chrLen_scale( d[0] ) ;
+	        })
+	        .attr('fill', function(d, i) {
+	        	return bev.colorScale( d[4] );
+	        })
+	        .attr("y", function() {
+	        	return chrIndex * 30;
+	        })
+	        .attr("class", function (d, i) {
+	            return 'top chr' + i + 'Ticks';
+	        })
+	        .attr("width", 1)
+	        .attr("height", 17)
+	        ;
+    });
 
 
-        /* TODO : remove all elements on the chromosome */
+        /* TODO : remove all elements on the chromosome when threshold changes */
         
     //     var xpos = [];
     //     for( var j = 0; j < dd.length; j++ ) {
