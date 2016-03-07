@@ -303,13 +303,13 @@ function draw_genomebev_experiment(bev)
 	        	return bev.colorScale( d[4] );
 	        })
 	        .attr("y", function() {
-	        	return chrIndex * 30;
+	        	return chrIndex * 30 + 3;
 	        })
 	        .attr("class", function (d, i) {
 	            return 'top chr' + i + 'Ticks';
 	        })
 	        .attr("width", 1)
-	        .attr("height", 17)
+	        .attr("height", 11)
 	        ;
     });
 

@@ -73,7 +73,7 @@ function constructGraphs(data) {
 	function drawContent(dataToDraw, maxValforScale, datasetName) {
 
     var margin = {top: 20, right: 20, bottom: 30, left: 80},
-      width = 960 - margin.left - margin.right,
+      width = 1160 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom;
 		
     var svg = d3.select("#artboard").append("svg")

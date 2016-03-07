@@ -863,7 +863,7 @@ Session.set('isBrowserReady', true) // Place this when load complete
     
     callGenomeGraph = function(coordinate) {
         Session.set('coordinate', coordinate);
-        Router.go('/gv');
+        Router.go('/gg');
     }
 
 

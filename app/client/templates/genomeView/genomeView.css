@@ -25,7 +25,7 @@ text {
 }
 
 rect.chr {
-	fill:blue;
+	fill:yellow;
 	stroke:pink;
 	stroke-width:5;
 	fill-opacity:0.1;
