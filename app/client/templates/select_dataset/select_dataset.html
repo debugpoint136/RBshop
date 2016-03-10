@@ -2,10 +2,216 @@
     <div class="container">
         <div class="row pt mt">
             <div class="col-xs-12">
-                <h1>Select Datasets</h1>
-                <div id="datasetsArtboard"></div>
+
+                <h1 class="ihec_page_title" style="float:left!important;">Data Grid : </h1>
+                <div style="float:left;margin-top:34px; margin-left:16px;"><select id="assembly_selector" class="form-control assembly_selection"></select></div>
+                <div style="clear:both;"></div>
+
+                <div id="gridContainer"></div>
                 {{#if datapageReady }}
-                <a href="/heatmap" type="button" class="btn btn-info">Load Browser</a>
+                <div class="col-xs-12">
+                    <span style="float: right; margin-top: 10px; margin-bottom: 10px;">
+                    <h5>Order:</h5> 
+                      <select id="order" class="form-control">
+                        <option value="cell_type_y" selected="selected">by Cell Type</option>
+                        <option value="cell_type_category_y">by Cell Type Category</option>
+                        <option value="institution_y">by Consortium</option>
+                    </select> 
+                  </span>
+                </div>
+
+                <div style="clear: both;">
+                <div id="gridButtonsContainer" style="text-align: center;">
+                  <button onclick="callLocalBrowser();" class="displayWhenAssembly">Visualize in Genome Browser</button>
+                  &nbsp;&nbsp;&nbsp;
+                  <button id="button-getTrackHub" class="displayWhenAssembly">Get track hub link</button>
+                  &nbsp;&nbsp;&nbsp;
+                  <button onclick="callDownloadPage();">Download tracks</button>
+                  &nbsp;&nbsp;&nbsp;
+                  <button onclick="digViewer.resetSelection();">Reset</button>
+                  &nbsp;&nbsp;&nbsp;
+                  <button onclick="digViewer.selectAll();">Select All</button>
+                </div>
+              </div>
+
+                <!-- main grid container -->
+                <div class="col-xs-12" id="gridContainer">
+                    <div class="row pt mt centered">
+                        <h3> d3 dataset selection chart goes here </h3>
+                    </div>
+                </div>
+
+                <!-- Selection menus -->
+                <div class="row">
+                    <div class="col-xs-6 ">
+                        <div class="row pt centered panel-gap">
+                         <h3> Tissues </h3>
+                             <div class="panel panel-success">
+                              <div class="panel-heading">Panel Heading</div>
+                              <div class="panel-body">
+                                <!-- start -->
+                                <div id="widget-cellTypeCategorySelector" class="digv-controls">
+                                <span class="digv-controls-title-text">Tissues</span>
+                                <div class="digv-controls-title-line"></div>
+                                <div id="cell_type_category_div"></div>
+                              </div>
+                                <!-- end -->
+                              </div>
+                                
+                             </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <div class="row pt centered panel-gap">
+                         <h3> Assay Categories </h3>
+                             <div class="panel panel-danger">
+                              <div class="panel-heading">Panel Heading</div>
+                              <div class="panel-body">
+                                <!-- start -->
+                                <div id="widget-assayCategorySelector" class="digv-controls">
+                                <span class="digv-controls-title-text">Assay Categories</span>
+                                <div class="digv-controls-title-line"></div>
+                                <div id="assay_category_div"></div>
+                              </div>
+                                <!-- end -->
+                              </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-6 ">
+                        <div class="row pt centered panel-gap">
+                         <h3> Track Hubs </h3>
+                             <div class="panel panel-info">
+                              <div class="panel-heading">Panel Heading</div>
+                              <div class="panel-body">
+                                <!-- start -->
+                                <div id="widget-institutions" class="digv-controls">
+                                <span class="digv-controls-title-text">Track Hubs</span>
+                                <div class="digv-controls-title-line"></div>
+                                <div id="institution_div"></div>
+                                </div>
+                                <!-- end -->
+                              </div>
+                             </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <div class="row pt centered panel-gap">
+                         <h3> Overview </h3>
+                             <div class="panel panel-default">
+                              <div class="panel-heading">Panel Heading</div>
+                              <div class="panel-body">
+                                <!-- start -->
+                                <div id="widget-dataOverview" class="digv-controls">
+                                <span class="digv-controls-title-text">Overview</span>
+                                <div class="digv-controls-title-line"></div>
+                                <form id="pie_type_form" action="" onchange="updateOverviewPie(currentlyDisplayedData);">
+                                  <input type="radio" name="pie_type" id="pie_type_inst" value="inst" checked="checked"><label for="pie_type_inst" style="display:inline;">Consortium</label><br>
+                                  <input type="radio" name="pie_type" id="pie_type_ctc" value="ctc"><label for="pie_type_ctc" style="display:inline;">Tissue</label><br>
+                                  <input type="radio" name="pie_type" id="pie_type_ac" value="ac"><label for="pie_type_ac" style="display:inline;">Assay Category</label>
+                                </form>
+                                <div id="pie"></div>
+                              </div>
+                                <!-- end -->
+                              </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Display selected tracks -->
+                <h3 class="row pt centered"> Selected Tracks </h3>
+
+                <div class="container">
+                    <table class="table">
+                    <thead>
+                      <tr>
+                        <th>&nbsp;</th>
+                        <th>Sample</th>
+                        <th>Track Name</th>
+                        <th>Species</th>
+                        <th>Consortium</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="success">
+                        <td><input type="checkbox"></td>
+                        <td>ENCBS003ENC</td>
+                        <td>ENCSR000DPI_peak_calls_35014_hotspots(rep1)</td>
+                        <td>human</td>
+                        <td>ENCODE</td>
+                      </tr>
+                      <tr class="danger">
+                        <td><input type="checkbox"></td>
+                        <td>ENCBS003ENC</td>
+                        <td>ENCSR000DPI_peak_calls_35014_hotspots(rep1)</td>
+                        <td>human</td>
+                        <td>ENCODE</td>
+                      </tr>
+                      <tr class="info">
+                        <td><input type="checkbox"></td>
+                        <td>ENCBS003ENC</td>
+                        <td>ENCSR000DPI_peak_calls_35014_hotspots(rep1)</td>
+                        <td>human</td>
+                        <td>ENCODE</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div style="width:100%; text-align: right; margin-top: 5px;">
+                    <a href="#top">Go to top</a>
+                </div>
+
+
+                <!-- start -->
+<div id="widgetsContainer" style="text-align: center;">
+  <div id="trackSelector_div" style="width: 100%;">
+
+    <div id="trackSelector_trackKind" style="display:none;">
+          <span class="digv-controls-title-text">Track Kind:</span>
+      <div class="digv-controls-title-line"></div>
+      <table id="track_selector_track_kinds_table">
+        <tr><td><input type="checkbox" name="track_kind" class="track_kind" id="track_kind_contig" value="contigs" checked="checked"><label style="display:inline;" for="track_kind_contig">Contigs</label></td></tr>
+        <tr><td><input type="checkbox" name="track_kind" class="track_kind" id="track_kind_signal" value="signal" checked="checked"><label style="display:inline;" for="track_kind_signal">Signal</label></td></tr>
+        <tr><td><input type="checkbox" name="track_kind" class="track_kind" id="track_kind_signal_forward" value="signal_forward" checked="checked"><label style="display:inline;" for="track_kind_signal_forward">Signal Forward</label></td></tr>
+        <tr><td><input type="checkbox" name="track_kind" class="track_kind" id="track_kind_signal_reverse" value="signal_reverse" checked="checked"><label style="display:inline;" for="track_kind_signal_reverse">Signal Reverse</label></td></tr>
+        <tr><td><input type="checkbox" name="track_kind" class="track_kind" id="track_kind_peaks" value="peaks" checked="checked"><label style="display:inline;" for="track_kind_peaks">Peaks</label></td></tr>
+        <tr><td><input type="checkbox" name="track_kind" class="track_kind" id="track_kind_profile" value="profile" checked="checked"><label style="display:inline;" for="track_kind_profile">Methylation Profile</label></td></tr>
+      </table>
+    </div>
+    
+    <div id="trackSelector_selectedTracks">
+      <table class="table" id="trackSelector_selectedTracks_table" frame="above" rules="rows">
+        <thead>
+          <tr>
+            <td>&nbsp;</td>
+            <td>View</td>
+            <td>Donor</td>
+            <td>Sample</td>
+            <td>Track Name</td>
+            <td>Species</td>
+            <td>Consortium</td>
+          </tr>
+        </thead>
+        <tbody id="selectedTracks"></tbody>
+      </table>
+      <div style="width:100%; text-align: right; margin-top: 5px;">
+        <a href="#top">Go to top</a>
+      </div>
+    </div>
+     
+  </div>
+</div>
+                <!-- end -->
+
+
+                <!-- <a href="/heatmap" type="button" class="btn btn-info">Load Browser</a> -->
                     
                 {{else}}
                     <div class="row pt">

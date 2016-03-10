@@ -1,0 +1,26 @@
+{
+    "institution": [
+
+    {
+        "id": 4,
+        "name": "ENCODE",
+        "short_name": "ENCODE",
+        "is_default": 1,
+        "color": "#2ca02c",
+        "build": "2011-01",
+        "site_url" : "https://genome.ucsc.edu/encode/",
+        "policies_url" : "http://encodeproject.org/ENCODE/terms.html"
+    },
+    {
+        "id": 5,
+        "name": "NIH Roadmap",
+        "short_name": "Roadmap",
+        "is_default": 1,
+        "color": "#9467bd",
+        "build": "2014-05-29",
+        "site_url" : "http://www.roadmapepigenomics.org/",
+        "policies_url" : "http://www.ncbi.nlm.nih.gov/geo/roadmap/epigenomics/"
+    }
+        ]
+    }
+    

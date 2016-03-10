@@ -8,14 +8,20 @@ Template.Heatmap.onCreated(function () {
 
 Template.Heatmap.onRendered(function () {
 
+    var heatmapConfig = {};
+
     var margin = {top: 150, right: 10, bottom: 50, left: 300},
         cellSize = 12;
+    heatmapConfig['margin'] = margin;
+    heatmapConfig['cellSize'] = cellSize;
 
 
 
     // TODO: set this dynamically based on the datasets and subfamilies selected
-    col_number = 60;
-    row_number = 50;
+    var col_number = 26, 
+        row_number = 11;
+    heatmapConfig[ 'col_number' ] = col_number;
+    heatmapConfig[ 'row_number' ] = row_number;
 
     var data = []; // Adding this after disabling the previously laid out structure
 
@@ -23,13 +29,33 @@ Template.Heatmap.onRendered(function () {
     var datasetNames = [];
 
     width = cellSize * col_number, // - margin.left - margin.right,
-        height = cellSize * row_number , // - margin.top - margin.bottom,
-        //gridSize = Math.floor(width / 24),
-        legendElementWidth = cellSize * 2.5,
-        colorBuckets = 21,
-        //colors = ['#005824', '#1A693B', '#347B53', '#4F8D6B', '#699F83', '#83B09B', '#9EC2B3', '#B8D4CB', '#D2E6E3', '#EDF8FB', '#FFFFFF', '#F1EEF6', '#E6D3E1', '#DBB9CD', '#D19EB9', '#C684A4', '#BB6990', '#B14F7C', '#A63467', '#9B1A53', '#91003F'];
-        colors = ['#FF0000', '#FF1717', '#FF2E2E', '#FF4545', '#FF5C5C', '#FF7373', '#FF8B8B', '#FFA2A2', '#FFB9B9', '#FFD0D0', '#FFFFFF', '#D0D0FF', '#B9B9FF', '#A2A2FF', '#8B8BFF', '#7373FF', '#5C5CFF', '#4545FF', '#2E2EFF', '#1717FF', '#0000FF'];  // '#FFE7E7', '#FFFFFF', '#E7E7FF'
+    height = cellSize * row_number , // - margin.top - margin.bottom,
 
+    heatmapConfig['width'] = width;
+    heatmapConfig['height'] = height;
+
+        //gridSize = Math.floor(width / 24),
+    legendElementWidth = cellSize * 2.5,
+    colorBuckets = 9,
+        //colors = ['#005824', '#1A693B', '#347B53', '#4F8D6B', '#699F83', '#83B09B', '#9EC2B3', '#B8D4CB', '#D2E6E3', '#EDF8FB', '#FFFFFF', '#F1EEF6', '#E6D3E1', '#DBB9CD', '#D19EB9', '#C684A4', '#BB6990', '#B14F7C', '#A63467', '#9B1A53', '#91003F'];
+        // colors = ['#FF0000', '#FF1717', '#FF2E2E', '#FF4545', '#FF5C5C', '#FF7373', '#FF8B8B', '#FFA2A2', '#FFB9B9', '#FFD0D0', '#FFFFFF', '#D0D0FF', '#B9B9FF', '#A2A2FF', '#8B8BFF', '#7373FF', '#5C5CFF', '#4545FF', '#2E2EFF', '#1717FF', '#0000FF'];  // '#FFE7E7', '#FFFFFF', '#E7E7FF'
+       
+    colors = ['#FF0000', '#FF1717', '#FF2E2E', '#FF4545', '#FF5C5C', '#FF7373', 
+                    '#FF8B8B', '#FFA2A2', '#FFB9B9', '#FFD0D0', 
+                    '#FFFFFF', '#D0D0FF', '#B9B9FF', '#A2A2FF', '#8B8BFF', '#7373FF', 
+                    '#5C5CFF', '#4545FF', '#2E2EFF', '#1717FF', '#0000FF'];  
+
+    colorsBR = ['#0000FF', '#2E2EFF', '#5C5CFF',
+                    '#FFFFFF', '#B9B9FF', '#FFA2A2',
+                    '#FF0000', '#FF2E2E', '#FF5C5C'
+                    ];
+
+    var colorScale = d3.scale.quantile()
+                .domain([-1, 0, 1])
+                .range(colorsBR);
+
+    heatmapConfig['colors'] = colors;
+    heatmapConfig['colorScale'] = colorScale;
 
 
     var hcrowStart = 1, hcrowEnd = row_number;
@@ -40,9 +66,13 @@ Template.Heatmap.onRendered(function () {
         hcrow.push(i);
     }
 
+    heatmapConfig['hcrow'] = hcrow;
+
+
     for (var j = hccolStart; j <= hccolEnd; j++) {
         hccol.push(j);
     }
+    heatmapConfig['hccol'] = hccol;
 
     // Pull data from mongo db
     var datasets = Datasets.find({});
@@ -55,12 +85,20 @@ Template.Heatmap.onRendered(function () {
         }
     );
 
+    heatmapConfig['rowLabel'] = rowLabel;
+    heatmapConfig['datasets'] = datasets;
+    heatmapConfig['datasetNames'] = datasetNames;
+    heatmapConfig['data'] = data;
+
     var subfam = Subfam.find({});
     colLabel = [];
     subfam.forEach(function(doc) {
         colLabel.push(doc.name);
         }
     );
+
+    heatmapConfig['colLabel'] = colLabel;
+
 
     // parse data ratio - and dump it in data array
     for (var i = 0; i < dataRatio.length; i++) {
@@ -73,428 +111,35 @@ Template.Heatmap.onRendered(function () {
 
             data.push(cellObj);
         }
-    }
+    }          
 
-            var colorScale = d3.scale.quantile()
-                .domain([-10, 0, 10])
-                .range(colors);
-
-            var svg = d3.select("#main").append("svg")
-                .attr("width", width + margin.left + margin.right)  // Expanded the drawing canvas
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")// moved the brush
-                ;
-            var rowSortOrder = false;
-            var colSortOrder = false;
+    var svg = d3.select("#main").append("svg")
+        .attr("width", width + margin.left + margin.right)  // Expanded the drawing canvas
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")// moved the brush
+        ;
+    var rowSortOrder = false;
+    var colSortOrder = false;
 
 
-            /*========== Row labels ===========*/
+/*========== Row labels ===========*/
+    svg = drawRowLabels(svg, heatmapConfig);
 
-            var rowLabels = svg.append("g")
-                .selectAll(".rowLabelg")
-                .data(rowLabel)
-                .enter()
-                .append("text")
-                .text(function (d) {
-                    return d;
-                })
-                .attr("x", 0)
-                .attr("y", function (d, i) {
-                    return hcrow.indexOf(i + 1) * cellSize;  // relative position of the row
-                })
-                .style("text-anchor", "end")
-                .attr("transform", "translate(-6," + cellSize / 1.25 + ")")
-                .attr("class", function (d, i) {
-                    return "rowLabel mono r" + i;
-                })
-                .on("mouseover", function (d) {
-                    d3.select(this).classed("text-hover", true);
-                })
-                .on("mouseout", function (d) {
-                    d3.select(this).classed("text-hover", false);
-                })
-                .on("click", function (d, i) {
-                    rowSortOrder = !rowSortOrder;
-                    sortbylabel("r", i, rowSortOrder);
-                    d3.select("#order").property("selectedIndex", 3).node().focus();  // this selects the order drop-down to "by contrast name"
-                    ;
-                })
-                ;
+/*========== Column labels ===========*/
+    // drawColLabels(svg, heatmapConfig);
 
-            /*========== Column labels ===========*/
+/* SUBFAMILY METADATA CELLS */
+// subFamMetaDataCells()
+// assaySampleMetadata()
+// drawHeatMap()
+// legend()
+  
+// TODO : Drag and select should give option to zoom on on the selection
+// TODO : Pan and zoom, with reset,  on these line - http://bl.ocks.org/mbostock/7ec977c95910dd026812
+// TODO : Main wrapper/container should be fluid and responsive
 
-            var colLabels = svg.append("g")
-                .selectAll(".colLabelg")
-                .data(colLabel)
-                .enter()
-                .append("text")
-                .text(function (d) {
-                    return d;
-                })
-                .attr("x", 0)
-                .attr("y", function (d, i) {
-                    return hccol.indexOf(i + 1) * cellSize;
-                })
-                .style("text-anchor", "left")
-                .attr("transform", "translate(" + cellSize / 1.25 + ",-6) rotate (-90)")
-                .attr("class", function (d, i) {
-                    return "colLabel mono c" + i;
-                })
-                .on("mouseover", function (d) {
-                    d3.select(this).classed("text-hover", true);
-                })
-                .on("mouseout", function (d) {
-                    d3.select(this).classed("text-hover", false);
-                })
-                .on("click", function (d, i) {
-                    colSortOrder = !colSortOrder;
-                    sortbylabel("c", i, colSortOrder);
-                    d3.select("#order").property("selectedIndex", 4).node().focus();
-                });
-
-            /*========== CFS Metadata labels ===========*/
-            
-            // SUBFAMILY METADATA CELLS
-
-            /* Declare variables */
-            var dispClasses = [],
-                dispFamilies = [],
-                dispSubFamilies = [];
-
-            d3.json("/CFScolors.json", function(CFScolors) {
     
-                var colMetaData = svg.append("g")
-                    .selectAll(".colMetadatag")
-                    .data(colLabel)
-                    .enter()
-                    .append("rect")
-                    .attr("class", "sfsf")
-                    .attr("x", 0)
-                    .attr("y", function (d, i) {
-                        return hccol.indexOf(i + 1) * cellSize;
-                    })
-                    .style("text-anchor", "left")
-                    .attr("transform", "translate(0, -80) rotate (-90)")
-                    .attr("width", cellSize)
-                    .attr("height", cellSize)
-                    .style("fill", function (d) {
-                        return CFScolors[d][4];
-                    })
-                    .on("click", function (d, i) {
-                        colSortOrder = !colSortOrder;
-                        sortbylabel("c", i, colSortOrder);
-                        d3.select("#order").property("selectedIndex", 4).node().focus();
-                    }) // move this to On click - Subfamily
-                  ;
-
-                // SUBFAMILY METADATA LABEL 
-
-                var subFamilyMetadataLabel = svg.append("g")
-                    .append("text")
-                    .text('Subfamily')
-                    .attr("x", 0)
-                    .attr("y", 0)
-                    .attr("transform", "translate(-6, -80)")
-                    .attr("class", "subMetadataLabelg")
-
-                    // TODO: this selects the order drop-down to "by contrast name"
-                    .on("click", function () {
-                        console.log("subfamily clicked..!");
-                        order("contrast");
-                    });
-
-                // FAMILY METADATA CELLS
-
-                var familyMetaData = svg.append("g")
-                    .selectAll(".familyMetadatag")
-                    .data(colLabel)
-                    .enter()
-                    .append("rect")
-                    .attr("class", "sff")
-                    .attr("x", 0)
-                    .attr("y", function (d, i) {
-                        return hccol.indexOf(i + 1) * cellSize;
-                    })
-                    .style("text-anchor", "left")
-                    .attr("transform", "translate(0, -92) rotate (-90)")
-                    .attr("width", cellSize)
-                    .attr("height", cellSize)
-                    .style("fill", function (d) {
-                        return CFScolors[d][3];
-                    })
-                    .on("click", function (d, i) {
-                        colSortOrder = !colSortOrder;
-                        sortbylabel("c", i, colSortOrder);
-                        d3.select("#order").property("selectedIndex", 4).node().focus();
-                    }) // move this to On click - Subfamily
-                  ;
-
-                // FAMILY METADATA LABEL 
-
-                var familyMetadataLabel = svg.append("g")
-                    .append("text")
-                    .text('Family')
-                    .attr("x", 0)
-                    .attr("y", 0)
-                    .attr("transform", "translate(-6, -93)")
-                    .attr("class", "subMetadataLabelg")
-
-                    // TODO: this selects the order drop-down to "by contrast name"
-                    .on("click", function () {
-                        console.log("Family clicked..!");
-                        order("contrast");
-                    });
-
-                // CLASS METADATA CELLS
-
-                var classMetaData = svg.append("g")
-                    .selectAll(".classMetadatag")
-                    .data(colLabel)
-                    .enter()
-                    .append("rect")
-                    .attr("class", "sfc")
-                    .attr("x", 0)
-                    .attr("y", function (d, i) {
-                        return hccol.indexOf(i + 1) * cellSize;
-                    })
-                    .style("text-anchor", "left")
-                    .attr("transform", "translate(0, -104) rotate (-90)")
-                    .attr("width", cellSize)
-                    .attr("height", cellSize)
-                    .style("fill", function (d) {
-                        dispClasses.push(CFScolors[d][1]);
-                        return CFScolors[d][2];
-                    });
-                    
-                // CLASS METADATA LABEL 
-
-                var classMetadataLabel = svg.append("g")
-                    .append("text")
-                    .text('Class')
-                    .attr("x", 0)
-                    .attr("y", 0)
-                    .attr("transform", "translate(-6, -106)")
-                    .attr("class", "subMetadataLabelg")
-
-                    // TODO: this selects the order drop-down to "by contrast name"
-                    .on("click", function () {
-                        colSortOrder = !colSortOrder;
-                        sortbylabel("sfClass", dispClasses, colSortOrder);
-                    });
-            }); // end of d3.json call
-            /*==========================================*/
-
-            // var geo = flatten_metadata_by_geo('encode');  // this won't work since this is asynchronous call
-
-            var sampleColors = {};
-            var assayColors = {};                                               // this is an adhoc objects to hold colors for samples and assays
-
-            var geoURL = 'http://vizhub.wustl.edu/public/hg19/encode.md',
-                roadmapURL = 'http://vizhub.wustl.edu/public/hg19/roadmap9_methylC.md';
-          
-            var geoFlat = {};
-            var dispSamples = [];
-            var dispAssays = [];
-
-            /*========== TCA Metadata start ===========*/
-
-            d3.json(geoURL,                                                     // TODO: hardcoded for encode only
-                function(err, res) {
-                    cleanUpGEO(res);
-
-//################## SAMPLE METADATA MAP 
-                    var sampleMetaData = svg.append("g")
-                            .selectAll(".sampleMetadatag")
-                            .data(datasetNames)
-                            .enter()
-                            .append("rect")
-                            .attr("class", "ysam")
-                            .attr("x", 0)
-                            .attr("y", function (d, i) {
-                                return hcrow.indexOf(i) * cellSize;
-                            })
-                            .attr("transform", "translate(-288, " + cellSize + ")")
-                            .attr("width", cellSize)
-                            .attr("height", cellSize)
-                            .style("fill", function (d) {
-                                var sample = geoFlat[d][0].metadata.Sample;
-                                dispSamples.push(sample);
-
-                                if (sampleColors[sample]) {
-                                    return sampleColors[sample];
-                                } else {
-                                    var newColor = getNewColor(); // randomly picking some color | TODO: refactor this to have fixed colors?
-                                    sampleColors[sample] = newColor;
-                                    return newColor;
-                                }
-                            }); // style end
-
-//################## ASSAY METADATA MAP 
-                    var assayMetaData = svg.append("g")
-                            .selectAll(".assayMetadatag")
-                            .data(datasetNames)
-                            .enter()
-                            .append("rect")
-                            .attr('class', 'yAssay')
-                            .attr("x", 0)
-                            .attr("y", function (d, i) {
-                                return hcrow.indexOf(i) * cellSize;
-                            })
-                            .attr("transform", "translate(-300, " + cellSize + ")")
-                            .attr("width", cellSize)
-                            .attr("height", cellSize)
-                            .style("fill", function (d) {
-                                var assay = geoFlat[d][0].metadata.Assay;
-                                dispAssays.push(assay);
-
-                                if (assayColors[assay]) {
-                                    return assayColors[assay];
-                                } else {
-                                    var newColor = getNewColor(); // randomly picking some color | TODO: refactor this to have fixed colors?
-                                    assayColors[assay] = newColor;
-                                    return newColor;
-                                }
-                            }); // style end
-            }); // d3.json call end
-
-//################## SAMPLE METADATA LABEL 
-            var sampleMetadataLabel = svg.append("g")
-                                .data(datasetNames)
-                                .append("text")
-                                .text('Sample')
-                                .attr("x", 0)
-                                .attr("y", 0)
-                                .attr("transform", "translate(-276, -6) rotate (-90)")
-                                .attr("class", "tcaMetadataLabelg")
-
-                                // TODO: this selects the order drop-down to "by contrast name"
-                                .on("click", function () {
-                                    colSortOrder = !colSortOrder;
-                                    sortbylabel("ySample", dispSamples, colSortOrder);
-                                });
-
-//################## ASSAY METADATA LABEL 
-            var assayMetadataLabel = svg.append("g")
-                                .append("text")
-                                .text('Assay')
-                                .attr("x", 0)
-                                .attr("y", 0)
-                                .attr("transform", "translate(-288, -6) rotate (-90)")
-                                .attr("class", "tcaMetadataLabelg")
-
-                                // TODO: this selects the order drop-down to "by contrast name"
-                                .on("click", function () {
-                                    colSortOrder = !colSortOrder;
-                                    sortbylabel("yAssay", dispAssays, colSortOrder);
-                                });
-
-            /*========== TCA Metadata end ===========*/
-
-    /*========== heatmap ===========*/
-
-    var heatMap;
-    heatMap = svg.append("g").attr("class", "g3")
-        .selectAll(".cellg")
-        .data(data, function (d) {
-            return d.row + ":" + d.col;
-        })
-        .enter()
-        .append("rect")
-        .attr("x", function (d) {
-            return hccol.indexOf(d.col) * cellSize;
-        })
-        .attr("y", function (d) {
-            return hcrow.indexOf(d.row) * cellSize;
-        })
-        .attr("class", function (d) {
-            return "cell cell-border cr" + (d.row - 1) + " cc" + (d.col - 1);
-        })
-        .attr("width", cellSize)
-        .attr("height", cellSize)
-        .style("fill", function (d) {
-            return colorScale(d.value);
-        })
-        .on("click", function (d) {
-            var rowtext = d3.select(".r" + (d.row - 1));
-
-            // called function here that will create a genome graph view
-            var coordinate = [];
-
-            coordinate.push(datasetNames[d.row -1], colLabel[d.col - 1]);
-            callGenomeGraph(coordinate);
-
-            if (rowtext.classed("text-selected") == false) {
-                rowtext.classed("text-selected", true);
-            } else {
-                rowtext.classed("text-selected", false);
-            }
-        })
-        .on("mouseover", function (d) {
-            //highlight text
-            d3.select(this).classed("cell-hover", true);
-            d3.selectAll(".rowLabel").classed("text-highlight", function (r, ri) {
-                return ri == (d.row - 1);
-            });
-            d3.selectAll(".colLabel").classed("text-highlight", function (c, ci) {
-                return ci == (d.col - 1);
-            });
-
-            /*========== Tooltip ===========*/
-
-            //Update the tooltip position and value
-            d3.select("#tooltip")
-                .style("left", (d3.event.pageX + 10) + "px")
-                .style("top", (d3.event.pageY - 10) + "px")
-                .select("#experiment")
-                //.text("labels:" + rowLabel[d.row - 1] + "," + colLabel[d.col - 1] + "\ndata:" + d.value + "\nrow-col-idx:" + d.col + "," + d.row + "\ncell-xy " + this.x.baseVal.value + ", " + this.y.baseVal.value);
-                .text("Experiment:" + rowLabel[d.row - 1]);
-            d3.select("#tooltip")
-                .select("#repeat-subfamily")
-                .text("Repeat Subfamily : " + colLabel[d.col - 1]);
-            //"\ndata:" + d.value + "\nrow-col-idx:" + d.col + "," + d.row + "\ncell-xy " + this.x.baseVal.value + ", " + this.y.baseVal.value);
-            //Show the tooltip
-            d3.select("#tooltip").classed("hidden", false);
-        })
-        .on("mouseout", function () {
-            d3.select(this).classed("cell-hover", false);
-            d3.selectAll(".rowLabel").classed("text-highlight", false);
-            d3.selectAll(".colLabel").classed("text-highlight", false);
-            d3.select("#tooltip").classed("hidden", true);
-        });
-
-    // TODO : Drag and select should give option to zoom on on the selection
-    // TODO : Pan and zoom, with reset,  on these line - http://bl.ocks.org/mbostock/7ec977c95910dd026812
-    // TODO : Main wrapper/container should be fluid and responsive
-
-    /*========== Legend ===========*/
-
-            var legend = svg.selectAll(".legend")
-                .data([-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-                .enter().append("g")
-                .attr("class", "legend");
-
-            legend.append("rect")
-                .attr("x", function (d, i) {
-                    return legendElementWidth * i;
-                })
-                .attr("y", height + (cellSize * 2))
-                .attr("width", legendElementWidth)
-                .attr("height", cellSize)
-                .style("fill", function (d, i) {
-                    return colors[i];
-                });
-
-            legend.append("text")
-                .attr("class", "mono")
-                .text(function (d) {
-                    return d;
-                })
-                .attr("width", legendElementWidth)
-                .attr("x", function (d, i) {
-                    return legendElementWidth * i;
-                })
-                .attr("y", height + (cellSize * 4));
 
 /*==================LOAD COMPLETE FLAG===========*/
 
@@ -867,34 +512,8 @@ Session.set('isBrowserReady', true) // Place this when load complete
     }
 
 
-    function cleanUpGEO(res) {
-        res.forEach(function(d) {
-                    if (d.geo) {
-                      var geoName = d.geo[0];
-                      // Re-format the objects 
-                        var obj = {};
-
-                        obj['name'] = d.name;
-                        obj['detail_url'] = d.detail_url;
-                        obj['metadata'] = d.metadata;
-                        obj['type'] = d.type;
-                        obj['public'] = d.public;
-                        obj['url'] = d.url;
-
-                        // var metadata = d.name.split(' ');
-
-                        if (geoFlat[geoName]) {
-                          geoFlat[geoName].push(obj);
-                        } else {
-                          geoFlat[geoName] = [obj];
-                        }
-                    }   
-            });
-    }
-
-    function getNewColor() {
-        return '#'+Math.floor(Math.random()*16777215).toString(16);
-    }
+    
+    
 
 });
 
