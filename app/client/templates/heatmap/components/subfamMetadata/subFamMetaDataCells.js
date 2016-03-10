@@ -60,6 +60,8 @@ subFamMetaDataCells = function(svg, params) {
 
         // CLASS METADATA CELLS
 
+        var classColors = ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"];
+
         var classMetaData = svg.append("g")
             .selectAll(".classMetadatag")
             .data(colLabel)
@@ -77,7 +79,8 @@ subFamMetaDataCells = function(svg, params) {
             .style("fill", function (d) {
                 dispClasses.push(CFScolors[d][1]);
                 return CFScolors[d][2];
-            });
+            })
+            ;
             
         // CLASS METADATA LABEL 
 

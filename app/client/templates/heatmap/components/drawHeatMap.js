@@ -5,7 +5,8 @@ drawHeatMap = function(svg, params) {
 	var hccol = params.hccol;
 	var hcrow = params.hcrow;
 	var data = params.data;
-	var colorScale = params.colorScale;
+	var posColorScale = params.posColorScale;
+    var negColorScale = params.negColorScale;
 	var datasetNames = params.datasetNames;
 
     var heatMap;
@@ -28,7 +29,12 @@ drawHeatMap = function(svg, params) {
         .attr("width", cellSize)
         .attr("height", cellSize)
         .style("fill", function (d) {
-            return colorScale(d.value);
+            if ( d.value < 0 ) {
+                return negColorScale(d.value);
+            } else {
+                return posColorScale(d.value);
+            }
+                
         })
         .on("click", function (d) {
             var rowtext = d3.select(".r" + (d.row - 1));
@@ -65,12 +71,16 @@ drawHeatMap = function(svg, params) {
                 .text("Experiment:" + rowLabel[d.row - 1]);
             d3.select("#tooltip")
                 .select("#repeat-subfamily")
-                .text("Repeat Subfamily : " + colLabel[d.col - 1]);
+                // .text("Repeat Subfamily : " + colLabel[d.col - 1]);
+                .text("Repeat Subfamily : MER41E");
             //"\ndata:" + d.value + "\nrow-col-idx:" + d.col + "," + d.row + "\ncell-xy " + this.x.baseVal.value + ", " + this.y.baseVal.value);
             //Show the tooltip
+            d3.select("#tooltip")
+                .select("#score")
+                .text("Log odds ratio : " + d.value);
             d3.select("#tooltip").classed("hidden", false);
         })
-        .on("mouseout", function () {
+        .on("mouseout", function () { 
             d3.select(this).classed("cell-hover", false);
             d3.selectAll(".rowLabel").classed("text-highlight", false);
             d3.selectAll(".colLabel").classed("text-highlight", false);

@@ -1,4 +1,5 @@
 cells = function(svg, params) {
+
     var colMetaData = svg.append("g")
         .selectAll(".colMetadatag")
         .data(params.colLabel)

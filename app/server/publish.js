@@ -49,12 +49,11 @@ Meteor.publish('testdatasets', function () {
 Meteor.publish('testsubfam', function () {
     // return Subfam.find({}, { limit : 60 , sort : { family: 1}});
     //return Subfam.find({'name': { $regex: /MER41/} });
-    return Subfam.find({ name: { $in: ["LTR13", "MER107", "LTR12F", "MER51B",
-        "LTR19B", "MER41B", "THE1C", "MER57B1", "MER51A", "MER41E", "LTR26", "MER44A",
-        "LTR47A", "MER57B2", "MSTB1", "L1MB2", "LTR8B", "Tigger7", "MER44B",
-        "MER45B", "MER77", "LTR41", "LTR50", "LTR41B", "MLT1J", "MLT1L", "AmnSINE1"
+    return Subfam.find({ name: { $in: [
+        "MER107", "MER41E", "LTR12F", "MER51B",
+        "LTR19B", "MER41B", "MER57B1", "MER51A", 
+         "MER44A","MER57B2", "MER44B","MER45B"
         ] }});
-
 });
 
 Meteor.publish('fetchDatasetId', function(coordinate) {
@@ -69,3 +68,9 @@ Meteor.publish('fetchDatasetId', function(coordinate) {
 //        }
 //    });
 //});
+
+/*["LTR13", "MER107", "LTR12F", "MER51B",
+        "LTR19B", "MER41B", "THE1C", "MER57B1", "MER51A", "MER41E", "LTR26", "MER44A",
+        "LTR47A", "MER57B2", "MSTB1", "L1MB2", "LTR8B", "Tigger7", "MER44B",
+        "MER45B", "MER77", "LTR41", "LTR50", "LTR41B", "MLT1J", "MLT1L", "AmnSINE1"
+]*/

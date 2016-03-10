@@ -18,7 +18,7 @@ Template.Heatmap.onRendered(function () {
 
 
     // TODO: set this dynamically based on the datasets and subfamilies selected
-    var col_number = 26, 
+    var col_number = 12, 
         row_number = 11;
     heatmapConfig[ 'col_number' ] = col_number;
     heatmapConfig[ 'row_number' ] = row_number;
@@ -49,13 +49,6 @@ Template.Heatmap.onRendered(function () {
                     '#FFFFFF', '#B9B9FF', '#FFA2A2',
                     '#FF0000', '#FF2E2E', '#FF5C5C'
                     ];
-
-    var colorScale = d3.scale.quantile()
-                .domain([-1, 0, 1])
-                .range(colorsBR);
-
-    heatmapConfig['colors'] = colors;
-    heatmapConfig['colorScale'] = colorScale;
 
 
     var hcrowStart = 1, hcrowEnd = row_number;
@@ -99,6 +92,7 @@ Template.Heatmap.onRendered(function () {
 
     heatmapConfig['colLabel'] = colLabel;
 
+    var forScale = [];
 
     // parse data ratio - and dump it in data array
     for (var i = 0; i < dataRatio.length; i++) {
@@ -109,9 +103,35 @@ Template.Heatmap.onRendered(function () {
             cellObj['col'] = j + 1;
             cellObj['value'] = row[j];
 
+            forScale.push(row[j]);
+
             data.push(cellObj);
         }
-    }          
+    }  
+
+    RdBu = ["#b2182b","#d6604d","#f4a582","#fddbc7","#f7f7f7","#d1e5f0","#92c5de","#4393c3","#2166ac"];
+    BuRd = RdBu.reverse();
+    // Blues = ["#f7fbff","#deebf7","#c6dbef","#9ecae1","#6baed6","#4292c6","#2171b5","#084594"];
+    Blues = ["#9ecae1","#6baed6","#4292c6","#2171b5","#084594"];
+    Reds  = ["#fff5f0","#fee0d2","#fcbba1","#fc9272","#fb6a4a","#ef3b2c","#cb181d","#99000d"];  
+
+    var sizeExtent = d3.extent(forScale);
+    var negExtent = [ sizeExtent[0], 0 ];
+    var posExtent = [ 0, sizeExtent[1] ]; 
+
+    var negColorScale = d3.scale.quantize()
+                 .domain(negExtent).range(Blues);
+
+    var posColorScale = d3.scale.quantize()
+                 .domain(posExtent).range(Reds);
+
+    heatmapConfig['colors'] = BuRd;
+    heatmapConfig['negColorScale'] = negColorScale;
+    heatmapConfig['posColorScale'] = posColorScale;
+    
+    // var colorScale = d3.scale.quantile()
+    //             .domain([-1, 0, 1])
+    //             .range(colorsBR);        
 
     var svg = d3.select("#main").append("svg")
         .attr("width", width + margin.left + margin.right)  // Expanded the drawing canvas
