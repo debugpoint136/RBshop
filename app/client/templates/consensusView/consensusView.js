@@ -2,9 +2,8 @@ Template.consensusView.events({
     'click .jsShowInfo': function (event) {
         // grab the identifier from name attr of button
         var banner = event.target.name;
-        fetchInfo(banner, function(row, val){
-          Session.set('sesnFetchInfoRow', row);
-          Session.set('sesnFetchInfoVal', val);
+        fetchInfo(banner, function(row){
+          Session.set('sesnFetchInfo', row);
           Modal.show("showInfo");
         });
 
@@ -179,16 +178,18 @@ function fetchInfo(banner, cb) {
     Meteor.call('httpGETcall', urlString, function(err, res) {
       var details = eval('(' + res + ')');
 
-      var returnObjRow = [];
-      var returnObjVal = [];
+      var returnObj = [];
 
       var detailsText = details.text.split(';');
       detailsText.forEach(function(d){
         var splitByEqual = d.split('=');
-        returnObjRow.push( splitByEqual[0] );
-        returnObjVal.push( splitByEqual[1] );
+
+        returnObj.push( {
+          'name' : splitByEqual[0],
+          'val'  : splitByEqual[1]
+        } );
       });
-      cb(returnObjRow, returnObjVal);
+      cb(returnObj);
     });
 }
 
