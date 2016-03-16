@@ -1,13 +1,35 @@
-Template.consensusView.onRendered(function () {
+Template.consensusView.events({
+    'click .jsShowInfo': function (event) {
+        // grab the identifier from name attr of button
+        var banner = event.target.name;
+        fetchInfo(banner, function(row, val){
+          Session.set('sesnFetchInfoRow', row);
+          Session.set('sesnFetchInfoVal', val);
+          Modal.show("showInfo");
+        });
 
+        // Modal.show("showInfo");
+        return false;
+    }
+}); // end Template events
+
+
+Template.consensusView.onRendered(function () {
   
   // var coordinate = ['GSM935360', 'MER41B'];
   var coordinate = Session.get('coordinate');
 
+  d3.select('#dataset')
+    .text(coordinate[0]);
+
+  d3.select('#subfam')
+    .text(coordinate[1]);
+
  	Meteor.call("retrieveMedia", coordinate, function(error, res) {
       if (!error) {
             var data = cleanUp(res);
-    		    constructGraphs(data);
+    		    // constructGraphs(data);
+            makeCharts(data);
       } else {
         console.log(error);
       }
@@ -16,6 +38,14 @@ Template.consensusView.onRendered(function () {
 }); // end Template onRendered
 
 //#####################################################################
+
+
+
+
+
+
+
+
 
 function constructGraphs(data) {
 
@@ -126,13 +156,15 @@ function constructGraphs(data) {
           .attr('fill', fillColor);
 
       svg.append("g")
-          .attr("class", "x axis")
+          .attr("class", "x axis axisText")
           .attr("transform", "translate(0," + height / 2 + ")")
           .call(xAxis);
 
       svg.append("g")
-          .attr("class", "y axis")
+          .attr("class", "y axis axisText")
           .call(yAxis);
+
+          makeHCGraphs();
     }
 
 
@@ -141,78 +173,24 @@ function constructGraphs(data) {
 
 //#####################################################################
 
-function cleanUp(req) {
-    var data = eval('(' + req + ')');
 
-    var cleanedUp = {};
-    var treatment_all = data.treatment_all;
-    var treatment_unique = data.treatment_unique;
-    var input_all = data.input_all;
-    var input_unique = data.input_unique;
-    var density = data.density;
-    var consensusseq = data.consensusseq;
+function fetchInfo(banner, cb) {
+    var urlString = 'http://epigenomegateway.wustl.edu/cgi-bin/subtleKnife?repeatbrowser%3Don%26getfileinfo%3D' + banner + '%26rpbrDbname%3Dhg19repeat';
+    Meteor.call('httpGETcall', urlString, function(err, res) {
+      var details = eval('(' + res + ')');
 
-    var tmp_treatment = {};
-    var tmp_input = {};
+      var returnObjRow = [];
+      var returnObjVal = [];
 
-    treatment_unique.forEach(function(item) {
-      var tmp = {};
-      tmp['iteres'] = item[1];
-      if (! tmp_treatment[item[0]]) {
-        tmp_treatment[item[0]] = [];
-      }
-      tmp_treatment[item[0]].push(tmp)
+      var detailsText = details.text.split(';');
+      detailsText.forEach(function(d){
+        var splitByEqual = d.split('=');
+        returnObjRow.push( splitByEqual[0] );
+        returnObjVal.push( splitByEqual[1] );
+      });
+      cb(returnObjRow, returnObjVal);
     });
+}
 
-    treatment_all.forEach(function(item) {
-      var tmp = {};
-      tmp['bwa'] = item[1];
-      if (! tmp_treatment[item[0]]) {
-        tmp_treatment[item[0]] = [];
-      }
-      tmp_treatment[item[0]].push(tmp)
-    });
 
-    if (input_all) {
-      input_all.forEach(function(item) {
-        var tmp = {};
-        tmp['iteres'] = item[1];
-        if (! tmp_input[item[0]]) {
-          tmp_input[item[0]] = [];
-        }
-        tmp_input[item[0]].push(tmp)
-      });
-    }
-
-    if (input_unique) {
-      input_unique.forEach(function(item) {
-        var tmp = {};
-        tmp['bwa'] = item[1];
-        if (! tmp_input[item[0]]) {
-          tmp_input[item[0]] = [];
-        }
-        tmp_input[item[0]].push(tmp)
-      });
-    }
-
-    cleanedUp['treatment'] = tmp_treatment;
-    cleanedUp['input'] = tmp_input;
-    cleanedUp['density'] = density;
-    cleanedUp['consensusseq'] = consensusseq;
-
-    return cleanedUp;
-  }
-
-  // format data array to make it work with d3.svg.area()
-  function formatData(data) {
-    var dataPoints = [];
-      data.forEach(function(d, i) {
-        var tmp = {};
-        tmp.position = i;
-        tmp.signal = d;
-
-        dataPoints.push(tmp);
-      });
-
-    return dataPoints;
-  }
+  

@@ -9,7 +9,13 @@ drawRowLabels = function(svg, param, next) {
                 .enter()
                 .append("text")
                 .text(function (d) {
-                    return d;
+                    if (!d.search(/Monocytes/)) {
+                        return 'CD14 - CTCF';
+                    } else {
+                        var arr = d.split(" ");
+                        return arr[0].concat(' - ' + arr[1]);
+                    }
+                    //PROD: return d;
                 })
                 .attr("x", 0)
                 .attr("y", function (d, i) {

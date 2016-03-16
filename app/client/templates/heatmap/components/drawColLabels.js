@@ -5,12 +5,6 @@ drawColLabels = function(svg, params) {
         .enter()
         .append("text")
         .text(function (d) {
-            if ( d === "MER41B") {
-                return "MER41E";
-            }
-            if ( d === "MER41E") {
-                return "MER41B";
-            }
             return d;
         })
         .attr("x", 0)

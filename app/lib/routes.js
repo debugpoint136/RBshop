@@ -47,6 +47,11 @@ Router.map(function() {
         template: 'consensusView'
     });
 
+    this.route('info', {
+        path: '/info',
+        template: 'showInfo'
+    });
+
     this.route('cv', {
         path: '/cv',
         template: 'GenomeGraph'

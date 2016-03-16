@@ -1,0 +1,71 @@
+<template name="consensusView">
+	<div class="container">
+        <div class="row pt mt">
+        	<h1>Consensus View</h1>
+        	<div id="main">
+        		
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading ">Dataset</div>
+                                <div class="panel-body centered">
+                                    <h1 id="dataset">GM6728238</h1> 
+                                </div>
+                        </div>
+                    </div>
+                
+                    
+                    <div class="col-xs-6" >
+                        <div class="panel panel-success">
+                            <div class="panel-heading ">Repeat Subfamily</div>
+                                <div class="panel-body centered">
+                                    <h1 id="subfam">MER41E</h1> 
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-3 pull-right">
+                                    <div class="panel-body text-center">
+                                        <a href="/gv" class="btn btn-success btn-sm">Go to Genome Context View</a>
+                                    </div>
+                </div>
+               
+                
+        		<div class="col-xs-12" id="artboard"></div>
+
+                <div class="col-xs-2" id="treatment1_label">              
+                        <button class='btn btn-info cvbtn jsShowInfo'>Replicate 1</button>
+                </div>
+                <div class="col-xs-10" id="treatment1"></div>
+
+                <div class="col-xs-2" id="treatment2_label">
+                    <button class='btn btn-info cvbtn jsShowInfo'>Replicate 2</button>
+                </div>
+                <div class="col-xs-10" id="treatment2"></div>
+
+                <div class="col-xs-2" id="treatment3_label">
+                    <button class='btn btn-info cvbtn hidden jsShowInfo'>Replicate 3</button>
+                </div>
+                <div class="col-xs-10" id="treatment3"></div>
+
+                <div class="col-xs-2" id="input1_label">
+                    <button class='btn btn-warning cvbtn jsShowInfo'>Input 1</button>
+                </div>
+                <div class="col-xs-10" id="input1"></div>
+
+                <div class="col-xs-2" id="input2_label">
+                    <button class='btn btn-warning cvbtn jsShowInfo'>Input 2</button>
+                </div>
+                <div class="col-xs-10" id="input2"></div>
+
+                <div class="col-xs-2" id="input3_label">
+                    <button class='btn btn-warning cvbtn jsShowInfo'>Input 3</button>
+                </div>
+                <div class="col-xs-10" id="input3"></div>
+
+        	
+        </div>
+    </div>
+</div>
+</template>

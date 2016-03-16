@@ -26,7 +26,7 @@ assaySampleMetadata = function(svg, params) {
                             .attr("y", function (d, i) {
                                 return params.hcrow.indexOf(i) * params.cellSize;
                             })
-                            .attr("transform", "translate(-268, " + params.cellSize + ")")
+                            .attr("transform", "translate(-228, " + params.cellSize + ")")
                             .attr("width", params.cellSize)
                             .attr("height", params.cellSize)
                             .style("fill", function (d) {
@@ -53,7 +53,7 @@ assaySampleMetadata = function(svg, params) {
                             .attr("y", function (d, i) {
                                 return params.hcrow.indexOf(i) * params.cellSize;
                             })
-                            .attr("transform", "translate(-280, " + params.cellSize + ")")
+                            .attr("transform", "translate(-240, " + params.cellSize + ")")
                             .attr("width", params.cellSize)
                             .attr("height", params.cellSize)
                             .style("fill", function (d) {
@@ -77,7 +77,7 @@ assaySampleMetadata = function(svg, params) {
                                 .text('Sample')
                                 .attr("x", 0)
                                 .attr("y", 0)
-                                .attr("transform", "translate(-256, -6) rotate (-90)")
+                                .attr("transform", "translate(-216, -6) rotate (-90)")
                                 .attr("class", "tcaMetadataLabelg")
 
                                 // TODO: this selects the order drop-down to "by contrast name"
@@ -92,7 +92,7 @@ assaySampleMetadata = function(svg, params) {
                                 .text('Assay')
                                 .attr("x", 0)
                                 .attr("y", 0)
-                                .attr("transform", "translate(-268, -6) rotate (-90)")
+                                .attr("transform", "translate(-228, -6) rotate (-90)")
                                 .attr("class", "tcaMetadataLabelg")
 
                                 // TODO: this selects the order drop-down to "by contrast name"

@@ -7,6 +7,7 @@ drawHeatMap = function(svg, params) {
 	var data = params.data;
 	var posColorScale = params.posColorScale;
     var negColorScale = params.negColorScale;
+    var colorScale = params.colorScale;
 	var datasetNames = params.datasetNames;
 
     var heatMap;
@@ -29,12 +30,12 @@ drawHeatMap = function(svg, params) {
         .attr("width", cellSize)
         .attr("height", cellSize)
         .style("fill", function (d) {
-            if ( d.value < 0 ) {
-                return negColorScale(d.value);
+            /*if ( d.value < 0 ) {
+                return negColorScale(parseInt(d.value));
             } else {
-                return posColorScale(d.value);
-            }
-                
+                return posColorScale(parseInt(d.value));
+            }*/
+            return colorScale(parseInt(d.value));            
         })
         .on("click", function (d) {
             var rowtext = d3.select(".r" + (d.row - 1));
@@ -63,22 +64,22 @@ drawHeatMap = function(svg, params) {
             /*========== Tooltip ===========*/
 
             //Update the tooltip position and value
-            d3.select("#tooltip")
+            var tooltip = d3.select("#tooltip");
+            tooltip
                 .style("left", (d3.event.pageX + 10) + "px")
-                .style("top", (d3.event.pageY - 10) + "px")
+                .style("top", (d3.event.pageY - 10) + "px");
+            tooltip
                 .select("#experiment")
-                //.text("labels:" + rowLabel[d.row - 1] + "," + colLabel[d.col - 1] + "\ndata:" + d.value + "\nrow-col-idx:" + d.col + "," + d.row + "\ncell-xy " + this.x.baseVal.value + ", " + this.y.baseVal.value);
-                .text("Experiment:" + rowLabel[d.row - 1]);
-            d3.select("#tooltip")
+                .text(rowLabel[d.row - 1]);
+            tooltip
                 .select("#repeat-subfamily")
-                // .text("Repeat Subfamily : " + colLabel[d.col - 1]);
-                .text("Repeat Subfamily : MER41E");
-            //"\ndata:" + d.value + "\nrow-col-idx:" + d.col + "," + d.row + "\ncell-xy " + this.x.baseVal.value + ", " + this.y.baseVal.value);
+                .text(colLabel[d.col - 1]);
             //Show the tooltip
-            d3.select("#tooltip")
+            tooltip
                 .select("#score")
-                .text("Log odds ratio : " + d.value);
-            d3.select("#tooltip").classed("hidden", false);
+                .text("Log odds ratio : " + d.value.toFixed(2));
+            tooltip
+                .classed("hidden", false);
         })
         .on("mouseout", function () { 
             d3.select(this).classed("cell-hover", false);

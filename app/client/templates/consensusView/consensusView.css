@@ -18,3 +18,14 @@ body {
 	font-weight: bold;
 	fill: blue;
 }
+
+.axisText {
+    font-family: Helvetica;
+    font-size: 9px;
+    font-weight: lighter;
+    text-align: center;
+}
+
+.cvbtn {
+  display: none;
+}
