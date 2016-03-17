@@ -75,7 +75,7 @@ function setSession(selectedREs) {
 
     selectedREs.forEach(function(str) {
         if ( !str.match(/_/gi) ) {
-            selectedTEids.push(Number(str));
+            selectedTEids.push(str);
         }
     });
 

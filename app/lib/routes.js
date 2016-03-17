@@ -24,9 +24,9 @@ Router.map(function() {
         name: '/te',
         path: '/te',
         template: 'select_te',
-        waitOn: function () {
-            return this.subscribe('subfam');
-        }
+        // waitOn: function () {
+        //     return this.subscribe('testsubfam', Session.get('ssnTEselected'));
+        // }
     });
 
     this.route('datasets', {

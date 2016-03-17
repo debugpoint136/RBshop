@@ -6,6 +6,8 @@ HeatmapController = RouteController.extend({
     // this.subscribe('item', this.params._id).wait();
 
     subscriptions: function() {
+        // this.subscribe('testdatasets');
+        // this.subscribe('testsubfam', Session.get('ssnTEselected'));
     },
 
     // Subscriptions or other things we want to "wait" on. This also
@@ -14,9 +16,11 @@ HeatmapController = RouteController.extend({
     // return Meteor.subscribe('post', this.params._id);
 
     waitOn: function () {
+
+        console.log("Polling the value of Session.get(ssnTEselected) :" + Session.get('ssnTEselected'));
         return [
             this.subscribe('testdatasets'),
-            this.subscribe('testsubfam')
+            this.subscribe('testsubfam', Session.get('ssnTEselected'))
         ];
     },
 

@@ -10,9 +10,9 @@ Meteor.publish('datafiles', function (datasetID) {
     });
 });
 
-Meteor.publish('subfam', function () {
-    return Subfam.find();
-});
+// Meteor.publish('subfam', function () {
+//     return Subfam.find();
+// });
 
 Meteor.publish('subfamfragments', function (subfamID) {
     return SubfamFragments.find({
@@ -54,10 +54,21 @@ var subfamList = ["LTR13", "MER107", "LTR12F", "MER51B",
         "LTR47A", "MER57B2", "MSTB1", "L1MB2", "LTR8B", "Tigger7", "MER44B",
         "MER45B", "MER77", "LTR41", "LTR50", "LTR41B", "MLT1J", "MLT1L", "AmnSINE1"
 ];
-Meteor.publish('testsubfam', function () {
-    return Subfam.find({}, { limit : 100 , sort : { family: 1}});
+
+
+
+Meteor.publish('testsubfam', function (selectedList) {
+    var selectedRepeats = [];
+
+    if (! selectedList ) {
+        return Subfam.find({ name: { $in: subfamList }});
+    } else {
+        return Subfam.find({ _id: { $in: selectedList }});
+    }
+    // return Subfam.find({}, { limit : 100 , sort : { family: 1}});
     //return Subfam.find({'name': { $regex: /MER41/} });
-    // return Subfam.find({ name: { $in: testList }});
+    // return Subfam.find({ name: { $in: selectedRepeats }});
+    
 });
 
 Meteor.publish('fetchDatasetId', function(coordinate) {
