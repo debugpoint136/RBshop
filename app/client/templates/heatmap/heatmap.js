@@ -543,7 +543,14 @@ Session.set('heatmapReady', true) // Place this when load complete
     
     callGenomeGraph = function(coordinate) {
         Session.set('coordinate', coordinate);
-        Router.go('/gg');
+        var subfamClicked = Subfam.findOne({
+            name: coordinate[1]
+        	});
+        if( subfamClicked.consensuslength === "0"){
+        	toastr.error('Cannot load Consensus View: \nconsensus length is 0 ');
+        } else {
+        	Router.go('/gg');
+        }
     }
 
 
