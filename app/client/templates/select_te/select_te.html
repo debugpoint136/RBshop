@@ -1,29 +1,23 @@
 <template name="select_te">
 <div class="container pt">
-    <div class="jumbotron mt pt">
+    
         <div class="row">
-
-            <div class="col-lg-6 col-lg-offset-3 centered">
-                <h4>Select TE subfamilies to include in this analysis</h4>
-                <div class="row col-lg-6 col-lg-offset-3 centered">
-                    <form id="s">
-                        <input class="form-control" type="search" id="q" placeholder="LINE" />
-                        <br/>
-                        <button class="btn btn-sm" type="submit">Search</button>
-                    </form>
-                </div>
-
-                <div class="tree mt pt">
-                </div>
-            </div>
-            <div class="row mt col-lg-6 col-lg-offset-3 centered">
+        <div class="col-sm-5">
+            <div class="jumbotron mt pt centered">
+            <h3>Select Repeat subfamilies </h3>
+            <h4>to include in this analysis</h4>
+            <form id="s">
+                <input class="form-control" type="search" id="q" placeholder="LINE" />
                 <br/>
-                <br/>
-
-                <hr>
-                <a href="/data" type="button" class="btn btn-info" style="margin-top: 20px">Select Datasets</a>
-            </div>
+                <button class="btn btn-info" type="submit">Search</button>
+            </form>
+            <hr>
+            <a href="#" type="button" id="jsDoneSelectTE" class="btn btn-warning" style="margin-top: 20px">Done selecting</a>
+            </div><!-- end jumbotron -->
+    </div> 
+        <div class="col-sm-7 mt pt" id="tree"></div>
+        
         </div>
-    </div>
+    
 </div>
 </template>
