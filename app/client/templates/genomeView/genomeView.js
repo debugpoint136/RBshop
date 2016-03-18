@@ -14,7 +14,18 @@ var chrLen_scale = d3.scale.linear().range([0, width - margin.right - margin.lef
 	chrLen_scale.domain([0, d3.max(d3.values(chrLengths))]);
 var colors = ['#FF0000', '#FF1717', '#FF2E2E', '#FF4545', '#FF5C5C', '#FF7373', '#FF8B8B', '#FFA2A2', '#FFB9B9', '#FFD0D0', '#FFFFFF', '#D0D0FF', '#B9B9FF', '#A2A2FF', '#8B8BFF', '#7373FF', '#5C5CFF', '#4545FF', '#2E2EFF', '#1717FF', '#0000FF'];  // '#FFE7E7', '#FFFFFF', '#E7E7FF'
 
+var SVGprops = {
+	'margin' : margin,
+	'width'	 : width,
+	'height' : height,
+	'chrLen_scale': chrLen_scale,
+	'colors'	: colors,
+	'chrLengths': chrLengths,
+	'chrLst'	: chrLst
+};
 /*----end----*/
+
+
 Template.genomeView.onCreated(function () {
 	Session.set('ispageReady', false);
 });
@@ -33,7 +44,6 @@ Template.genomeView.onRendered(function () {
 	/* PROD */ getsubfamcopies( subfamid, geoid, viewKey, 'getsubfamcopieswithtk' , bev, data); 
 	/* PROD */ // make_genomebev_base();
 	/* TEST */ // parseData_exp_bev();
-
 	
 	//		 make_genomebev_base(vobj,data.key);  -- BASE CREATED
 	//       parseData_exp_bev(data,vobj,vobj.bev);
@@ -73,7 +83,7 @@ function callAPI(apiName, url, bev, data) {
 	Meteor.call(apiName, url, function(error, res) {
 	  if (!error) {
 	        var data = eval('(' + res + ')');
-	        /* PROD */  make_genomebev_base(data, bev); 
+	        /* PROD */  make_genomebev_base(data, bev, SVGprops); 
 	        // parseData_exp_bev(data);
 			
 	  } else {
@@ -82,63 +92,7 @@ function callAPI(apiName, url, bev, data) {
 	});
 }
 
-function make_genomebev_base(data, bev) {
-    
-	var svg = d3.select('#genomeviewArtboard').append("svg")
-		.attr("width", width + margin.left + margin.right)  // Expanded the drawing canvas
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")// moved the brush
-        ;
 
-	var chrBars = svg.append("g")
-		.selectAll(".chrbar")
-    	.data(d3.values(chrLengths))
-        .enter()
-        .append("rect")
-        .attr("x", 0)
-        .attr('fill', '#F5F5F5')
-        .attr("y", function (d, i) {
-            return i * 30;
-        })
-        .attr('rx', 5)
-        .attr('ry', 5)
-        .attr("class", function (d, i) {
-            return " chr chr-border chr" + i;
-        })
-        .attr("width", function(d) {
-        	return chrLen_scale(d);
-        })
-        .attr("height", 17)
-        ;
-
-    var chrNames = svg.append('g')
-		.selectAll('chrname')
-		.data(d3.keys(chrLengths))
-		.enter()
-		.append('text')
-		.text(function(d) {
-			return d;
-		})
-		.attr('class', 'mono')
-		.attr("x", -40)
-		.attr("dy","0.15em")
-		.attr("y", function (d, i) {
-        	return i * 30 + 12;
-    	})
-    	;
-
-	// mousemove - genomebev_tooltip_mousemove
-
-	// mouseout - pica_hide
-
-	// mousedown - genomebev_zoomin_md
-
-	bev.genomebev_base = svg;
-	bev.chrLen_scale = chrLen_scale;
-
-	parseData_exp_bev(data, bev);
-}
 
 function parseData_exp_bev(data, bev) {
 

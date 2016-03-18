@@ -17,7 +17,6 @@ HeatmapController = RouteController.extend({
 
     waitOn: function () {
 
-        console.log("Polling the value of Session.get(ssnTEselected) :" + Session.get('ssnTEselected'));
         return [
             this.subscribe('testdatasets'),
             this.subscribe('testsubfam', Session.get('ssnTEselected'))

@@ -25,10 +25,11 @@ text {
 }
 
 rect.chr {
-	fill:yellow;
+	fill:black;
 	stroke:pink;
 	stroke-width:5;
-	fill-opacity:0.1;
+    stroke-location: outside;
+	fill-opacity:1.0;
 	stroke-opacity:0.9;
 }
 
