@@ -9,6 +9,10 @@ Template.consensusView.events({
 
         // Modal.show("showInfo");
         return false;
+    },
+    'click .gv': function(e) {
+        $.blockUI({ message: null });
+        setTimeout($.unblockUI, 5000);
     }
 }); // end Template events
 

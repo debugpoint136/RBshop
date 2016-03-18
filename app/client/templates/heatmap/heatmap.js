@@ -555,8 +555,6 @@ Session.set('heatmapReady', true) // Place this when load complete
 
 
     
-    
-
 });
 
 Template.Heatmap.helpers({

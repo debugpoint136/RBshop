@@ -7,7 +7,7 @@ parseData_exp_bev = function(data, bev, props) {
 	for(var i=0; i<chrLst.length; i++)
         chr2data[chrLst[i]]=[];
 
-    var has_input = 0; // TODO: Check if input exists
+    var has_input = 1; // TODO: Check if input exists
     var Data=[];
 
     for(i=0; i<data.genomecopies.length; i++) {
@@ -108,6 +108,11 @@ parseData_exp_bev = function(data, bev, props) {
 	        chr2data[c].sort(coordSort);
 	    
 	    bev.data = chr2data;
+
+	    Session.set('chr2data', chr2data);
+	    Session.set('minv', minv);
+	    Session.set('maxv', maxv);
+
 	    bev.minv = minv;
 	    bev.maxv = maxv;
 
@@ -117,5 +122,6 @@ parseData_exp_bev = function(data, bev, props) {
 
         bev.colorScale = colorScale;
 
+        // make_bevcolorscale(bev);
 	    draw_genomebev_experiment(bev, props);
 }

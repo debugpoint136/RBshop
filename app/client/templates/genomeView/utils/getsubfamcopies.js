@@ -1,4 +1,4 @@
-getsubfamcopies = function(sid, geoid, viewKey, urlParam, bev, data)
+getsubfamcopies = function(sid, geoid, viewKey, urlParam, bev, data, lst2, props)
 {
      
     var CFSobj = {};
@@ -12,10 +12,10 @@ getsubfamcopies = function(sid, geoid, viewKey, urlParam, bev, data)
 
 		if ( urlParam === 'getsubfamcopiesonly') {
 			var urlRequestString = 'repeatbrowser=on&getsubfamcopiesonly=on' + subfamTrackParamString;
-			callAPI( urlParam, urlRequestString , bev, data);
+			callAPI( urlParam, urlRequestString , bev, data, props);
 		} else if ( urlParam === 'getsubfamcopieswithtk' ) {
 			var urlRequestString = 'repeatbrowser=on&getsubfamcopieswithtk=on' + subfamTrackParamString + '&geo=' + geoid + '&viewkey=' + viewKey;
-			callAPI( urlParam, urlRequestString , bev, data);
+			callAPI( urlParam, urlRequestString , bev, data, props);
 		} else {
 			return 'Invalid URL param';
 		}

@@ -36,4 +36,5 @@ legend = function(svg, params) {
             return -200 + (legendElementWidth * i);
         })
         .attr("y", -80 + (cellSize * 2));
+    $.unblockUI;
 };
