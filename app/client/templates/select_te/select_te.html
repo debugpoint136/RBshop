@@ -1,21 +1,30 @@
 <template name="select_te">
 <div class="container pt">
-    
+    <div class="col-xs-12 mt">
+                <h1>Select Repeats</h1>
+                <h4>to include in this analysis</h4>
+    </div>
         <div class="row">
-        <div class="col-sm-5">
-            <div class="jumbotron mt pt centered">
-            <h3>Select Repeat subfamilies </h3>
-            <h4>to include in this analysis</h4>
+        <div class="col-sm-4">
+            <div class="jumbotron centered">
             <form id="s">
+                Search a Repeat Element
                 <input class="form-control" type="search" id="q" placeholder="LINE" />
                 <br/>
                 <button class="btn btn-info" type="submit">Search</button>
             </form>
-            <hr>
-            <a href="/heatmap" type="button" id="jsDoneSelectTE" class="btn btn-warning" style="margin-top: 20px">Done selecting</a>
             </div><!-- end jumbotron -->
     </div> 
-        <div class="col-sm-7 mt pt" id="tree"></div>
+        <div class="col-sm-4" id="tree"></div>
+        <div class="col-sm-4">
+            <div class="jumbotron">
+             <li>There are 1395 Repeat elements classified into Classes and Families</li>   
+            <li>Click Checkboxes on the left to select Repeat Classes</li>
+            <li>Expand the tree to select Repeat Families or specific Subfamilies</li>
+            <li>Click the button below to update and go back to browser heatmap</li>
+            <a href="/heatmap" type="button" id="jsDoneSelectTE" class="btn btn-warning" style="margin-top: 20px">Update Selection</a>
+            </div>
+        </div>  
         
         </div>
     

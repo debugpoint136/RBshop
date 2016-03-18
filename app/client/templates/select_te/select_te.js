@@ -18,7 +18,7 @@ Template.select_te.onRendered(function () {
                 var nodes;
                 if (node.id === '#') {
                     var rootNode = [{
-                        text: 'All Subfamilies',
+                        text: 'All',
                         id: '0',
                         children: true,
                         state: {
