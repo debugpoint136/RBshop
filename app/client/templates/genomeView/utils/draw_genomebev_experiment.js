@@ -1,4 +1,4 @@
-draw_genomebev_experiment = function(bev, props)
+draw_genomebev_experiment = function(bev)
 {
     /* draw bev graph on which the TEs from a subfam is plotted
      colored by experiment assay data
@@ -6,21 +6,33 @@ draw_genomebev_experiment = function(bev, props)
     var chr2xpos = {};
     var basev = -0.01656745516965108; //HARDCODED!! TODO: this should come with bev.csbj.baseline;
     var num = 0;
-    var chrLst = props.chrLst;
+    var chrLst = bev.chrLst;
 
-    var svg = bev.genomebev_base;
+    // var svg = bev.genomebev_base;
+    var s = Session.get('selectedbySlider');
+
+    chrLst.forEach(function(chrNum, chrIndex) {
+           svg
+            .selectAll('rect')
+            .data(d3.values(bev.data[chrNum]))
+            .exit()
+            //.filter(function(d) { return s[0] >= d[4] && d[4] >= s[1] })
+            .remove()
+            ;
+    });
 
     chrLst.forEach(function(chrNum, chrIndex) {
         var chrTicks = svg.append('g')
-    		.selectAll('chrTicks')
+    		.selectAll('rect')
     		.data(d3.values(bev.data[chrNum]))
     		.enter()
     		.append("rect")
+            .filter(function(d) { return s[0] <= d[4] && d[4] <= s[1] })
 	        .attr("x", function(d, i) {
-	        	return  bev.chrLen_scale( d[0] ) ;
+	        	return  chrLen_scale( d[0] ) ;
 	        })
-	        .attr('fill', function(d, i) {
-	        	return bev.colorScale( d[4] );
+	        .attr('fill', function(d, i) { 
+                return colorScale( d[4] );
 	        })
 	        .attr("y", function() {
 	        	return chrIndex * 30 + 3;
@@ -32,6 +44,8 @@ draw_genomebev_experiment = function(bev, props)
 	        .attr("height", 11)
 	        ;
     });
+
+    
 
 // page ready?
     Session.set('ispageReady', true);

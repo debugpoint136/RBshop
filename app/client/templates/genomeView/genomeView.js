@@ -12,8 +12,8 @@ var width = 1200;
 var height = 750;
 var chrLen_scale = d3.scale.linear().range([0, width - margin.right - margin.left - 75]);
 	chrLen_scale.domain([0, d3.max(d3.values(chrLengths))]);
-var colors = ['#FF0000', '#FF1717', '#FF2E2E', '#FF4545', '#FF5C5C', '#FF7373', '#FF8B8B', '#FFA2A2', '#FFB9B9', '#FFD0D0', '#FFFFFF', '#D0D0FF', '#B9B9FF', '#A2A2FF', '#8B8BFF', '#7373FF', '#5C5CFF', '#4545FF', '#2E2EFF', '#1717FF', '#0000FF'];  // '#FFE7E7', '#FFFFFF', '#E7E7FF'
-
+// var colors = ['#FF0000', '#FF1717', '#FF2E2E', '#FF4545', '#FF5C5C', '#FF7373', '#FF8B8B', '#FFA2A2', '#FFB9B9', '#FFD0D0', '#FFFFFF', '#D0D0FF', '#B9B9FF', '#A2A2FF', '#8B8BFF', '#7373FF', '#5C5CFF', '#4545FF', '#2E2EFF', '#1717FF', '#0000FF'];  // '#FFE7E7', '#FFFFFF', '#E7E7FF'
+var colors = ['#FFC107', '#C2185B'];
 var SVGprops = {
 	'margin' : margin,
 	'width'	 : width,

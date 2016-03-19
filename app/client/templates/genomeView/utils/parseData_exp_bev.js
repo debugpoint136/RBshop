@@ -116,12 +116,15 @@ parseData_exp_bev = function(data, bev, props) {
 	    bev.minv = minv;
 	    bev.maxv = maxv;
 
-	    var colorScale = d3.scale.quantile()
+	    colorScale = d3.scale.quantile()
                 .domain([minv, 0, maxv])
                 .range(colors);
 
-        bev.colorScale = colorScale;
+        // bev.colorScale = colorScale;
+        bev.chrLst = chrLst;
 
         // make_bevcolorscale(bev);
-	    draw_genomebev_experiment(bev, props);
+
+        Session.set('redrawbev', bev);
+	    draw_genomebev_experiment(bev);
 }

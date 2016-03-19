@@ -3,11 +3,11 @@ make_genomebev_base = function(data, bev, props) {
     var width = props.width,
         height = props.height,
         margin = props.margin,
-        chrLengths = props.chrLengths,
+        chrLengths = props.chrLengths;
         chrLen_scale = props.chrLen_scale;
 
     
-	var svg = d3.select('#genomeviewArtboard').append("svg")
+	svg = d3.select('#genomeviewArtboard').append("svg")
 		.attr("width", width + margin.left + margin.right)  // Expanded the drawing canvas
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -19,7 +19,7 @@ make_genomebev_base = function(data, bev, props) {
     	.data(d3.values(chrLengths))
         .enter()
         .append("rect")
-        .attr("x", 0)
+        .attr("x", -5)
         .attr('fill', '#F5F5F5')
         .attr("y", function (d, i) {
             return i * 30;
@@ -30,7 +30,7 @@ make_genomebev_base = function(data, bev, props) {
             return " chr chr-border chr" + i;
         })
         .attr("width", function(d) {
-        	return chrLen_scale(d);
+        	return chrLen_scale(d) + 10;
         })
         .attr("height", 17)
         ;
@@ -44,7 +44,7 @@ make_genomebev_base = function(data, bev, props) {
 			return d;
 		})
 		.attr('class', 'mono')
-		.attr("x", -40)
+		.attr("x", -45)
 		.attr("dy","0.15em")
 		.attr("y", function (d, i) {
         	return i * 30 + 12;
@@ -58,6 +58,8 @@ make_genomebev_base = function(data, bev, props) {
 	// mousedown - genomebev_zoomin_md
 
 	bev.genomebev_base = svg;
+    Session.set('genomebevBase', svg);
+
 	bev.chrLen_scale = chrLen_scale;
 
 	parseData_exp_bev(data, bev, props);

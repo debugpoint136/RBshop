@@ -17,7 +17,7 @@ Template.slider.onRendered(function () {
 
     var margin = {top: 14, right: 50, bottom: 24, left: 50},
         width = 960 - margin.left - margin.right,
-        height = 100 - margin.top - margin.bottom;
+        height = 70 - margin.top - margin.bottom;
 
     var x = d3.scale.linear()
         .domain([minv, maxv])
@@ -74,13 +74,17 @@ Template.slider.onRendered(function () {
 
     function brushmove() {
       var s = brush.extent();
-      circle.classed("selected", function(d) { return s[0] <= d && d <= s[1]; }); 
+      Session.set('selectedbySlider', s);
+      circle.classed("selectedNeg", function(d) { return s[0] <= d && d < 0; }); 
+      circle.classed("selectedPos", function(d) { return 0 < d && d <= s[1]; }); 
     }
 
     function brushend() {
       svg.classed("selecting", !d3.event.target.empty());
-      $.blockUI({ message: null }); 
-      setTimeout($.unblockUI, 2000);
+      // $.blockUI({ message: null }); 
+      // setTimeout($.unblockUI, 500);
+      var s = brush.extent();
+      if ( s[0] != 0.3 || s[1] != 0.5)
+        draw_genomebev_experiment(Session.get('redrawbev'));
     }
-    // setTimeout($.unblockUI, 2000);
 });
