@@ -11,8 +11,8 @@ Template.consensusView.events({
         return false;
     },
     'click .gv': function(e) {
-        $.blockUI({ message: null });
-        setTimeout($.unblockUI, 5000);
+        // $.blockUI({ message: null });
+        // setTimeout($.unblockUI, 5000);
     }
 }); // end Template events
 
