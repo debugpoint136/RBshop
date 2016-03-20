@@ -1,13 +1,14 @@
-make_genomebev_base = function(data, bev, props) {
+make_genomebev_base = function() {
 
-    var width = props.width,
-        height = props.height,
-        margin = props.margin,
-        chrLengths = props.chrLengths;
-        chrLen_scale = props.chrLen_scale;
-
+    var margin  =   GVprops.margin,
+        width   =   GVprops.width,
+        height  =   GVprops.height,
+        chrLengths = GVprops.chrLengths,
+        chrLen_scale = GVprops.chrLen_scale,
+        colors  =   GVprops.colors,
+        chrLst = GVprops.chrLst; 
     
-	svg = d3.select('#genomeviewArtboard').append("svg")
+	var svg = d3.select('#genomeviewArtboard').append("svg")
 		.attr("width", width + margin.left + margin.right)  // Expanded the drawing canvas
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -57,10 +58,36 @@ make_genomebev_base = function(data, bev, props) {
 
 	// mousedown - genomebev_zoomin_md
 
-	bev.genomebev_base = svg;
-    Session.set('genomebevBase', svg);
+	// bev.genomebev_base = svg;
+    
 
-	bev.chrLen_scale = chrLen_scale;
+    var s = [0.3, 0.5];
 
-	parseData_exp_bev(data, bev, props);
+
+    chrLst.forEach(function(chrNum, chrIndex) {
+        var chrTicks = svg.append('g')
+            .selectAll('chrTicks')
+            .data(d3.values(bev.data[chrNum]))
+            .enter()
+            .append("rect")
+            .filter(function(d) { return s[0] <= d[4] && d[4] <= s[1] })
+            .attr("x", function(d, i) {
+                return  chrLen_scale( d[0] ) ;
+            })
+            .attr('fill', function(d, i) { 
+                return colorScale( d[4] );
+            })
+            .attr("y", function() {
+                return chrIndex * 30 + 3;
+            })
+            .attr("class", function (d, i) {
+                return 'top chr' + i + 'Ticks';
+            })
+            .attr("width", 1)
+            .attr("height", 11)
+            ;
+    });
+    bev.genomebev_base = svg;
+// page ready?
+    Session.set('ispageReady', true);
 }

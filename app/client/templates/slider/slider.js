@@ -12,7 +12,6 @@ Template.slider.onRendered(function () {
         });
     });
 
-    //data = d3.range(800).map(Math.random);
     data = resData;
 
     var margin = {top: 14, right: 50, bottom: 24, left: 50},
@@ -75,8 +74,9 @@ Template.slider.onRendered(function () {
     function brushmove() {
       var s = brush.extent();
       Session.set('selectedbySlider', s);
-      circle.classed("selectedNeg", function(d) { return s[0] <= d && d < 0; }); 
-      circle.classed("selectedPos", function(d) { return 0 < d && d <= s[1]; }); 
+      circle.classed("selectedNeg", function(d) { return s[0] <= d && d < 0 && d <= s[1]; }); 
+      circle.classed("selectedPos", function(d) { return s[0] <= d && 0 < d && d <= s[1]; }); 
+      circle.classed("selectedZero", function(d) { return s[0] <= d && 0 == d && d <= s[1]; }); 
     }
 
     function brushend() {
@@ -85,6 +85,6 @@ Template.slider.onRendered(function () {
       // setTimeout($.unblockUI, 500);
       var s = brush.extent();
       if ( s[0] != 0.3 || s[1] != 0.5)
-        draw_genomebev_experiment(Session.get('redrawbev'));
+        draw_genomebev_experiment();
     }
 });

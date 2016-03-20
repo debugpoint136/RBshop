@@ -1,7 +1,12 @@
-parseData_exp_bev = function(data, bev, props) {
+parseData_exp_bev = function(data) {
 
-	var chrLst = props.chrLst,
-		colors = props.colors;
+	var margin  =   GVprops.margin,
+        width   =   GVprops.width,
+        height  =   GVprops.height,
+        chrLengths = GVprops.chrLengths,
+        chrLen_scale = GVprops.chrLen_scale,
+        colors  =   GVprops.colors,
+        chrLst = GVprops.chrLst; 
 
 	var chr2data={};
 	for(var i=0; i<chrLst.length; i++)
@@ -9,6 +14,9 @@ parseData_exp_bev = function(data, bev, props) {
 
     var has_input = 1; // TODO: Check if input exists
     var Data=[];
+
+    /* declaring global bev object */
+    bev = {};
 
     for(i=0; i<data.genomecopies.length; i++) {
         var lst=data.genomecopies[i].split(' ');
@@ -116,15 +124,15 @@ parseData_exp_bev = function(data, bev, props) {
 	    bev.minv = minv;
 	    bev.maxv = maxv;
 
-	    colorScale = d3.scale.quantile()
+	    colorScale = d3.scale.linear()
                 .domain([minv, 0, maxv])
                 .range(colors);
 
         // bev.colorScale = colorScale;
-        bev.chrLst = chrLst;
+        // bev.chrLst = chrLst;
 
         // make_bevcolorscale(bev);
 
-        Session.set('redrawbev', bev);
-	    draw_genomebev_experiment(bev);
+        // Session.set('redrawbev', bev);
+        make_genomebev_base();
 }

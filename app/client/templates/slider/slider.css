@@ -22,6 +22,10 @@ circle {
   stroke: #C2185B;
 }
 
+.selecting circle.selectedZero {
+  stroke: #E16D31;
+}
+
 .resize path {
   fill: #666;
   fill-opacity: .8;
