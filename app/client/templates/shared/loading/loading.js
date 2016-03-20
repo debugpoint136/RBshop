@@ -2,7 +2,7 @@ Template.Loading.onCreated(function () {
   // if ( ! Session.get('loadingSplash') ) {
     this.loading = window.pleaseWait({
       logo: '/images/loader.gif',
-      backgroundColor: '#46AEA5',
+      backgroundColor: 'white',
       loadingHtml: message + spinner
     });
   // Session.set('loadingSplash', true); // just show loading splash once

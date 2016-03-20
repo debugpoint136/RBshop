@@ -56,8 +56,8 @@ Template.select_te.events({
     'click #jsDoneSelectTE': function(e) {
         var selectedNodes = $("#tree").jstree('get_checked');
         setSession(selectedNodes);
-     	// $.blockUI({ message: null });
-    	// setTimeout($.unblockUI, 5000);
+     	$.blockUI({ message: null });
+    	setTimeout($.unblockUI, 2000);
     }
 });
 
