@@ -77,14 +77,34 @@ Template.slider.onRendered(function () {
       circle.classed("selectedNeg", function(d) { return s[0] <= d && d < 0 && d <= s[1]; }); 
       circle.classed("selectedPos", function(d) { return s[0] <= d && 0 < d && d <= s[1]; }); 
       circle.classed("selectedZero", function(d) { return s[0] <= d && 0 == d && d <= s[1]; }); 
+        if ( s[0] != 0.3 || s[1] != 0.5) {
+            d3.select('#wait')
+                .classed("hidden", false);
+        }
     }
 
     function brushend() {
       svg.classed("selecting", !d3.event.target.empty());
-      // $.blockUI({ message: null }); 
-      // setTimeout($.unblockUI, 500);
+
+      
       var s = brush.extent();
-      if ( s[0] != 0.3 || s[1] != 0.5)
-        draw_genomebev_experiment();
+      if ( s[0] != 0.3 || s[1] != 0.5) {
+
+        // var totalSelectedCount = 0;
+        // var negElements = d3.selectAll('.selectedNeg').size(),
+        //     posElements = d3.selectAll('.selectedPos').size(),
+        //     zeroElements = d3.selectAll('.selectedZero').size();
+    
+        //     totalSelectedCount = negElements + posElements + zeroElements;
+
+        //     if ( totalSelectedCount ) {
+        //         if ( totalSelectedCount > 1000 ) {
+        //             $.blockUI({ message: null }); 
+        //             setTimeout($.unblockUI, totalSelectedCount * 4 );
+        //         } 
+        //     }
+
+            draw_genomebev_experiment();
+        }
     }
 });

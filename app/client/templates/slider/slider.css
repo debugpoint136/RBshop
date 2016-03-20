@@ -23,7 +23,8 @@ circle {
 }
 
 .selecting circle.selectedZero {
-  stroke: #E16D31;
+  /*stroke: #E16D31;*/
+  stroke: grey;
 }
 
 .resize path {

@@ -11,27 +11,67 @@ draw_genomebev_experiment = function()
         colors  =   GVprops.colors,
         chrLst = GVprops.chrLst; 
 
-    // var bev = Session.get('redrawbev');
     var svg = bev.genomebev_base;
-    //var svg = Session.get('genomebevBase');
     var s = Session.get('selectedbySlider');
 
     chrLst.forEach(function(chrNum, chrIndex) {
            svg
             .selectAll('rect')
-            .data(d3.values(bev.data[chrNum]))
+            .data(d3.values(bev.data[chrNum]), function(d) { 
+                return(d[4]); })
             .exit()
+            .transition()
+            .duration(1000)
             .remove()
             ;
     });
 
+    var chrBars = svg.append("g")
+        .selectAll(".chrbar")
+        .data(d3.values(chrLengths))
+        .enter()
+        .append("rect")
+        .attr("x", -5)
+        .attr('fill', '#F5F5F5')
+        .attr("y", function (d, i) {
+            return i * 30;
+        })
+        .attr('rx', 5)
+        .attr('ry', 5)
+        .attr("class", function (d, i) {
+            return " chr chr-border chr" + i;
+        })
+        .attr("width", function(d) {
+            return chrLen_scale(d) + 10;
+        })
+        .attr("height", 17)
+        ;
+
+     var totalSelectedCount = 0;
+     var tickWidth = 3;
+        var negElements = d3.selectAll('.selectedNeg').size(),
+            posElements = d3.selectAll('.selectedPos').size(),
+            zeroElements = d3.selectAll('.selectedZero').size();
+    
+            totalSelectedCount = negElements + posElements + zeroElements;
+
+            if ( totalSelectedCount > 1500 ) {
+                tickWidth = 1;
+                // $.blockUI({ message: null }); 
+                // setTimeout($.unblockUI, totalSelectedCount * 4 );
+            } 
+
+
     chrLst.forEach(function(chrNum, chrIndex) {
         var chrTicks = svg.append('g')
     		.selectAll('chrTicks')
-    		.data(d3.values(bev.data[chrNum]))
+    		.data(d3.values(bev.data[chrNum]), function(d) { return(d); })
     		.enter()
     		.append("rect")
             .filter(function(d) { return s[0] <= d[4] && d[4] <= s[1] })
+            .transition()
+            .duration(500)
+            .ease('bounce')
 	        .attr("x", function(d, i) {
 	        	return  chrLen_scale( d[0] ) ;
 	        })
@@ -51,12 +91,14 @@ draw_genomebev_experiment = function()
 	        .attr("class", function (d, i) {
 	            return 'top chr' + i + 'Ticks';
 	        })
-	        .attr("width", 1)
+	        .attr("width", tickWidth)
 	        .attr("height", 11)
 	        ;
     });
 
 // page ready?
+    d3.select('#wait')
+        .classed("hidden", true);
     Session.set('ispageReady', true);
 
 } /* --end-- */

@@ -549,6 +549,8 @@ Session.set('heatmapReady', true) // Place this when load complete
         if( subfamClicked.consensuslength === "0"){
         	toastr.error('Cannot load Consensus View: \nconsensus length is 0 ');
         } else {
+        	$.blockUI({ message: null }); 
+            setTimeout($.unblockUI, 2000 );
         	Router.go('/gg');
         }
     }

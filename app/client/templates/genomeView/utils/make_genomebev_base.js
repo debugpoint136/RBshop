@@ -58,7 +58,7 @@ make_genomebev_base = function() {
 
 	// mousedown - genomebev_zoomin_md
 
-	// bev.genomebev_base = svg;
+	bev.genomebev_base = svg;
     
 
     var s = [0.3, 0.5];
@@ -83,11 +83,13 @@ make_genomebev_base = function() {
             .attr("class", function (d, i) {
                 return 'top chr' + i + 'Ticks';
             })
-            .attr("width", 1)
+            .attr("width", 3)
             .attr("height", 11)
             ;
     });
-    bev.genomebev_base = svg;
+    // bev.genomebev_base = svg;
 // page ready?
+    d3.select('#wait')
+        .classed("hidden", true);
     Session.set('ispageReady', true);
 }
