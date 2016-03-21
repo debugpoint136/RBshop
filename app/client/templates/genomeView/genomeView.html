@@ -1,18 +1,47 @@
 <template name="genomeView">
+    {{> Loading}}
 	<div class="container">
         <div class="row pt mt">
             <div class="col-xs-12">
 				<h1>Genome View</h1>
+
+                <div class="row">
+                    <h5 class="col-xs-6 centered">{{ datasetId }}</h5>
+                    <h5 class="col-xs-6 centered">{{ subfamid }}</h5> 
+                </div>
+
                 {{#if pageReady }}
-					{{> slider}}
+                <div class="row">
+                    
+                    <div> {{#if repeatSelected }} 
+                        {{ repeatSelected }} Repeat genome copies selected 
+                        {{ else }}
+                        Use the slider to filter genome copies of this repeat
+                        {{/if}}
+                    </div>
+                    <a href='#' class='wubrLink btn btn-warning pull-right'>View in Wash U Browser</a>
+                    <div id="wurbLaunch">
+                        
+                    </div>
+                    
+                </div>
+                
+                <div class="row">
+                    <div class="col-xs-9">
+                        {{> slider}}
+                    </div>
+                    <div class="col-xs-3">
+                        <div id="wait" class='row centered hidden'><h5>Updating ...</h5><img src="/images/loader.gif" alt="Loading .. " style="height: 20px; align-content: center"></div>
+                    </div>
+				</div>
 				{{else}}
                     <div class="row pt mt">
             			<div class="col-xs-4">
-            				<h5><a href="#">Generating view ...</a></h5>		{{> Loading}}
+            				<h5><a href="#">Generating view ...</a></h5>		
                    		</div>
                    	</div>
                 {{/if}}
-                <div id="wait" class='row centered hidden'>Updating ... </div>
+                
                 <div id="genomeviewArtboard"></div>
 
             </div>

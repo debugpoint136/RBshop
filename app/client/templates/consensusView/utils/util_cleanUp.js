@@ -57,5 +57,24 @@ cleanUp = function(req) {
   cleanedUp['density'] = density;
   cleanedUp['consensusseq'] = consensusseq;
 
+  // REFACTOR : setting up session id for genome view integration with main browser
+
+  var forSession = {
+    'treatment': [],
+    'input': []
+  };
+
+  Object.keys(cleanedUp.treatment).forEach(function(trt) {
+    forSession.treatment.push(trt);
+  });
+
+  if (cleanedUp.input) {
+    Object.keys(cleanedUp.input).forEach(function(inp) {
+      forSession.input.push(inp);
+    });
+  }
+
+  /* SESSION */
+  Session.set('ssnCreateWURBlink', forSession);
   return cleanedUp;
 }

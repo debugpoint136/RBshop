@@ -546,6 +546,10 @@ Session.set('heatmapReady', true) // Place this when load complete
         var subfamClicked = Subfam.findOne({
             name: coordinate[1]
         	});
+        // SESSION : set filename string for integration with main browser
+        var subfamfile = subfamClicked.subfamclass + subfamClicked.family +subfamClicked.name ;
+        Session.set('subfamfile', subfamfile);
+
         if( subfamClicked.consensuslength === "0"){
         	toastr.error('Cannot load Consensus View: \nconsensus length is 0 ');
         } else {

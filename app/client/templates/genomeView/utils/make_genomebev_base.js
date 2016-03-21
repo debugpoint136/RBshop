@@ -89,6 +89,7 @@ make_genomebev_base = function() {
     });
     // bev.genomebev_base = svg;
 // page ready?
+    fetchRepeatsSelection();
     d3.select('#wait')
         .classed("hidden", true);
     Session.set('ispageReady', true);
