@@ -1,0 +1,16 @@
+/*****************************************************************************/
+/* AssayCategories: Style */
+/*****************************************************************************/
+.assay-categories {
+}
+
+.assay-categories {
+	text-align: center;
+	/*overflow: auto;*/
+	/*width: 200px;*/
+	height: 280px;
+	border: 1px solid #CCCCCC;
+	background-color: white;
+	
+	overflow: hidden;
+}

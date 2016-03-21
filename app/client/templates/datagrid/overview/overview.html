@@ -1,0 +1,30 @@
+<template name="Overview">
+    <div class="overview row centered panel-gap">
+     
+         <div class="panel panel-warning">
+          <div class="panel-heading"><h3> Overview </h3></div>
+          <div class="panel-body">
+            <!-- start -->
+            <form class="add_datafile_form">
+            <div class="form-group btn-group required" data-toggle="buttons">
+                <label class="btn btn-default">
+                    <input type="radio" id="cnsrtm" name="type" value="Consortium" /> Consortium
+                </label>
+                <label class="btn btn-default">
+                    <input type="radio" id="tissue" name="type" value="Tissue" /> Tissue
+                </label>
+                <label class="btn btn-default">
+                    <input type="radio" id="ac" name="type" value="AssayCategory" /> Assay Category
+                </label>
+            </div>
+            </form>
+            <!-- end -->
+
+            <div id="piechart pt mt centered">
+              Pie chart goes here
+              <p>http://bl.ocks.org/dbuezas/9306799</p>
+            </div>
+          </div>
+         </div>
+    </div>
+</template>

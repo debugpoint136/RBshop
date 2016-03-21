@@ -1,0 +1,16 @@
+/*****************************************************************************/
+/* Grid: Style */
+/*****************************************************************************/
+.grid {
+}
+
+#gridContainer {
+	text-align: center;
+	overflow: auto;
+	width: 1200px;
+	height: 580px;
+	border: 1px solid #CCCCCC;
+	background-color: white;
+	
+	/*overflow: hidden;*/
+}

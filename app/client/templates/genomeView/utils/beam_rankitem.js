@@ -94,8 +94,8 @@ var url_subfambed = "http://epigenomegateway.wustl.edu/browser/repeat/_d/subfam_
                     gss_opt : 'custom',
                     gss_origin : 'genebody'
                 };
-    console.dir(itemlst);
-    console.dir(gsobj);
+    // console.dir(itemlst);
+    // console.dir(gsobj);
     gsm_setcoord_gss(gsobj);
     // var _t = itemlst[10];
     var _t = itemlst[n -1];
@@ -111,7 +111,7 @@ var url_subfambed = "http://epigenomegateway.wustl.edu/browser/repeat/_d/subfam_
     // var browser.genome.name = 'hg19';
 
     var data2POST = 'json\n'+JSON.stringify(jlst);
-    console.log(data2POST);
+    // console.log(data2POST);
     ajaxPost('json\n'+JSON.stringify(jlst),function(key){
         var linkDiv = document.getElementById('wurbLaunch');
         linkDiv.innerHTML='<a href='+url_base+'?genome=hg19&datahub_jsonfile='+url_base+'t/'+key+' target=_blank>Click to view ranked list &#8599;</a>';    

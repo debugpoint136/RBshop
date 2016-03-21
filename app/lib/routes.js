@@ -225,5 +225,20 @@ Router.route('/genome_graph', {
 });
 
 
+/* ================================ */
+/*          Data Grid               */
+/* ================================ */
 
 
+// Router.route('/datagrid', {
+//   name: 'datagrid',
+//   controller: 'DatagridController',
+//   where: 'client'
+// });
+
+Router.map(function() {
+    this.route('data', {
+        path: '/data/grid',
+        template: 'Datagrid'
+    });
+});

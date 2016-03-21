@@ -1,0 +1,29 @@
+<template name="Tissues">
+	<div class=" row pt centered panel-gap">
+     	
+         <div class=" panel panel-success">
+          <div class="panel-heading"><h3> Tissues </h3></div>
+          <div class="tissues panel-body centered">
+            <!-- start -->
+            <table class="table centered">
+              <thead>
+                <tr class='success'>
+                  <th><input type="checkbox" id='chkallTissues'></th>
+                  <th>Category</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each tissue in Tissues}}
+                <tr>
+                  <th><input type="checkbox" id='chk{{tissue}}'></th>
+                  <th>{{tissue}}</th>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            <!-- end -->
+          </div>
+            
+         </div>
+    </div>
+</template>

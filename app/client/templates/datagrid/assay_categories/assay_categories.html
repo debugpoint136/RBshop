@@ -1,0 +1,27 @@
+<template name="AssayCategories">
+
+   <div class="row pt centered panel-gap">
+     
+         <div class="panel panel-danger">
+          <div class="panel-heading"><h3> Assay Categories </h3></div>
+          <div class="assay-categories panel-body ">
+            <table class="table centered">
+              <thead>
+                <tr class='danger'>
+                  <th><input type="checkbox" id='chkallAssays'></th>
+                  <th>Category</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each assay in AssayCategoryList}}
+                <tr>
+                  <th><input type="checkbox" id='chk{{assay}}'></th>
+                  <th>{{assay}}</th>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+         </div>
+    </div>
+</template>
