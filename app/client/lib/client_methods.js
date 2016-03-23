@@ -14,3 +14,11 @@ Template.registerHelper('getTreatmentNames', function (req) {
     }
     return keys;
 });
+
+Template.registerHelper( 'formatSpace', ( string ) => {
+  return string.replace(/ /g,"_");
+});
+
+Template.registerHelper( 'formatUndrscr', ( string ) => {
+  return string.replace(/_/g, " - ");
+});

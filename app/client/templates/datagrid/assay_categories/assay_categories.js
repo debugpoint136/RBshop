@@ -10,12 +10,12 @@ Template.AssayCategories.events({
 Template.AssayCategories.helpers({
 	AssayCategoryList : function() {
 		return [
-			'Histone',
-			'Methylome',
-			'Transcriptome',
-			'Regulome',
-			'TFBS',
-			'Other'
+			'DNA Methylation',
+			'Histone Mark',
+			'Histone-modifying enzymes',
+			'Other Epigenetic Mark',
+			'Transcription Factor Binding Sites',
+			'Other Transcription Regulator'
 		]
 	}
 });

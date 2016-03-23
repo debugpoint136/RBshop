@@ -3,25 +3,101 @@
      	
          <div class=" panel panel-success">
           <div class="panel-heading"><h3> Tissues </h3></div>
-          <div class="tissues panel-body centered">
-            <!-- start -->
-            <table class="table centered">
-              <thead>
-                <tr class='success'>
-                  <th><input type="checkbox" id='chkallTissues'></th>
-                  <th>Category</th>
-                </tr>
-              </thead>
-              <tbody>
-                {{#each tissue in Tissues}}
-                <tr>
-                  <th><input type="checkbox" id='chk{{tissue}}'></th>
-                  <th>{{tissue}}</th>
-                </tr>
-                {{/each}}
-              </tbody>
-            </table>
-            <!-- end -->
+          <div class="panel-body centered">
+
+        <ul class="nav nav-pills nav-justified">
+          <li class="active"><a data-toggle="tab" href="#adult">Adult Cells/Tissues</a></li>
+          <li><a data-toggle="tab" href="#cancer">Cancer Cells</a></li>
+          <li><a data-toggle="tab" href="#ips">ES/iPS Cells</a></li>
+          <li><a data-toggle="tab" href="#fetal">Fetal Cells/Tissues</a></li>
+        </ul>
+        <p></p>
+          <div class="tissues centered tab-content">
+            <div id="adult" class="tab-pane fade in active">
+              <!-- start -->
+              <h3> </h3>
+              <table class="col-xs-4 table ">
+                <thead>
+                  <tr>
+                    <th><input type="checkbox" id='chkallTissues'></th>
+                    <th>Category</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each tissue in TissuesAdult}}
+                  <tr>
+                    <th><input type="checkbox" id='chk{{ formatSpace tissue}}'></th>
+                    <th>{{tissue}}</th>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+              <!-- end -->  
+            </div> 
+            <div id="cancer" class="tab-pane fade">
+              <!-- start -->
+              <h3> </h3>
+              <table class="col-xs-4 table ">
+                <thead>
+                  <tr>
+                    <th><input type="checkbox" id='chkallTissues'></th>
+                    <th>Category</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each tissue in TissuesCancerCells}}
+                  <tr>
+                    <th><input type="checkbox" id='chk{{tissue}}'></th>
+                    <th>{{tissue}}</th>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+              <!-- end -->  
+            </div>
+            <div id="ips" class="tab-pane fade">
+              <!-- start -->
+              <h3> </h3>
+              <table class="col-xs-4 table ">
+                <thead>
+                  <tr>
+                    <th><input type="checkbox" id='chkallTissues'></th>
+                    <th>Category</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each tissue in TissuesESiPScells}}
+                  <tr>
+                    <th><input type="checkbox" id='chk{{tissue}}'></th>
+                    <th>{{tissue}}</th>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+              <!-- end --> 
+            </div>
+            <div id="fetal" class="tab-pane fade">
+              <!-- start -->
+              <h3> </h3>
+              <table class="col-xs-4 table ">
+                <thead>
+                  <tr>
+                    <th><input type="checkbox" id='chkallTissues'></th>
+                    <th>Category</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each tissue in TissuesFetal}}
+                  <tr>
+                    <th><input type="checkbox" id='chk{{tissue}}'></th>
+                    <th>{{formatUndrscr tissue}}</th>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+              <!-- end --> 
+            </div>
+          </div> <!-- end="tab-content" -->
           </div>
             
          </div>
