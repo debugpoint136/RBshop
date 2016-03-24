@@ -5,7 +5,7 @@
          <div class="panel panel-danger">
           <div class="panel-heading"><h3> Assay Categories </h3></div>
           <div class="assay-categories panel-body ">
-            <table class="table centered">
+            <table id='assayTable' class="table centered">
               <thead>
                 <tr class='danger'>
                   <th><input type="checkbox" id='chkallAssays'></th>
@@ -15,7 +15,7 @@
               <tbody>
                 {{#each assay in AssayCategoryList}}
                 <tr>
-                  <th><input type="checkbox" id='chk{{assay}}'></th>
+                  <th><input type="checkbox" name='assayCategory' id='{{ formatSpace assay}}'></th>
                   <th>{{assay}}</th>
                 </tr>
                 {{/each}}

@@ -1,5 +1,8 @@
 /* set variables for grid */
-grid_init = function() {
+grid_init = function(data) {
+
+	// data : receive from onRendered
+	
 	var testdata = {
 		'a1': [0,0,2,0,3],
 		'a2': [3,0,1,0,1],
@@ -21,8 +24,6 @@ grid_init = function() {
             formattedData.push(cellObj);
 		});
 	});
-
-	console.log(formattedData);
 
 	var props = {
 		margin : {top: 150, right: 10, bottom: 50, left: 300},
@@ -64,4 +65,8 @@ grid_init = function() {
         	}
         })
         ;
+    props.colLabel = assayLabels;
+    props.svg = svg;
+    props.data = formattedData;
+    drawGridColLabels(props);
 }
