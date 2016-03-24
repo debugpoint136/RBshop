@@ -1,0 +1,18 @@
+<template name="TissueESiPS">
+  <table class="col-xs-4 table" id='TissueESiPS'>
+    <thead>
+      <tr class='info'>
+        <th><input type="checkbox" id='chkallTissuesESiPS'></th>
+        <th>Select / Unselect All</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each tissue in TissuesESiPScells}}
+      <tr>
+        <th><input type="checkbox" name='TissueESiPS' id='{{ formatSpace tissue}}'></th>
+        <th>{{tissue}}</th>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</template>

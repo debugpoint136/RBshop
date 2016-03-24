@@ -1,0 +1,18 @@
+<template name="TissueFetal">
+    <table class="col-xs-4 table" id='TissueFetal'>
+      <thead>
+        <tr class='info'>
+          <th><input type="checkbox" id='chkallTissuesFetal'></th>
+          <th>Select / Unselect All</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each tissue in TissuesFetal}}
+        <tr>
+          <th><input type="checkbox" name='TissueFetal' id='{{ tissue }}'></th>
+          <th>{{formatUndrscr tissue}}</th>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+</template>
