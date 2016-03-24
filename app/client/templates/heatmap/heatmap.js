@@ -551,10 +551,27 @@ Session.set('heatmapReady', true) // Place this when load complete
         Session.set('subfamfile', subfamfile);
 
         if( subfamClicked.consensuslength === "0"){
+        	toastr.options = {
+			  "closeButton": false,
+			  "debug": false,
+			  "newestOnTop": false,
+			  "progressBar": false,
+			  "positionClass": "toast-bottom-right",
+			  "preventDuplicates": true,
+			  "onclick": null,
+			  "showDuration": "300",
+			  "hideDuration": "1000",
+			  "timeOut": "5000",
+			  "extendedTimeOut": "1000",
+			  "showEasing": "swing",
+			  "hideEasing": "linear",
+			  "showMethod": "fadeIn",
+			  "hideMethod": "fadeOut"
+			}
         	toastr.error('Cannot load Consensus View: \nconsensus length is 0 ');
         } else {
-        	$.blockUI({ message: null }); 
-            setTimeout($.unblockUI, 2000 );
+        	// $.blockUI({ message: null }); 
+         	// setTimeout($.unblockUI, 2000 );
         	Router.go('/gg');
         }
     }

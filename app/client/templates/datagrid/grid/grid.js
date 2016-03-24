@@ -17,6 +17,7 @@ Template.Grid.onCreated(function () {
 });
 
 Template.Grid.onRendered(function () {
+	grid_init();
 });
 
 Template.Grid.onDestroyed(function () {

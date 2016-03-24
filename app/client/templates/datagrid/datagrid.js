@@ -81,13 +81,13 @@ function bootstrapGEO(data) {
             });
         console.log("======completing updating id2geo ======");
         // console.log(Object.keys(id2geo).length);
-		createGridfromid2geo();
+		// createGridfromid2geo();
       }	
     }); /* geoURLroadmap end */
 } /* bootstrapGEO end */
 
 
-callAPIforGEO();
+// callAPIforGEO();
 
 
 /*****************************************************************************/
@@ -106,18 +106,7 @@ Template.Datagrid.helpers({
 /* Datagrid: Lifecycle Hooks */
 /*****************************************************************************/
 Template.Datagrid.onCreated(function () {
-	// REFACTOR : importing id2geo from persisted source
-	// d3.json('/id2geoPersisted.json', function(err, res) {
-	// 	if (err) return console.warn(err);
-
-	// 	// var data = eval('(' + res + ')');
-	// 	console.dir(res);
-	// 	// createGridfromid2geo(data);
-
-	// });
-
-    
-
+	createAssaySampleGrid();
 });
 
 Template.Datagrid.onRendered(function () {

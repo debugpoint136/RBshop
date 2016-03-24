@@ -18,6 +18,8 @@ Template.consensusView.events({
 
 
 Template.consensusView.onRendered(function () {
+
+  toastr.clear();
   
   // var coordinate = ['GSM935360', 'MER41B'];
   var coordinate = Session.get('coordinate');
