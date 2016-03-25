@@ -10,8 +10,12 @@ Template.TissueESiPS.events({
 	  	tmp = Session.get("tisESiPSSelected");
 	  	if ( event.target.checked == true) {
 		  		if ( x !== 'chkallTissuesESiPS'){
-		  			tmp.push(x);
+		  			if ( sampleKeys[x] ){
+		  			sampleKeys[x].forEach(function(s) {
+		  				tmp.push(s);
+		  			});
 		  		} 
+		  	}
 		  	Session.set("tisESiPSSelected", tmp);
 	 	} else {
 		  	var index = tmp.indexOf(x);

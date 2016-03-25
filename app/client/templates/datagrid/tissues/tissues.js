@@ -12,7 +12,7 @@ Template.Tissues.events({
 		   	Session.get("tisFetSelected")
 		   	);
 
-	 	console.log(tissuesSelected);
+	 	Session.set("tissuesSelected", tissuesSelected);
 	  }
 });
 

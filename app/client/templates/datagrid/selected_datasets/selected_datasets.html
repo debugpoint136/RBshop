@@ -2,40 +2,37 @@
     <div class="container">
       <div class="row centered">
          <div class="panel panel-default">
-          <div class="panel-heading"><h3> Selected Datasets </h3></div>
-          <div class="assay-categories panel-body ">
-            <table class="table">
+          <div class="panel-heading"><h3> My Datasets Cart <i class="fa fa-shopping-cart"></i></h3>
+            <div class='row'>
+              <div class="col-xs-6 pull-left">
+                <input type="checkbox" id='chkallDatasets'> Select / Unselect All
+              </div>
+
+              <div class="col-xs-6 pull-right">
+                  <a href="#" class='btn btn-warning btn-sm' id='resetDatasets'>Empty Cart</a>
+              </div>
+              
+            </div>
+          </div>
+
+          <div class="selected-datasets panel-body ">
+            <table class="table" id='DatasetsBrowse'>
             <thead>
               <tr>
-                <th><input type="checkbox"></th>
-                <th>Sample</th>
-                <th>Track Name</th>
-                <th>Species</th>
-                <th>Consortium</th>
+                <!-- <th><input type="checkbox" id='chkallDatasets'> Select / Unselect All</th> -->
+               <!--  <th>Sample</th> -->
               </tr>
             </thead>
             <tbody>
-              <tr class="success">
-                <td><input type="checkbox"></td>
-                <td>ENCBS003ENC</td>
-                <td>ENCSR000DPI_peak_calls_35014_hotspots(rep1)</td>
-                <td>human</td>
-                <td>ENCODE</td>
+              {{#each clickedDataset in datasetsClickedonGrid }}
+              <tr>
+                <td><input type="checkbox" name='datasetsBrowse' id={{ clickedDataset }}></td>
+                <td>{{ clickedDataset }}</td>
               </tr>
-              <tr class="danger">
-                <td><input type="checkbox"></td>
-                <td>ENCBS003ENC</td>
-                <td>ENCSR000DPI_peak_calls_35014_hotspots(rep1)</td>
-                <td>human</td>
-                <td>ENCODE</td>
-              </tr>
-              <tr class="info">
-                <td><input type="checkbox"></td>
-                <td>ENCBS003ENC</td>
-                <td>ENCSR000DPI_peak_calls_35014_hotspots(rep1)</td>
-                <td>human</td>
-                <td>ENCODE</td>
-              </tr>
+              {{else}}
+                <h3 class='centered'>    No Datasets selected </h3>
+                <p> Click cells on the datagrid on the top</p>
+              {{/each}}
             </tbody>
           </table>
           </div>

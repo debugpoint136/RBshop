@@ -1,9 +1,9 @@
 drawGridColLabels = function(props) {
-    // unpack props
 
-     var colLabels = props.svg.append("g")
+     var svg = d3.select("#selectiondatagrid svg .grid");
+     var colLabels = svg.append("g")
         .selectAll(".colLabelg")
-        .data(props.colLabel)
+        .data(props.colLabel, function(d) { return d; })
         .enter()
         .append("text")
         .text(function (d) {

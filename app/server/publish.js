@@ -32,15 +32,21 @@ Meteor.publish('datafile', function (id) {
     });
 });
 
-var datasetsList = ["GSM733660","GSM733662","GSM1003578","GSM733656","GSM733739","GSM733763","GSM733755","GSM733646","GSM733691","GSM733718","GSM945854","GSM733666","GSM1003493","GSM733771","GSM733674","GSM945853","GSM818826","GSM1003462","GSM733684","GSM733743"];
+//var datasetsList = ["GSM733660","GSM733662","GSM1003578","GSM733656","GSM733739","GSM733763","GSM733755","GSM733646","GSM733691","GSM733718","GSM945854","GSM733666","GSM1003493","GSM733771","GSM733674","GSM945853","GSM818826","GSM1003462","GSM733684","GSM733743"];
+var datasetsList = ["GSM733646","GSM733691","GSM733718","GSM945854","GSM733666","GSM1003493","GSM733771","GSM733674","GSM945853","GSM818826","GSM1003462","GSM733684"];
 
-Meteor.publish('testdatasets', function () {
+Meteor.publish('testdatasets', function ( selectedDatasets ) {
+    if ( !selectedDatasets || selectedDatasets.length == 0 ) {
+        return Datasets.find({}, { limit : 50 });
+    } else {
+        return Datasets.find({ name: { $in: selectedDatasets }});
+    }
     // return Datasets.find({ name: { $in: datasetsList }});
     // datasets = "GSM733660,GSM733662,GSM1003578,GSM733656";
     // var dataids = datasets.split(",");
     // "GSM733739","GSM733763","GSM733755","GSM733646","GSM733691","GSM733718","GSM945854","GSM733666","GSM1003493","GSM733771","GSM733674","GSM945853","GSM818826","GSM1003462","GSM733684","GSM733743"]}});
     // return Datasets.find({});
-     return Datasets.find({}, { limit : 100 });
+    // return Datasets.find({}, { limit : 100 });
     // return Datasets.find({'label': { $regex: /STAT/i} });
     // return Datasets.find({'label': { $in: [ /STAT1/,  /IRF1/, /H3K27ac/, /CD14/]} });
     //return Datasets.find({ name: { $in: ["GSM733660","GSM733662","GSM1003578","GSM733656","GSM733739","GSM733763","GSM733755","GSM733646","GSM733691","GSM733718","GSM945854","GSM733666","GSM1003493","GSM733771","GSM733674","GSM945853","GSM818826","GSM1003462","GSM733684","GSM733743"]} });

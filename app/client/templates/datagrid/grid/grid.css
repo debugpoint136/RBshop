@@ -44,6 +44,15 @@ text.mono {
     font-weight: bold;
 }
 
+text.datasetNum {
+    font-size: 7pt;
+    font-family: 'Montserrat', Consolas, courier;
+    /*font-family: Arial;*/
+    fill: #36454F;
+    font-weight: bold;
+    cursor:pointer;
+}
+
 text.text-selected {
     fill: #000;
 }
@@ -56,7 +65,7 @@ text.text-hover {
     fill: #00C;
 }
 
-.grid {
+#gridContainer {
 	text-align: center;
 	overflow: auto;
 	width: 1200px;
@@ -65,4 +74,8 @@ text.text-hover {
 	background-color: white;
 	
 	/*overflow: hidden;*/
+}
+
+.hasData {
+    cursor:pointer;
 }

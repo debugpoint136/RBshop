@@ -19,12 +19,29 @@ vocInst = gflagmdlst[4];
 /* Datagrid: Event Handlers */
 /*****************************************************************************/
 Template.Datagrid.events({
+	'click #datasetToBrowser': function() {
+		// var tmp = Session.get('datasetsforBrowsing');
+  //       if ( tmp.length == 0){
+  //       	toastr.warning('Select Datasets from your cart to proceed');
+  //       } else {
+  //       	Router.go('/heatmap');
+  //       }
+     }
 });
 
 /*****************************************************************************/
 /* Datagrid: Helpers */
 /*****************************************************************************/
 Template.Datagrid.helpers({
+	dataPickedYet: function() {
+		if (Session.get('tissuesSelected').length > 0 && 
+			Session.get('acSelected').length > 0
+			) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 });
 
 /*****************************************************************************/

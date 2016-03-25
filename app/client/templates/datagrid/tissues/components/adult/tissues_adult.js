@@ -10,8 +10,12 @@ Template.TissuesAdult.events({
 	  	tmp = Session.get("tisAduSelected")
 	  	if ( event.target.checked == true) {
 		  		if ( x !== 'chkallTissuesAdult'){
-		  			tmp.push(x);
+		  			if ( sampleKeys[x] ){
+		  			sampleKeys[x].forEach(function(s) {
+		  				tmp.push(s);
+		  			});
 		  		} 
+		  	}
 		  	Session.set("tisAduSelected", tmp);
 	 	} else {
 		  	var index = tmp.indexOf(x);

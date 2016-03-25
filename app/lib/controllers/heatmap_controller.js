@@ -18,7 +18,7 @@ HeatmapController = RouteController.extend({
     waitOn: function () {
 
         return [
-            this.subscribe('testdatasets'),
+            this.subscribe('testdatasets', Session.get('datasetsforBrowsing')),
             this.subscribe('testsubfam', Session.get('ssnTEselected'))
         ];
     },

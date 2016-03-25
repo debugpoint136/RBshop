@@ -1,27 +1,29 @@
 <template name="Datagrid">
   <div class="container datagrid pt mt">
     <h1>Datagrid</h1>
+    <hr>
+
 
     <div class="row">
-    	<div class="col-xs-6">
-    		<!-- <h5>Header goes here ...</h5> -->
-    	</div>
-    	<div class="col-xs-3 col-xs-offset-2">
-    		<!-- order by -->
-    		<span style="float: right; margin-top: 10px; margin-bottom: 10px;">
-                <h5>Order:</h5> 
-                  	<select id="order" class="form-control">
-                        <option value="cell_type_y form-control" selected="selected">by Cell Type</option>
-                        <option value="cell_type_category_y form-control">by Cell Type Category</option>
-                        <option value="institution_y form-control">by Consortium</option>
-                    </select> 
-              </span>
-    		<!-- end -->
-    	</div>
-    </div>
-
-    <div class="row"> 
-    	{{> Grid}}
+        {{#if dataPickedYet }} 
+            <div class="row">
+            <div class="col-xs-3 col-xs-offset-9">
+                <!-- order by -->
+                <!-- <span style="float: right; margin-top: 10px; margin-bottom: 10px;"> -->
+                    <h5>Order:</h5> 
+                        <select id="order" class="form-control">
+                            <option value="cell_type_y form-control" selected="selected">by Cell Type</option>
+                            <option value="cell_type_category_y form-control">by Cell Type Category</option>
+                            <option value="institution_y form-control">by Consortium</option>
+                        </select> 
+                  <!-- </span> -->
+                    <!-- end -->
+                </div>
+            </div>
+    	   {{> Grid}}
+        {{ else }}
+            <h3 class='centered'> Pick at least one Tissue and Assay Category </h3>
+        {{/if}}
     </div>	
 
     
@@ -43,10 +45,15 @@
     	</div>
     </div>
 
-
+    {{#if dataPickedYet }} 
     <div class="row">
     	{{> SelectedDatasets}}
-    </div>			 
+    </div>	
+
+    <div class="row centered">
+        <a href="#" id='datasetToBrowser' class='btn btn-success'>Apply Changes <i class="fa fa-thumbs-up"></i></a>
+    </div>
+    {{/if}}
 
   </div>
 </template>

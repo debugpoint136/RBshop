@@ -1,29 +1,5 @@
 /* set variables for grid */
-grid_init = function(data) {
-
-	// data : receive from onRendered
-	
-	var testdata = {
-		'a1': [0,0,2,0,3],
-		'a2': [3,0,1,0,1],
-		'a3': [0,3,0,2,0],
-		'a4': [1,0,0,2,0],
-		'a5': [0,0,2,0,1]
-	};
-
-	var formattedData = [];
-	var assayLabels = [];
-
-	Object.keys(testdata).forEach(function(assay, i) {
-		assayLabels.push(assay);
-		testdata[assay].forEach(function(sval, j) {
-			var cellObj = {}; // tmp obj
-            cellObj['row'] = j;
-            cellObj['col'] = i;
-            cellObj['val'] = sval;
-            formattedData.push(cellObj);
-		});
-	});
+grid_init = function() {
 
 	var props = {
 		margin : {top: 150, right: 10, bottom: 50, left: 300},
@@ -40,33 +16,17 @@ grid_init = function(data) {
         .attr("height", props.height + props.margin.top + props.margin.bottom)
         .append("g")
         .attr("transform", "translate(" + props.margin.left + "," + props.margin.top + ")")
+        .append('text')
+        .text('Select something ...')
         ;
 
-    var gridmat = svg.append("g").attr("class", "grid").selectAll(".cellg")
-        .data(formattedData)
-        .enter()
-        .append('rect')
-        .attr("x", function (d, i) {
-            return d.col * cellSize;
-        })
-        .attr("y", function (d, i) {
-            return  d.row * cellSize;
-        })
-        .attr("class", function (d, i) {
-            return "cell cell-border cr" + i + " cc" + i ;
-        })
-        .attr("width", cellSize)
-        .attr("height", cellSize)
-        .style("fill", function (d) {
-        	if (d.val) {
-        		return 'red';
-        	} else {
-        		return '#dfdfdf';
-        	}
-        })
-        ;
-    props.colLabel = assayLabels;
-    props.svg = svg;
-    props.data = formattedData;
-    drawGridColLabels(props);
+    svg = d3.selectAll("#selectiondatagrid").append("svg");
+    svg.append("circle")
+        .attr("cx",40)
+        .attr("cy",40)
+        .attr("r",20)
+        .style("fill","blue");
+
+    dataObserver();
+
 }

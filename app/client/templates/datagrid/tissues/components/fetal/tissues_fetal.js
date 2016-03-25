@@ -10,8 +10,12 @@ Template.TissueFetal.events({
 	  	tmp = Session.get("tisFetSelected");
 	  	if ( event.target.checked == true) {
 		  		if ( x !== 'chkallTissuesFetal'){
-		  			tmp.push(x);
+		  			if ( sampleKeys[x] ){
+		  			sampleKeys[x].forEach(function(s) {
+		  				tmp.push(s);
+		  			});
 		  		} 
+		  	}
 		  	Session.set("tisFetSelected", tmp);
 	 	} else {
 		  	var index = tmp.indexOf(x);

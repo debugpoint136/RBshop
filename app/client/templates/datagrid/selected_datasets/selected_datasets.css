@@ -2,4 +2,13 @@
 /* SelectedDatasets: Style */
 /*****************************************************************************/
 .selected-datasets {
+
+	text-align: center;
+	overflow: auto;
+	width: auto;
+	height: 280px;
+	border: 1px solid #CCCCCC;
+	background-color: white;
+	
+	/*overflow: hidden;*/
 }
