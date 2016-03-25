@@ -79,3 +79,11 @@ text.text-hover {
 .hasData {
     cursor:pointer;
 }
+
+rect.cellPicked {
+    fill: #B30707 !important;
+}
+
+text.numPicked {
+    fill: white !important;
+}

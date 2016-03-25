@@ -21,16 +21,34 @@ Template.Grid.events({
 		if (x) {
 			var tmp = x.split('_');
 			var prev = Session.get("datasetsClicked");
-			Session.set("datasetsClicked", prev.concat(tmp));
+			tmp.forEach(function(t){
+				var index = prev.indexOf(t);
+		  			if (index > -1) {
+		  				prev.splice(index, 1);
+		  			} else {
+		  				prev.push(t);
+		  			}
+			});
+			Session.set("datasetsClicked", prev);
 		}
-	},
+	}
+	,
 	'click .datasetNum': function(e) {
 		var x = e.target.id;
 		var tmp = x.split('_');
 		var prev = Session.get("datasetsClicked");
-		Session.set("datasetsClicked", prev.concat(tmp));
+		tmp.forEach(function(t){
+				var index = prev.indexOf(t);
+		  			if (index > -1) {
+		  				prev.splice(index, 1);
+		  			} else {
+		  				prev.push(t);
+		  			}
+			});
+		Session.set("datasetsClicked", prev);
 	}
 });
+
 
 /*****************************************************************************/
 /* Grid: Helpers */

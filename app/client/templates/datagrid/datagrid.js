@@ -19,14 +19,6 @@ vocInst = gflagmdlst[4];
 /* Datagrid: Event Handlers */
 /*****************************************************************************/
 Template.Datagrid.events({
-	'click #datasetToBrowser': function() {
-		// var tmp = Session.get('datasetsforBrowsing');
-  //       if ( tmp.length == 0){
-  //       	toastr.warning('Select Datasets from your cart to proceed');
-  //       } else {
-  //       	Router.go('/heatmap');
-  //       }
-     }
 });
 
 /*****************************************************************************/
@@ -37,10 +29,35 @@ Template.Datagrid.helpers({
 		if (Session.get('tissuesSelected').length > 0 && 
 			Session.get('acSelected').length > 0
 			) {
+				if (Session.get('datagridInfo') !== 'set') {
+				toastr.options = {
+				  "closeButton": false,
+				  "debug": false,
+				  "newestOnTop": false,
+				  "progressBar": false,
+				  "positionClass": "toast-bottom-left",
+				  "preventDuplicates": true,
+				  "onclick": null,
+				  "showDuration": "5000",
+				  "hideDuration": "3000",
+				  "timeOut": "5000",
+				  "extendedTimeOut": "1000",
+				  "showEasing": "swing",
+				  "hideEasing": "linear",
+				  "showMethod": "fadeIn",
+				  "hideMethod": "fadeOut"
+				}
+				toastr.info('Select Datasets from this grid \n to move to your data cart at the bottom of this page');
+				Session.set('datagridInfo', 'set');
+			}
 			return true;
 		} else {
 			return false;
 		}
+	},
+	readyForBrowser: function() {
+		var tmp = Session.get('datasetsforBrowsing');
+		return tmp;
 	}
 });
 

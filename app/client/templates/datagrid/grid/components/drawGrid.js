@@ -41,6 +41,7 @@ drawGrid = function(dfprops) {
         .append('g')
         ;
 
+    
     gridmat
         .append('rect')
         .attr("x", function (d, i) {
@@ -51,24 +52,58 @@ drawGrid = function(dfprops) {
         })
         .attr("class", function (d, i) {
         	if (d.val) {
-        		return "hasData cell cell-border cr" + i + " cc" + i ;
+        		return "hasData cell cell-border " + d.datasets + 'Rect';
+                // return "hasData cell cell-border cr" + i + " cc" + i ;
         	} else {
         		return "cell cell-border cr" + i + " cc" + i ;
         	}
         })
         .attr('id', function(d) {
-        	return d.datasets;
+            return d.datasets;
         })
         .attr("width", props.cellSize)
         .attr("height", props.cellSize)
         .style("fill", function (d) {
         	if (d.val) {
-        		return randomColor();
+        		return '#EDC613';
         	} else {
         		return '#4B717F';
         	}
+        })
+        .on("click", function (d) {
+            if (d.val) {
+             d3.select(this) 
+             .classed("cellPicked", function (d, i) {
+                return !d3.select(this).classed("cellPicked");  
+                })
+             var tmp = '.' + this.id + 'Num';
+            d3.select(tmp)
+                 .classed("numPicked", function (d, i) {
+                    return !d3.select(this).classed("numPicked");  
+                    })  
+            } else {
+            toastr.options = {
+              "closeButton": false,
+              "debug": false,
+              "newestOnTop": false,
+              "progressBar": false,
+              "positionClass": "toast-bottom-left",
+              "preventDuplicates": true,
+              "onclick": null,
+              "showDuration": "5000",
+              "hideDuration": "3000",
+              "timeOut": "5000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+            toastr.warning('No Datasets available for this combination'); 
+            }
         });
 
+// Overlay number on Rectangle
     gridmat
         .append('text')
         .attr("x", function (d, i) {
@@ -86,8 +121,22 @@ drawGrid = function(dfprops) {
         	if ( d.val > 0 )
             return d.val;
         })
-        .attr('class', 'datasetNum')
-        ;
+        .attr('class', function(d) {
+            return 'datasetNum ' + d.datasets + 'Num';
+        })
+        .on("click", function (d) {
+            if (d.val) {
+             d3.select(this)
+                 .classed("numPicked", function (d, i) {
+                    return !d3.select(this).classed("numPicked");  
+                    })   
+            }
+            var tmp = '.' + this.id + 'Rect';
+            d3.select(tmp)
+                 .classed("cellPicked", function (d, i) {
+                    return !d3.select(this).classed("cellPicked");  
+                    })  
+        });
 
      drawGridColLabels(props)
      drawGridRowLabels(props);

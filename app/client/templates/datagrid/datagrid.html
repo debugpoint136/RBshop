@@ -22,7 +22,9 @@
             </div>
     	   {{> Grid}}
         {{ else }}
-            <h3 class='centered'> Pick at least one Tissue and Assay Category </h3>
+            <h3 class='centered'> Filter data by selecting Tissue and Assay Category </h3>
+            <p class='centered'>For Example, Tissues -> Cancer Cells -> K562</p>
+            <p class='centered'> Assay Categories -> Transcription Factor Binding Sites</p>
         {{/if}}
     </div>	
 
@@ -48,10 +50,12 @@
     {{#if dataPickedYet }} 
     <div class="row">
     	{{> SelectedDatasets}}
-    </div>	
+    </div>
+    {{/if}}
 
+    {{#if readyForBrowser }}	
     <div class="row centered">
-        <a href="#" id='datasetToBrowser' class='btn btn-success'>Apply Changes <i class="fa fa-thumbs-up"></i></a>
+        <a href="/heatmap" id='datasetToBrowser' class='btn btn-success'>Apply Changes <i class="fa fa-thumbs-up"></i></a>
     </div>
     {{/if}}
 
