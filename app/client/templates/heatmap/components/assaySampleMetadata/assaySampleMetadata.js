@@ -1,36 +1,37 @@
-assaySampleMetadata = function(svg, params) {
+assaySampleMetadata = function(props) {
 	var sampleColors = {};
-            var assayColors = {};                                               // this is an adhoc objects to hold colors for samples and assays
+            var assayColors = {};  
+            var colSortOrder = false;
+            var rowSortOrder = false;                                             // this is an adhoc objects to hold colors for samples and assays
 
-            var geoURL = 'http://vizhub.wustl.edu/public/hg19/encode.md',
-                roadmapURL = 'http://vizhub.wustl.edu/public/hg19/roadmap9_methylC.md';
-          
-            var geoFlat = {};
             var dispSamples = [];
             var dispAssays = [];
 
-            /*========== TCA Metadata start ===========*/
+            var svg = d3.select(".heatmapgrid");
 
-            d3.json(geoURL,                                                     // TODO: hardcoded for encode only
-                function(err, res) {
-                    cleanUpGEO(res, geoFlat);
+            var mdmOfsset = {
+                'sample': { 'label': -266 , 'cells': -278},
+                'assay' : { 'label': -278, 'cells': -290 }
+            };
+
+            /*========== TCA Metadata start ===========*/
 
 //################## SAMPLE METADATA MAP 
                     var sampleMetaData = svg.append("g")
                             .selectAll(".sampleMetadatag")
-                            .data(params.datasetNames)
+                            .data(props.datasetNames)
                             .enter()
                             .append("rect")
                             .attr("class", "ysam")
                             .attr("x", 0)
                             .attr("y", function (d, i) {
-                                return params.hcrow.indexOf(i) * params.cellSize;
+                                return props.hcrow.indexOf(i) * props.cellSize;
                             })
-                            .attr("transform", "translate(-228, " + params.cellSize + ")")
-                            .attr("width", params.cellSize)
-                            .attr("height", params.cellSize)
+                            .attr("transform", "translate( " + mdmOfsset.sample.cells + ", " + props.cellSize + ")")
+                            .attr("width", props.cellSize)
+                            .attr("height", props.cellSize)
                             .style("fill", function (d) {
-                                var sample = geoFlat[d][0].metadata.Sample;
+                                var sample = GEOglobal[[d][0]].sample;
                                 dispSamples.push(sample);
 
                                 if (sampleColors[sample]) {
@@ -45,19 +46,19 @@ assaySampleMetadata = function(svg, params) {
 //################## ASSAY METADATA MAP 
                     var assayMetaData = svg.append("g")
                             .selectAll(".assayMetadatag")
-                            .data(params.datasetNames)
+                            .data(props.datasetNames)
                             .enter()
                             .append("rect")
                             .attr('class', 'yAssay')
                             .attr("x", 0)
                             .attr("y", function (d, i) {
-                                return params.hcrow.indexOf(i) * params.cellSize;
+                                return props.hcrow.indexOf(i) * props.cellSize;
                             })
-                            .attr("transform", "translate(-240, " + params.cellSize + ")")
-                            .attr("width", params.cellSize)
-                            .attr("height", params.cellSize)
+                            .attr("transform", "translate( " + mdmOfsset.assay.cells + ", " + props.cellSize + ")")
+                            .attr("width", props.cellSize)
+                            .attr("height", props.cellSize)
                             .style("fill", function (d) {
-                                var assay = geoFlat[d][0].metadata.Assay;
+                                var assay = GEOglobal[[d][0]].assay;
                                 dispAssays.push(assay);
 
                                 if (assayColors[assay]) {
@@ -68,39 +69,34 @@ assaySampleMetadata = function(svg, params) {
                                     return newColor;
                                 }
                             }); // style end
-            }); // d3.json call end
+
 
 //################## SAMPLE METADATA LABEL 
             var sampleMetadataLabel = svg.append("g")
-                                .data(params.datasetNames)
-                                .append("text")
-                                .text('Sample')
-                                .attr("x", 0)
-                                .attr("y", 0)
-                                .attr("transform", "translate(-216, -6) rotate (-90)")
-                                .attr("class", "tcaMetadataLabelg")
-
-                                // TODO: this selects the order drop-down to "by contrast name"
-                                .on("click", function () {
-                                    colSortOrder = !colSortOrder;
-                                    sortbylabel("ySample", dispSamples, colSortOrder);
-                                });
+                .data(props.datasetNames)
+                .append("text")
+                .text('Sample')
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("transform", "translate( " + mdmOfsset.sample.label + ", -6) rotate (-90)")
+                .attr("class", "tcaMetadataLabelg")
+                .on("click", function () {
+                    colSortOrder = !colSortOrder;
+                    sortbylabel("ySample", dispSamples, colSortOrder, props);
+                });
 
 //################## ASSAY METADATA LABEL 
             var assayMetadataLabel = svg.append("g")
-                                .append("text")
-                                .text('Assay')
-                                .attr("x", 0)
-                                .attr("y", 0)
-                                .attr("transform", "translate(-228, -6) rotate (-90)")
-                                .attr("class", "tcaMetadataLabelg")
-
-                                // TODO: this selects the order drop-down to "by contrast name"
-                                .on("click", function () {
-                                    colSortOrder = !colSortOrder;
-                                    sortbylabel("yAssay", dispAssays, colSortOrder);
-                                });
+                .append("text")
+                .text('Assay')
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("transform", "translate( " + mdmOfsset.assay.label + ", -6) rotate (-90)")
+                .attr("class", "tcaMetadataLabelg")
+                .on("click", function () {
+                    colSortOrder = !colSortOrder;
+                    sortbylabel("yAssay", dispAssays, colSortOrder, props);
+                });
 
             /*========== TCA Metadata end ===========*/
-   drawHeatMap(svg, params);
 };

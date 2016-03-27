@@ -1,3 +1,10 @@
+var safeColors = ['00','33','66','99','cc','ff'];
+var rand = function() {
+    return Math.floor(Math.random()*6);
+};
 getNewColor = function() {
-        return '#'+Math.floor(Math.random()*16777215).toString(16);
+    var r = safeColors[rand()];
+    var g = safeColors[rand()];
+    var b = safeColors[rand()];
+    return "#"+r+g+b;
 };

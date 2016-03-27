@@ -1,7 +1,10 @@
-drawColLabels = function(svg, params) {
-     var colLabels = svg.append("g")
+drawColLabels = function(props) {
+
+    var svg = d3.select(".heatmapgrid");
+    
+    var colLabels = svg.append("g")
         .selectAll(".colLabelg")
-        .data(params.colLabel)
+        .data(props.colLabel)
         .enter()
         .append("text")
         .text(function (d) {
@@ -9,10 +12,10 @@ drawColLabels = function(svg, params) {
         })
         .attr("x", 0)
         .attr("y", function (d, i) {
-            return params.hccol.indexOf(i + 1) * params.cellSize;
+            return props.hccol.indexOf(i + 1) * props.cellSize;
         })
         .style("text-anchor", "left")
-        .attr("transform", "translate(" + params.cellSize / 1.25 + ",-6) rotate (-90)")
+        .attr("transform", "translate(" + props.cellSize / 1.25 + ",-6) rotate (-90)")
         .attr("class", function (d, i) {
             return "colLabel mono c" + i;
         })
@@ -22,12 +25,12 @@ drawColLabels = function(svg, params) {
         .on("mouseout", function (d) {
             d3.select(this).classed("text-hover", false);
         })
-        // .on("click", function (d, i) {
-        //     colSortOrder = !colSortOrder;
-        //     sortbylabel("c", i, colSortOrder);
-        //     d3.select("#order").property("selectedIndex", 4).node().focus();
-        // })
+        .on("click", function (d, i) {
+            var colSortOrder = false;
+            colSortOrder = !colSortOrder;
+            sortbylabel("c", i, colSortOrder, props);
+            // d3.select("#order").property("selectedIndex", 4).node().focus();
+        })
         ;
-    subFamMetaDataCells(svg, params);
 }; /* end */
         

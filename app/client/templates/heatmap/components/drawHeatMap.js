@@ -1,16 +1,19 @@
 /*========== heatmap ===========*/
 
-drawHeatMap = function(svg, params) {
-	var cellSize = params.cellSize;
-	var hccol = params.hccol;
-	var hcrow = params.hcrow;
-	var data = params.data;
-	var posColorScale = params.posColorScale;
-    var negColorScale = params.negColorScale;
-    var colorScale = params.colorScale;
-	var datasetNames = params.datasetNames;
+drawHeatMap = function(props) {
+
+    var svg = d3.select(".heatmapgrid");
+	var cellSize = props.cellSize;
+	var hccol = props.hccol;
+	var hcrow = props.hcrow;
+	var data = props.data;
+	var posColorScale = props.posColorScale;
+    var negColorScale = props.negColorScale;
+    var colorScale = props.colorScale;
+	var datasetNames = props.datasetNames;
 
     var heatMap;
+    
     heatMap = svg.append("g").attr("class", "g3")
         .selectAll(".cellg")
         .data(data, function (d) {
@@ -43,7 +46,7 @@ drawHeatMap = function(svg, params) {
             // called function here that will create a genome graph view
             var coordinate = [];
 
-            coordinate.push(datasetNames[d.row -1], colLabel[d.col - 1]);
+            coordinate.push(datasetNames[d.row -1], props.colLabel[d.col - 1]);
             callGenomeGraph(coordinate);
 
             if (rowtext.classed("text-selected") == false) {
@@ -70,10 +73,10 @@ drawHeatMap = function(svg, params) {
                 .style("top", (d3.event.pageY - 10) + "px");
             tooltip
                 .select("#experiment")
-                .text(rowLabel[d.row - 1]);
+                .text(props.rowLabel[d.row - 1]);
             tooltip
                 .select("#repeat-subfamily")
-                .text(colLabel[d.col - 1]);
+                .text(props.colLabel[d.col - 1]);
             //Show the tooltip
             tooltip
                 .select("#score")
@@ -88,5 +91,4 @@ drawHeatMap = function(svg, params) {
             d3.select("#tooltip").classed("hidden", true);
         });
 
-   	legend(svg, params);
 };
