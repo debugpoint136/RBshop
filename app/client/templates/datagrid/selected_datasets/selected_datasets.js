@@ -47,6 +47,10 @@ Template.SelectedDatasets.events({
 Template.SelectedDatasets.helpers({
 	datasetsClickedonGrid : function() {
 		return Session.get("datasetsClicked");
+	},
+	readyForBrowser: function() {
+		var tmp = Session.get('datasetsforBrowsing');
+		return tmp;
 	}
 });
 

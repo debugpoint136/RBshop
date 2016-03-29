@@ -4,13 +4,21 @@
          <div class="panel panel-default">
           <div class="panel-heading"><h3> My Datasets Cart <i class="fa fa-shopping-cart"></i></h3>
             <div class='row'>
-              <div class="col-xs-6 pull-left">
+              <div class="col-xs-4 pull-left">
                 <input type="checkbox" id='chkallDatasets'> Select / Unselect All
               </div>
 
-              <div class="col-xs-6 pull-right">
+
+              <div class="col-xs-4">
                   <a href="#" class='btn btn-warning btn-sm' id='resetDatasets'>Empty Cart</a>
               </div>
+            <div class="col-xs-4 pull-right">
+              {{#if readyForBrowser }}  
+                  <div class="row centered">
+                      <a href="/browser" id='datasetToBrowser' class='btn btn-success'>Apply Changes <i class="fa fa-thumbs-up"></i></a>
+                  </div>
+              {{/if}}
+            </div>
               
             </div>
           </div>

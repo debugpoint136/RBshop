@@ -51,7 +51,10 @@ wrangleDataforHeatmap = function(sampleList, subfamList, cb) {
         rowLabel.push(doc.label);
         var tmp = [];
 
-        var arr = doc.ratio_all.split(',');
+        //  iteres -> ratio_all
+        //     BWA -> ratio_uniq
+        // FIXME : in mongodb it's opposite
+        var arr = doc.ratio_uniq.split(','); // intention is to keep iteres
         selectedSubfam.forEach(function(subfamid){
             tmp.push(parseFloat(arr[subfamid - 1]));
         });
