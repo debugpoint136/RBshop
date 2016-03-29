@@ -47,7 +47,7 @@ Template.Datagrid.helpers({
 				  "showMethod": "fadeIn",
 				  "hideMethod": "fadeOut"
 				}
-				toastr.info('Select Datasets from this grid \n to move to your data cart at the bottom of this page');
+				toastr.info('Click on cells in yellow on this grid to add those datasets to your Dataset Cart, at the bottom of this page. Number on cells denotes number of datasets for this combination', 'Usage : ');
 				Session.set('datagridInfo', 'set');
 			}
 			return true;
