@@ -31,17 +31,17 @@ Template.Datagrid.helpers({
 			) {
 				if (Session.get('datagridInfo') !== 'set') {
 				toastr.options = {
-				  "closeButton": false,
+				  "closeButton": true,
 				  "debug": false,
 				  "newestOnTop": false,
 				  "progressBar": false,
-				  "positionClass": "toast-bottom-left",
+				  "positionClass": "toast-bottom-full-width",
 				  "preventDuplicates": true,
 				  "onclick": null,
 				  "showDuration": "5000",
 				  "hideDuration": "3000",
 				  "timeOut": "5000",
-				  "extendedTimeOut": "1000",
+				  "extendedTimeOut": "5000",
 				  "showEasing": "swing",
 				  "hideEasing": "linear",
 				  "showMethod": "fadeIn",
